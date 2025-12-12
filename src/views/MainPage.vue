@@ -1,8 +1,9 @@
-<script setup>
+<script setup lang="ts">
 import {ref} from 'vue';
 import {EnemyLayout} from "@/components/EnemyLayout";
 import {UserLayout} from "@/components/UserLayout";
 import {OperationLayout} from "@/components/OperationLayout";
+import {LevelInfoLayout} from "@/components/LevelInfoLayout";
 
 const cardConfig = ref({
   shadow: 'never',
@@ -17,9 +18,10 @@ const buttonConfig = ref({
     <div class="common-layout">
       <el-container>
         <el-header class="header">
-          這裡是標題區
+          <span>測試測試</span>
         </el-header>
         <el-main>
+          <LevelInfoLayout></LevelInfoLayout>
           <EnemyLayout class="enemy-layout"></EnemyLayout>
           <OperationLayout class="operation-layout"></OperationLayout>
           <UserLayout class="user-layout"></UserLayout>
@@ -32,8 +34,12 @@ const buttonConfig = ref({
 
 <style scoped>
 .common-layout {
-  background-color: #2c3e50;
+  background-color: #303133;
 
+}
+
+.el-main {
+  padding-top: 0 !important;
 }
 
 .el-main > * {
@@ -41,20 +47,24 @@ const buttonConfig = ref({
   margin-bottom: .5rem;
 }
 
-.header {
-  height: 5vh;
-}
-
-.operation-layout {
-  height: 10vh;
-}
 
 .enemy-layout {
   height: 40vh;
 }
 
+.operation-layout {
+  height: 5vh;
+}
+
 .user-layout {
   height: 30vh;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  font-weight: bold;
 }
 
 </style>

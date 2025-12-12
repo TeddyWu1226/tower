@@ -1,13 +1,9 @@
-<!-- App.vue -->
+<script setup lang="ts">
+import MainPage from "@/views/MainPage.vue";
+</script>
+
 <template>
   <MainPage/>
 </template>
 
-<script setup>
-import MainPage from "@/views/MainPage.vue";
-</script>
-
-<style>
-
-
-</style>
+<style></style>

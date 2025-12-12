@@ -1,3 +1,16 @@
-.el-card {
-    border-radius: 10px !important;
+:root {
+    --el-border-radius-base: 8px;
+    --el-font-size-base: 20px;
 }
+
+.el-card {
+    --el-card-border-radius: 10px
+}
+
+.flex {
+    display: flex;
+}
+
+
+
+
