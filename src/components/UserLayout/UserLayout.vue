@@ -2,9 +2,11 @@
 import {HpProgress, ValueProgress} from "@/components/Shared/Progress";
 import {ref} from 'vue'
 import {CharInfo} from "@/storage/userinfo-storage";
+import {getEnumColumn} from "@/utils/enum";
+import {CharEnum} from "@/enums/char-enum";
 
 
-const activeName = ref('first')
+const activeName = ref('status')
 </script>
 
 <template>
@@ -13,8 +15,8 @@ const activeName = ref('first')
         v-model="activeName"
         stretch
     >
-      <el-tab-pane label="角色狀態" name="first">
-        <el-form title="角色資訊" label-width="3rem">
+      <el-tab-pane label="狀態" name="status">
+        <el-form label-width="3rem">
           <el-form-item label="HP">
             <HpProgress
                 class="value-progress"
@@ -31,12 +33,31 @@ const activeName = ref('first')
           </el-form-item>
           <el-form-item label="等級">
             <span class="level">
-              {{CharInfo.spLimit}}
-              ({{ CharInfo.level}})
+              {{ getEnumColumn(CharEnum, CharInfo.char) }}
+              ({{ CharInfo.level }})
             </span>
           </el-form-item>
           <el-form-item label="狀態">
             測試
+          </el-form-item>
+        </el-form>
+      </el-tab-pane>
+      <el-tab-pane label="裝備" name="equipment">
+        <el-form label-width="3rem">
+          <el-form-item label="頭部">
+            <span class="level">無</span>
+          </el-form-item>
+          <el-form-item label="身體">
+            <span class="level">無</span>
+          </el-form-item>
+          <el-form-item label="武器">
+            <span class="level">無</span>
+          </el-form-item>
+          <el-form-item label="副手">
+            <span class="level">無</span>
+          </el-form-item>
+          <el-form-item label="飾品">
+            <span class="level">無</span>
           </el-form-item>
         </el-form>
       </el-tab-pane>
@@ -57,6 +78,10 @@ const activeName = ref('first')
 
 :deep(.el-form-item) {
   margin-bottom: 0;
+}
+
+:deep(.el-tabs__item) {
+  padding: 0;
 }
 
 </style>

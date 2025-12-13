@@ -3,7 +3,8 @@ import {ref} from 'vue';
 import {EnemyLayout} from "@/components/EnemyLayout";
 import {UserLayout} from "@/components/UserLayout";
 import {OperationLayout} from "@/components/OperationLayout";
-import {LevelInfoLayout} from "@/components/LevelInfoLayout";
+import {FloorInfoLayout} from "@/components/FloorInfoLayout";
+import {gameStateManager} from "@/manager/game-state-manager";
 
 const cardConfig = ref({
   shadow: 'never',
@@ -11,6 +12,8 @@ const cardConfig = ref({
 const buttonConfig = ref({
   autoInsertSpace: true,
 })
+
+gameStateManager.startCycle()
 </script>
 
 <template>
@@ -18,10 +21,10 @@ const buttonConfig = ref({
     <div class="common-layout">
       <el-container>
         <el-header class="header">
-          <span>測試測試</span>
+          <span>🏛️ 神之塔 🏛️</span>
         </el-header>
         <el-main>
-          <LevelInfoLayout></LevelInfoLayout>
+          <FloorInfoLayout></FloorInfoLayout>
           <EnemyLayout class="enemy-layout"></EnemyLayout>
           <OperationLayout class="operation-layout"></OperationLayout>
           <UserLayout class="user-layout"></UserLayout>

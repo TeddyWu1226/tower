@@ -1,0 +1,39 @@
+export const RoomEnum = {
+    Rest: {
+        value: 0,
+        label: '休息',
+        icon: '🛌🏾',
+        color: '#4CAF50',
+    },
+    Fight: {
+        value: 1,
+        label: '戰鬥',
+        icon: '⚔️',
+        color: '#dda900',
+    },
+    EliteFight: {
+        value: 2,
+        label: '菁英戰鬥',
+        icon: '💀',
+        // 🟠 菁英/高挑戰：飽和橙色
+        color: '#FF8800',
+    },
+    Event: {
+        value: 3,
+        label: '特殊事件',
+        icon: '❓',
+        color: '#8A2BE2',
+    },
+    Shop: {
+        value: 4,
+        label: '商店',
+        icon: '🛒',
+        color: '#00498e',
+    },
+    Boss: {
+        value: 5,
+        label: '階段BOSS',
+        icon: '☠️',
+        color: '#D32F2F',
+    }
+};

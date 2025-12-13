@@ -11,7 +11,7 @@ interface UnitType {
     char: string; // 職業
 }
 
-export const CharInfo = useStorage<UnitType>('char-info',
+export const CharInfo = useStorage<UnitType>('user-info',
     {
         hp: 100,
         hpLimit: 100,

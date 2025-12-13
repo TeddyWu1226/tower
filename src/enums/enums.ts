@@ -1,3 +1,7 @@
+/**
+ * 定義遊戲的操作
+ */
+
 export enum operationStatusEnum {
 	Default = 'Default',
 	Skill = 'Skill',
@@ -5,6 +9,14 @@ export enum operationStatusEnum {
 	Choose = 'Choose'
 }
 
+/**
+ * 定義遊戲的兩種主要輪迴狀態
+ */
+export enum GameState {
+	INITIAL = 'INITIAL',            // 遊戲或場景的起始狀態
+	EVENT_PHASE = 'EVENT_PHASE',    // 事件狀態 (發生中)
+	SELECTION_PHASE = 'SELECTION_PHASE' // 選擇事件狀態 (等待輸入)
+}
 
 export interface EnumItem {
 	value: string | number;
