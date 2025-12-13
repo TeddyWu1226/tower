@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {PropType} from 'vue'; // 引入 ref 和 computed
+import {PropType, ref} from 'vue'; // 引入 ref 和 computed
 import {MonsterType} from "@/types";
 import {HpProgress} from "@/components/Shared/Progress";
 
@@ -9,13 +9,36 @@ const props = defineProps({
 });
 const emit = defineEmits(['select']);
 const handleClick = () => {
-  emit('select'); // 只需要通知父組件它被點擊了
+  emit('select', props.info);
 };
+
+// ⭐️ 新增狀態：用於控制抖動動畫
+const isShaking = ref(false);
+// 設置動畫持續時間 (需與 CSS @keyframes shake 的時間匹配)
+const SHAKE_DURATION = 500;
+
+/**
+ * 外部調用：啟動卡片抖動動畫
+ */
+const shake = () => {
+  // 1. 啟動抖動狀態
+  isShaking.value = true;
+
+  // 2. 在動畫結束後移除抖動類別
+  setTimeout(() => {
+    isShaking.value = false;
+  }, SHAKE_DURATION);
+};
+
+// ⭐️ 將 shake 方法暴露給父組件
+defineExpose({
+  shake
+});
 </script>
 
 <template>
   <el-card
-      :class="{'monster-card': true, 'is-selected': props.isSelected}"
+      :class="{'monster-card': true, 'is-selected': props.isSelected, 'is-shaking': isShaking}"
       shadow="hover"
       @click="handleClick"
   >
@@ -52,7 +75,7 @@ const handleClick = () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 10rem;
+  max-width: 10rem;
   font-size: 1rem;
   padding: 0;
 }
@@ -80,5 +103,21 @@ p {
 /* 確保 hover 效果依然存在 */
 .monster-card:hover:not(.is-selected) {
   box-shadow: 0 0 8px rgba(120, 255, 255, 0.4);
+}
+
+/* ------------------- 抖動特效 (@keyframes) ------------------- */
+
+/* ⭐️ 應用抖動動畫的類別 */
+.monster-card.is-shaking {
+  animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+  transform: translate3d(0, 0, 0); /* 啟用硬體加速 */
+}
+
+@keyframes shake {
+  /* 輕微的、快速的水平位移 */
+  10%, 90% { transform: translate3d(-1px, 0, 0); }
+  20%, 80% { transform: translate3d(2px, 0, 0); }
+  30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+  40%, 60% { transform: translate3d(4px, 0, 0); }
 }
 </style>

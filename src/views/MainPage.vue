@@ -7,6 +7,7 @@ import {FloorInfoLayout} from "@/components/FloorInfoLayout";
 import {gameStateManager} from "@/manager/game-state-manager";
 import {GameState} from "@/enums/enums";
 import {initAll} from "@/storage/init";
+import {ElMessage} from "element-plus";
 
 const cardConfig = ref({
   shadow: 'never',
@@ -20,10 +21,15 @@ const startGame = async () => {
   gameStateManager.startCycle()
 }
 
+/** 觸發 **/
+const EnemyLayoutRef = ref()
+const onAttack = () => {
+  EnemyLayoutRef.value?.onAttack()
+}
 </script>
 
 <template>
-  <el-config-provider :card="cardConfig" :button="buttonConfig">
+  <el-config-provider :card="cardConfig" :button="buttonConfig" :message="{max:3}">
     <div class="common-layout">
       <el-card
           v-if="gameStateManager.is(GameState.INITIAL)"
@@ -43,8 +49,8 @@ const startGame = async () => {
         </el-header>
         <el-main>
           <FloorInfoLayout></FloorInfoLayout>
-          <EnemyLayout class="enemy-layout"></EnemyLayout>
-          <OperationLayout class="operation-layout"></OperationLayout>
+          <EnemyLayout ref="EnemyLayoutRef" class="enemy-layout"></EnemyLayout>
+          <OperationLayout class="operation-layout" @attack="onAttack"></OperationLayout>
           <UserLayout class="user-layout"></UserLayout>
         </el-main>
       </el-container>

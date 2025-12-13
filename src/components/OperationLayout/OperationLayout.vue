@@ -3,6 +3,8 @@ import {ref} from "vue";
 import {operationStatusEnum} from "@/enums/enums";
 import {Operation} from "@/storage/operation-storage";
 
+
+const emit = defineEmits(['attack']);
 /**狀態紀錄**/
 const isDisabled = ref<boolean>(false)
 const changeStatus = (value: operationStatusEnum = operationStatusEnum.Default): void => {
@@ -22,7 +24,7 @@ const changeStatus = (value: operationStatusEnum = operationStatusEnum.Default):
     </el-button>
   </div>
   <div v-else class="flex">
-    <el-button type="primary">
+    <el-button type="primary" @click="emit('attack',true)">
       攻擊
     </el-button>
     <el-button type="primary" :disabled="isDisabled" @click="changeStatus(operationStatusEnum.Skill)">

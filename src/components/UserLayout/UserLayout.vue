@@ -37,6 +37,22 @@ const activeName = ref('status')
               ({{ UserInfo.level }})
             </span>
           </el-form-item>
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="⚔️">
+            <span class="level">
+              {{ UserInfo.ad }}
+            </span>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="🛡️">
+            <span class="level">
+              {{ UserInfo.ad }}
+            </span>
+              </el-form-item>
+            </el-col>
+          </el-row>
           <el-form-item label="狀態">
             測試
           </el-form-item>

@@ -3,16 +3,21 @@
 import {Floor, getNextAvailableRooms, getRoomValue} from "@/storage/floor-storage";
 import {getEnumColumn} from "@/utils/enum";
 import {RoomEnum} from "@/enums/room-enum";
-import {computed, ref, watch} from "vue";
+import {computed, Reactive, ref, watch} from "vue";
 import {createMonster, Monster} from "@/assets/monster-info";
 import {MonsterType} from "@/types";
 import MonsterCard from "@/components/EnemyLayout/comps/MonsterCard.vue";
+import {ElMessage} from "element-plus";
+import {applyDamage, triggerDamageEffect} from "@/assets/fight-func";
+import {UserInfo} from "@/storage/userinfo-storage";
+import {MonsterCardExposed} from "@/components/EnemyLayout/comps/types";
 
 const currentRoomValue = computed(() => {
       return getRoomValue(Floor.value.currentRoom)
     }
 )
-const monsters = ref<MonsterType[]>([])
+const monsters = ref<Reactive<MonsterType>[]>([])
+const monsterCardRefs = ref<MonsterCardExposed[]>([]);
 /** 生成對應怪物
  *
  */
@@ -38,6 +43,53 @@ const handleMonsterSelect = (index: number) => {
 }
 
 /**
+ * 怪物行動
+ */
+
+const monsterMove = () => {
+
+}
+
+/**
+ * 階段計算
+ */
+
+const roundCalculate = () => {
+  // 怪物是否死亡
+}
+
+/**
+ * 玩家行動
+ */
+// 攻擊
+const onAttack = () => {
+
+  if (!selectedMonsterIndex.value) {
+    selectedMonsterIndex.value = 0
+  }
+  const selectedMonster = monsters.value[selectedMonsterIndex.value];
+  if (!selectedMonster) {
+    ElMessage.warning('無攻擊目標!')
+    return
+  }
+  // 傷害計算
+  const damageOutput = applyDamage(UserInfo.value, selectedMonster);
+  const targetElement = monsterCardRefs.value[selectedMonsterIndex.value];
+  console.log('targetElement', targetElement)
+  triggerDamageEffect(damageOutput, targetElement.$el)
+  if (damageOutput.isHit) {
+    targetElement?.shake()
+  }
+  // 戰階計算
+  roundCalculate()
+  // 怪物行動
+  monsterMove()
+}
+
+defineExpose({
+  onAttack
+})
+/**
  * 追蹤變化
  */
 watch(() => Floor.value.currentRoom,
@@ -49,12 +101,10 @@ watch(() => Floor.value.currentRoom,
       switch (currentRoomValue.value) {
         case RoomEnum.Fight.value:
           genMonster(val[0])
-          handleMonsterSelect(0)
           break
         case RoomEnum.EliteFight.value:
           genMonster(val[0])
           genMonster(val[0])
-          handleMonsterSelect(0)
           break
       }
     },
@@ -77,6 +127,7 @@ watch(() => Floor.value.currentRoom,
          currentRoomValue === RoomEnum.EliteFight.value"
     >
       <MonsterCard
+          :ref="(el) => { if (el) monsterCardRefs[index] = el as MonsterCardExposed }"
           v-for="(monster,index) in monsters"
           :key="index"
           :info="monster"

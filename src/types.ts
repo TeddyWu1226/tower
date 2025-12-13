@@ -14,6 +14,8 @@ export interface ItemType {
  * 角色相關
  */
 export interface UnitType {
+    icon: string // 圖示
+    name: string // 名稱
     // 有關輸出
     ad: number // 物理攻擊力
     critIncrease: number // 爆擊增傷(200%)
@@ -44,8 +46,6 @@ export interface UserType extends UnitType {
  * 怪物相關
  */
 export interface MonsterType extends UnitType {
-    icon: string // 圖示
-    name: string // 名稱
     description?: string //介紹
     drop?: ItemType[]
 }
@@ -67,4 +67,18 @@ export interface FloorStorageType {
 
 export interface RoomWeights {
     [labelValue: number]: number;
+}
+/**
+ * 戰鬥相關
+ */
+export interface DamageResult {
+    totalDamage: number;  // 最終造成的傷害
+    isHit: boolean;       // 是否命中
+    isCrit: boolean;      // 是否暴擊
+    baseDamage: number;   // 減防前的基礎傷害
+}
+
+export interface BattleOutcome extends DamageResult {
+    isKilled: boolean;       // 被攻擊者是否被擊敗 (HP <= 0)
+    remainingHP: number;     // 被攻擊者剩餘的 HP
 }
