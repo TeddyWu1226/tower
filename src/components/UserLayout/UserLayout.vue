@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {HpProgress, ValueProgress} from "@/components/Shared/Progress";
 import {ref} from 'vue'
-import {CharInfo} from "@/storage/userinfo-storage";
+import {UserInfo} from "@/storage/userinfo-storage";
 import {getEnumColumn} from "@/utils/enum";
 import {CharEnum} from "@/enums/char-enum";
 
@@ -20,21 +20,21 @@ const activeName = ref('status')
           <el-form-item label="HP">
             <HpProgress
                 class="value-progress"
-                :current-value="CharInfo.hp"
-                :total-value="CharInfo.hpLimit"
+                :current-value="UserInfo.hp"
+                :total-value="UserInfo.hpLimit"
             />
           </el-form-item>
           <el-form-item label="MP">
             <ValueProgress
                 class="value-progress"
-                :current-value="CharInfo.sp"
-                :total-value="CharInfo.spLimit"
+                :current-value="UserInfo.sp"
+                :total-value="UserInfo.spLimit"
             />
           </el-form-item>
           <el-form-item label="等級">
             <span class="level">
-              {{ getEnumColumn(CharEnum, CharInfo.char) }}
-              ({{ CharInfo.level }})
+              {{ getEnumColumn(CharEnum, UserInfo.char) }}
+              ({{ UserInfo.level }})
             </span>
           </el-form-item>
           <el-form-item label="狀態">
