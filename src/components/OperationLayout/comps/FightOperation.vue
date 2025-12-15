@@ -3,7 +3,7 @@ import {ref} from "vue";
 import {operationStatusEnum} from "@/enums/enums";
 import {Operation} from "@/storage/operation-storage";
 
-const emit = defineEmits(['attack']);
+const emit = defineEmits(['attack', 'run']);
 const props = defineProps({
   disabled: Boolean,
 })
@@ -34,7 +34,7 @@ const changeStatus = (value: operationStatusEnum = operationStatusEnum.Default):
     <el-button type="info" :disabled="props.disabled" @click="changeStatus(operationStatusEnum.Package)">
       背包
     </el-button>
-    <el-button type="danger" :disabled="props.disabled">
+    <el-button type="danger" :disabled="props.disabled" @click="emit('run',true)">
       逃跑
     </el-button>
   </div>

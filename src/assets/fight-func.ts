@@ -203,3 +203,66 @@ export function applyRandomFloatAndRound(baseValue: number, minRate = 0.8, maxRa
 	// 4. 【關鍵步驟】使用 Math.round() 進行四捨五入取整
 	return Math.round(result);
 }
+
+
+/**
+ * 僅依據等級比較，計算逃跑成功率並判斷是否成功逃跑。
+ * 追擊方為 UnitType 陣列，取平均等級作為追擊難度。
+ * @param runner 逃跑方 (嘗試逃離的單位)
+ * @param chasers 追擊方陣列 (嘗試阻止逃跑的單位，敵人陣列)
+ * @returns boolean - true 表示逃跑成功
+ */
+export function canEscape(runner: UnitType, chasers: UnitType[]): boolean {
+
+	// 確保追擊方陣列非空
+	if (!chasers || chasers.length === 0) {
+		console.warn("追擊方陣列為空，逃跑自動成功。");
+		return true;
+	}
+
+	// --- 參數設定 ---
+
+	const BASE_CHANCE = 20; // 20% 基礎成功率 (居中值)
+	const LEVEL_WEIGHT = 3; // 每 1 級差距影響 3% 的機率
+	const MAX_CHANCE = 95;  // 最高成功率 95%
+	const MIN_CHANCE = 0;   // 最低成功率 0%
+
+	// --- 核心計算 ---
+
+	// 1. 計算追擊方平均等級
+	const totalChaserLevel = chasers.reduce((sum, chaser) => sum + chaser.level, 0);
+	const averageChaserLevel = totalChaserLevel / chasers.length;
+
+	// 2. 等級差異
+	const levelDifference = runner.level - averageChaserLevel;
+
+	// 3. 等級修正值
+	const levelModifier = levelDifference * LEVEL_WEIGHT;
+
+	// 4. 最終計算的理論成功率
+	let finalChance = BASE_CHANCE + levelModifier;
+
+	// 5. 套用最大/最小機率限制
+	finalChance = Math.max(MIN_CHANCE, Math.min(MAX_CHANCE, finalChance));
+
+	// --- 隨機判定 ---
+
+	// 生成一個 0 到 100 之間的隨機數
+	const roll = Math.random() * 100;
+
+	// 判斷是否成功逃跑
+	const success = roll < finalChance;
+
+	// [可選] 輸出計算過程供除錯
+	console.log(`--- 逃跑判定 (僅等級) ---`);
+	console.log(`逃跑方等級: ${runner.level}`);
+	console.log(`追擊方數量: ${chasers.length}`);
+	console.log(`追擊方平均等級: ${averageChaserLevel.toFixed(2)}`);
+	console.log(`等級差: ${levelDifference.toFixed(2)}`);
+	console.log(`等級修正: ${levelModifier.toFixed(2)}%`);
+	console.log(`最終成功率: ${finalChance.toFixed(2)}%`);
+	console.log(`隨機擲骰 (Roll): ${roll.toFixed(2)}`);
+	console.log(`結果: ${success ? '✅ 成功逃跑' : '❌ 逃跑失敗'}`);
+
+	return success;
+}

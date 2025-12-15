@@ -7,11 +7,12 @@ import {useGameStateStore} from "@/store/game-state-store";
 import {computed, onMounted, Reactive, ref} from "vue";
 import {MonsterType} from "@/types";
 import {createMonster, Monster} from "@/assets/monster-info";
-import {applyDamage, applyRandomFloatAndRound, triggerDamageEffect} from "@/assets/fight-func";
+import {applyDamage, applyRandomFloatAndRound, canEscape, triggerDamageEffect} from "@/assets/fight-func";
 import {UserInfo} from "@/storage/userinfo-storage";
 import {ElMessage} from "element-plus";
+import {useFloatingMessage} from "@/components/Shared/FloatingMessage/useFloatingMessage";
 
-const emit = defineEmits(['playerDead'])
+const emit = defineEmits(['playerDead', 'runFailed'])
 const gameStateStore = useGameStateStore()
 
 const currentRoomValue = computed(() => {
@@ -97,22 +98,38 @@ const onAttack = () => {
   if (selectedMonsterIndex.value >= monsters.value.length) {
     selectedMonsterIndex.value = null;
   }
-  // 怪物全部死亡
-  if (monsters.value.length === 0) {
-    gameStateStore.setBattleWon(true)
-    UserInfo.value.gold += monsterDropGold.value
-  }
-
   // 怪物行動
   if (!damageOutput.isKilled) {
-    monsterDropGold.value += applyRandomFloatAndRound(selectedMonster.dropGold ?? 0)
     monsterMove(selectedMonster)
+  } else {
+    monsterDropGold.value += applyRandomFloatAndRound(selectedMonster.dropGold ?? 0)
+  }
+  // 怪物全部死亡
+  if (monsters.value.length === 0) {
+    UserInfo.value.gold += monsterDropGold.value
+    gameStateStore.setBattleWon(true)
+  }
+}
+const isEscape = ref(false)
+const onRun = () => {
+  if (!canEscape(UserInfo.value, monsters.value)) {
+    if (!selectedMonsterIndex.value) {
+      selectedMonsterIndex.value = 0
+    }
+    const selectedMonster = monsters.value[selectedMonsterIndex.value];
+    emit('runFailed', true)
+    monsterMove(selectedMonster)
+  } else {
+    isEscape.value = true
+    gameStateStore.setBattleWon(true)
+    monsters.value = []
   }
 }
 
 
 defineExpose({
-  onAttack
+  onAttack,
+  onRun
 })
 
 // 初始化
@@ -122,6 +139,7 @@ const init = () => {
   clearMonsters();
   // 切換房間時，清除選中狀態
   selectedMonsterIndex.value = null;
+  isEscape.value = false
   switch (currentRoomValue.value) {
     case RoomEnum.Fight.value:
       genMonster(layer)
@@ -132,16 +150,14 @@ const init = () => {
       break
   }
 }
+
 init()
-onMounted(() => {
-  console.log('u偶喔')
-})
 </script>
 
 <template>
-  <div class="fight"
-       v-if="currentRoomValue === RoomEnum.Fight.value ||
-         currentRoomValue === RoomEnum.EliteFight.value"
+  <div
+      class="fight"
+      v-if="currentRoomValue === RoomEnum.Fight.value ||currentRoomValue === RoomEnum.EliteFight.value"
   >
     <MonsterCard
         :ref="(el) => { if (el) monsterCardRefs[index] = el as MonsterCardExposed }"
@@ -152,7 +168,8 @@ onMounted(() => {
         @select="handleMonsterSelect(index)"
     />
     <div CLASS="victory-container" v-if="gameStateStore.isWon">
-      <span class="victory-message">勝利!</span>
+      <span v-if="isEscape" class="run-message">你成功逃跑了!</span>
+      <span v-else class="victory-message">勝利!</span>
       <span v-if="monsterDropGold">你獲得了 {{ monsterDropGold }} G!</span>
     </div>
   </div>
@@ -185,4 +202,10 @@ onMounted(() => {
   color: gold;
   text-shadow: 0 0 10px #ffcc00, 0 0 20px #e69900;
 }
+
+.run-message {
+  font-size: 2rem;
+}
+
+
 </style>

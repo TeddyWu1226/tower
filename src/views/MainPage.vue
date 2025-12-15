@@ -43,10 +43,14 @@ const restartGame = async () => {
 
 /** 觸發 **/
 const RoomLayoutRef = ref()
+const OperationLayoutRef = ref()
 const onAttack = () => {
   RoomLayoutRef.value?.onAttack()
 }
 
+const onRun = () => {
+  RoomLayoutRef.value?.onRun()
+}
 const onRest = () => {
   RoomLayoutRef.value?.onRest()
 }
@@ -62,6 +66,10 @@ const onPlayerDead = (dead: boolean) => {
   isDead.value = true
 }
 
+const onRunFailed = () => {
+  OperationLayoutRef.value?.showEscapeFailedMessage()
+}
+
 // **【新增】房間唯一 ID/計數器**
 // 每次進入一個「新房間」時，這個值就會增加，無論房間類型是否相同。
 
@@ -72,6 +80,7 @@ const onPlayerDead = (dead: boolean) => {
     <div class="common-layout">
       <el-card
           v-if="isDead"
+          :class="{'dead': isDead}"
           style="padding: 5rem;margin: 2rem"
           body-class="flex items-center justify-center flex-column"
       >
@@ -83,7 +92,7 @@ const onPlayerDead = (dead: boolean) => {
             getEnumColumn(StageEnum, gameStateStore.getCurrentStage)
           }} 的旅途上
         </h1>
-        <el-button type="danger" style="width: 8rem;height: 5rem" @click="restartGame">
+        <el-button type="danger" style="width: 100%;height: 5rem" @click="restartGame">
           重新開始
         </el-button>
       </el-card>
@@ -109,9 +118,12 @@ const onPlayerDead = (dead: boolean) => {
               ref="RoomLayoutRef"
               class="room-layout"
               @player-dead="onPlayerDead"
+              @run-failed="onRunFailed"
           />
           <OperationLayout
+              ref="OperationLayoutRef"
               class="operation-layout"
+              @run="onRun"
               @attack="onAttack"
               @rest="onRest"
               @cancel="onCancel"
@@ -157,6 +169,10 @@ const onPlayerDead = (dead: boolean) => {
   align-items: center;
   font-size: 16px;
   font-weight: bold;
+}
+
+.dead{
+  height: 70vh;
 }
 
 </style>

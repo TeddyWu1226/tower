@@ -8,7 +8,7 @@ import RestRoom from "@/components/RoomLayout/comps/RestRoom.vue";
 import FightRoom from "@/components/RoomLayout/comps/FightRoom.vue";
 import EventRoomCard from "@/components/RoomLayout/comps/EventRoomCard.vue";
 
-const emit = defineEmits(['playerDead'])
+const emit = defineEmits(['playerDead', 'runFailed'])
 const gameStateStore = useGameStateStore()
 
 const currentRoomValue = computed(() => {
@@ -16,7 +16,10 @@ const currentRoomValue = computed(() => {
     }
 )
 const onPlayerDead = () => {
-  emit('playerDead')
+  emit('playerDead', true)
+}
+const onRunFailed = () => {
+  emit('runFailed', true)
 }
 /** 戰鬥房間 **/
 const FightRoomRef = ref()
@@ -25,6 +28,9 @@ const onAttack = () => {
   FightRoomRef.value.onAttack()
 }
 
+const onRun = () => {
+  FightRoomRef.value?.onRun()
+}
 
 /** 休息房間 **/
 const RestRoomRef = ref()
@@ -44,6 +50,7 @@ const onCancel = () => {
 
 defineExpose({
   onAttack,
+  onRun,
   onRest,
   onCancel
 })
@@ -51,8 +58,6 @@ defineExpose({
 /** 初始化刷新 **/
 const roomKeyCounter = ref(0)
 
-// **【新增】監聽房間狀態變化的 watch**
-// 假設 gameStateStore.currentRoomValue 是在每次切換房間後更新的。
 watch(() => gameStateStore.currentRoom,
     () => {
       roomKeyCounter.value++
@@ -74,6 +79,7 @@ watch(() => gameStateStore.currentRoom,
         ref="FightRoomRef"
         v-if="currentRoomValue === RoomEnum.Fight.value ||currentRoomValue === RoomEnum.EliteFight.value"
         @player-dead="onPlayerDead"
+        @run-failed="onRunFailed"
         :key="roomKeyCounter"
     />
     <RestRoom ref="RestRoomRef" v-if="currentRoomValue === RoomEnum.Rest.value" :key="roomKeyCounter"/>
