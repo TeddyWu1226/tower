@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import {computed, ref} from "vue";
+import {computed} from "vue";
 import {getEnumColumn} from "@/utils/enum";
 import {RoomEnum} from "@/enums/room-enum";
 import {RoomCoordinateTuple} from "@/types";
 import {getNextAvailableRooms, getRoomValue, useGameStateStore} from "@/store/game-state-store";
 
-const emit = defineEmits(['attack']);
 const props = defineProps({
   disabled: Boolean,
 })

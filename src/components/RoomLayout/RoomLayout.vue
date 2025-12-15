@@ -6,6 +6,7 @@ import {computed, ref, watch} from "vue";
 import {useGameStateStore} from "@/store/game-state-store";
 import RestRoom from "@/components/RoomLayout/comps/RestRoom.vue";
 import FightRoom from "@/components/RoomLayout/comps/FightRoom.vue";
+import EventRoomCard from "@/components/RoomLayout/comps/EventRoomCard.vue";
 
 const emit = defineEmits(['playerDead'])
 const gameStateStore = useGameStateStore()
@@ -63,13 +64,13 @@ watch(() => gameStateStore.currentRoom,
 </script>
 
 <template>
-  <el-card>
+  <EventRoomCard v-if="currentRoomValue === RoomEnum.Event.value"/>
+  <el-card v-else>
     <div class="title">
       {{ getEnumColumn(RoomEnum, currentRoomValue, 'icon') }}
       {{ getEnumColumn(RoomEnum, currentRoomValue) }}
     </div>
     <FightRoom
-        class="fight"
         ref="FightRoomRef"
         v-if="currentRoomValue === RoomEnum.Fight.value ||currentRoomValue === RoomEnum.EliteFight.value"
         @player-dead="onPlayerDead"
@@ -80,13 +81,7 @@ watch(() => gameStateStore.currentRoom,
 </template>
 
 <style scoped>
-:root {
-  --delay: 0.3s
-}
-
 .title {
   font-size: 1.2rem;
 }
-
-
 </style>

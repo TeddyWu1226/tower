@@ -107,7 +107,7 @@ const onPlayerDead = (dead: boolean) => {
           <FloorInfoLayout/>
           <RoomLayout
               ref="RoomLayoutRef"
-              class="enemy-layout"
+              class="room-layout"
               @player-dead="onPlayerDead"
           />
           <OperationLayout
@@ -140,7 +140,7 @@ const onPlayerDead = (dead: boolean) => {
 }
 
 
-.enemy-layout {
+.room-layout {
   height: 40vh;
 }
 
