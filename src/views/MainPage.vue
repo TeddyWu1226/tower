@@ -81,14 +81,13 @@ const onRunFailed = () => {
       <el-card
           v-if="isDead"
           :class="{'dead': isDead}"
-          style="padding: 5rem;margin: 2rem"
           body-class="flex items-center justify-center flex-column"
       >
         <h1 style="color:var(--el-color-danger)">
-          🪦你死了....🪦
+          🪦YOU DIED🪦
         </h1>
-        <h1 style="color:var(--el-color-danger)">
-          死在第 {{ gameStateStore.getCurrentStage }} 階段 - {{
+        <h1 style="color:var(--el-color-danger);text-align: center">
+          你倒在了第 {{ gameStateStore.getCurrentStage }} 階段 - {{
             getEnumColumn(StageEnum, gameStateStore.getCurrentStage)
           }} 的旅途上
         </h1>
@@ -97,14 +96,13 @@ const onRunFailed = () => {
         </el-button>
       </el-card>
       <el-card
+          class="start-view"
           v-else-if="gameStateStore.stateIs(GameState.INITIAL)"
-          style="padding: 5rem;margin: 2rem"
           body-class="flex items-center justify-center flex-column"
-          aaa
       >
         <h1>🏛️ 神之塔 🏛️</h1>
-        <span>不斷挑戰神的無限旅途</span>
-        <el-button style="width: 8rem;height: 5rem" @click="startGame">
+        <span>~不斷挑戰神的無限旅途~</span>
+        <el-button style="width: 8rem;height: 5rem;margin-top: 1rem" @click="startGame">
           開始遊戲
         </el-button>
       </el-card>
@@ -160,6 +158,7 @@ const onRunFailed = () => {
   height: 5vh;
 }
 
+
 .user-layout {
   height: 30vh;
 }
@@ -171,8 +170,13 @@ const onRunFailed = () => {
   font-weight: bold;
 }
 
-.dead{
-  height: 70vh;
+.dead {
+  height: 82vh;
+  padding-bottom: 15vh;
 }
 
+.start-view {
+  height: 82vh;
+  padding-bottom: 15vh;
+}
 </style>

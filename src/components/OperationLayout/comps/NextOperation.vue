@@ -26,11 +26,14 @@ const selectRoom = (roomXY: RoomCoordinateTuple) => {
         :disabled="props.disabled"
         @click="selectRoom(room)"
     >
-      <span>前往下一層:</span>
-      <span>
-        {{ getEnumColumn(RoomEnum, getRoomValue(room), 'icon') }}
-        {{ getEnumColumn(RoomEnum, getRoomValue(room)) }}
-      </span>
+      <el-row>
+        <el-col :xl="10">前往:</el-col>
+        <el-col :xl="14">
+          {{ getEnumColumn(RoomEnum, getRoomValue(room), 'icon') }}
+          {{ getEnumColumn(RoomEnum, getRoomValue(room)) }}
+        </el-col>
+      </el-row>
+
     </el-button>
   </div>
 </template>

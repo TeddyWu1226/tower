@@ -139,8 +139,6 @@ export function triggerDamageEffect(damageOutCome: BattleOutcome, targetElement?
 
 	let messageText = '';
 	let messageColor = '#E0E0E0'; // 預設顏色
-	let messageClass = '';
-
 	// --- 2. 核心邏輯：根據結果決定訊息和樣式 ---
 
 	if (damageOutCome.isKilled) {
@@ -159,7 +157,6 @@ export function triggerDamageEffect(damageOutCome: BattleOutcome, targetElement?
 			// 💥 暴擊：使用金色和暴擊樣式
 			messageText = `${prefixText} 💥${damageOutCome.totalDamage} 傷害`;
 			messageColor = '#ff0000'; // 金色
-			messageClass = 'crit-font';
 		} else {
 			// 普通命中
 			messageText = `${prefixText} ${damageOutCome.totalDamage} 傷害`;
@@ -176,8 +173,7 @@ export function triggerDamageEffect(damageOutCome: BattleOutcome, targetElement?
 		targetElement,
 		{
 			duration: 800, // 動畫時間保持不變
-			color: messageColor,
-			messageClass: messageClass
+			color: messageColor
 		}
 	);
 }

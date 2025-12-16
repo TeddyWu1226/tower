@@ -28,7 +28,7 @@ const onRest = () => {
 const onCancel = () => {
   emit('cancel')
 }
-const FightOperationRef =ref<typeof FightOperation>();
+const FightOperationRef = ref<typeof FightOperation>();
 const showEscapeFailedMessage = () => {
   if (!FightOperationRef.value) {
     console.error("找不到逃跑按鈕元素來顯示浮動訊息");
@@ -71,10 +71,6 @@ defineExpose({
 </template>
 
 <style scoped>
-.el-button {
-  height: 100%;
-}
-
 .flex > * {
   flex: 1;
 }

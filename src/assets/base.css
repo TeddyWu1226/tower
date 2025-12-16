@@ -6,6 +6,9 @@
 .el-card {
     --el-card-border-radius: 10px
 }
+.el-button {
+    height: 100%;
+}
 
 
 .flex {

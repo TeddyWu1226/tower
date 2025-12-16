@@ -68,52 +68,50 @@ const messageStyle = {
 
 <style scoped>
 :root {
-  --message-duration: 1500ms;
-  --x-offest: 2rem
+  --message-duration: 800ms;
 }
 
+/* 確保容器可以被定位到目標位置 */
 .floating-message-container {
+  /* 這裡的定位方式取決於父層如何渲染它。
+     如果它是放在 body 級別，建議使用 fixed 或 absolute。
+     但為了 RWD，我們主要調整字體大小。
+  */
   top: 50%;
   left: 50%;
-  /* 確保在所有內容之上 */
   z-index: 5000;
-  pointer-events: none; /* 讓點擊可以穿透 */
+  pointer-events: none;
 }
 
 .floating-message {
+  /* ⭐️ 預設字體大小 (桌面/大螢幕) */
   font-size: 2rem;
   font-weight: bold;
   padding: 0.5em 1em;
-  color: var(#ffffff);
+  color: var(#ffffff); /* 注意：這裡的 var(#ffffff) 語法可能錯誤，應為 color: white; 或 color: #ffffff; */
   text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-  /* 使用 filter drop-shadow 模擬邊框光暈 */
   filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.8));
 
   /* 設置動畫 */
-  animation: floating-move var(--message-duration) forwards, /* 處理移動和縮放 */ floating-fade-out var(--message-duration) forwards; /* 處理淡出 */
+  animation:
+      floating-move var(--message-duration) forwards,
+      floating-fade-out var(--message-duration) forwards;
 }
 
 /* ---------------------------------------------------- */
-/* 核心動畫: 向上移動 + 縮放 (縮小 -> 放大 -> 縮小) + 淡出 */
+/* 核心動畫 (桌面版本，若上面有 @media 則只在桌面生效) */
 /* ---------------------------------------------------- */
-
 @keyframes floating-move {
-  /* ⭐️ 0%：起點向左偏移 */
+  /* ⭐️ 桌面版本的動畫保持不變或微調 */
   0% {
     transform: translate(-8rem, 5rem) scale(0.6);
   }
-
-  /* 20%：向上移動並放大 */
   20% {
     transform: translate(-8rem, -1rem) scale(1.1);
   }
-
-  /* 80%：保持大小，保持向左偏移 30px */
   80% {
     transform: translate(-8rem, -3rem) scale(1.0);
   }
-
-  /* 100%：向上移動更遠並縮小淡出，保持向左偏移 30px */
   100% {
     transform: translate(-8rem, -5rem) scale(0.6);
   }
@@ -129,19 +127,45 @@ const messageStyle = {
   100% {
     opacity: 0;
   }
-  /* 最後 20% 淡出 */
 }
-
 
 /* ---------------------------------------------------- */
-/* Vue Transition 輔助動畫 (可選，用於更平滑的移除) */
+/* ⭐️ RWD 修正：針對手機螢幕 (小於或等於 767px) 縮小字體 */
 /* ---------------------------------------------------- */
+@media (max-width: 767px) {
+  .floating-message {
+    /* 縮小字體到 1.5rem */
+    font-size: 1.5rem;
+    /* 調整 padding 使其看起來更協調 */
+    padding: 0.4em 0.8em;
+    /* ⭐️ 關鍵修正：強制文字不換行 */
+    white-space: nowrap;
+    /* ⭐️ 額外建議：確保元素是內聯塊級，以適應內容寬度 */
+    display: inline-block;
+  }
 
-.floating-message-fade-leave-active {
-  transition: opacity 0.3s ease-in;
-}
+  /* ⭐️ 由於字體縮小，動畫的偏移量和縮放比例也應調整 */
+  @keyframes floating-move {
+    /* 0%：起點向左偏移 (距離縮小) */
+    0% {
+      transform: translate(-8rem, 3rem) scale(0.6);
+    }
 
-.floating-message-fade-leave-to {
-  opacity: 0;
+    /* 20%：向上移動並放大 */
+    20% {
+      transform: translate(-8rem, -1rem) scale(1.1);
+    }
+
+    /* 80%：保持大小 */
+    80% {
+      transform: translate(-8rem, -2rem) scale(1.0);
+    }
+
+    /* 100%：向上移動更遠並縮小淡出 */
+    100% {
+      transform: translate(-8rem, -4rem) scale(0.6);
+    }
+  }
 }
+/* ---------------------------------------------------- */
 </style>

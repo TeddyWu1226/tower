@@ -4,7 +4,7 @@ import {RoomEnum} from "@/enums/room-enum";
 import {MonsterCardExposed} from "@/components/RoomLayout/comps/types";
 import MonsterCard from "@/components/RoomLayout/comps/MonsterCard.vue";
 import {useGameStateStore} from "@/store/game-state-store";
-import {computed, onMounted, Reactive, ref} from "vue";
+import {computed, Reactive, ref} from "vue";
 import {MonsterType} from "@/types";
 import {createMonster, Monster} from "@/assets/monster-info";
 import {applyDamage, applyRandomFloatAndRound, canEscape, triggerDamageEffect} from "@/assets/fight-func";
