@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import {ref, onMounted, computed} from "vue";
+import {ref, onMounted} from "vue";
 import {useGameStateStore} from "@/store/game-state-store";
-import {UserInfo} from "@/storage/userinfo-storage";
 import {EquipmentType, ItemType, PotionType, statLabels} from "@/types";
 import {getRandomItemsByQuality} from "@/utils/create";
 import {QualityEnum} from "@/enums/quilty-enum";
@@ -12,8 +11,10 @@ import {Weapon} from "@/constants/equipment/weapon-info";
 import {ElMessage} from "element-plus";
 import {getEnumColumn} from "@/utils/enum";
 import {Potions} from "@/constants/potion-info";
+import {usePlayerStore} from "@/store/player-store";
 
 const gameStateStore = useGameStateStore();
+const playerStore = usePlayerStore();
 
 // 商店商品列表 (包含一個 'sold' 標記來處理售出狀態)
 const itemList = ref<((ItemType | PotionType | EquipmentType) & { sold?: boolean; price?: number })[]>([]);
@@ -74,18 +75,20 @@ const buyItem = () => {
   const item = selectedItem.value as any;
   if (!item || item.sold) return;
 
-  if (UserInfo.value.gold < item.price) {
+  if (playerStore.info.gold < item.price) {
     ElMessage.error("錢不夠啊，窮光蛋！");
     return;
   }
 
   // 執行購買邏輯
-  UserInfo.value.gold -= item.price;
+  playerStore.addGold(-item.price);
   item.sold = true; // 因為 selectedItem 是對 itemList 元素的引用，這會同步更新列表
 
   // 關閉彈窗
   isShowDetail.value = false;
   ElMessage.success(`成功購買 ${item.name}!`);
+  const {sold, price, ...cleanItem} = item;
+  playerStore.gainItem(cleanItem);
 };
 
 // 進入房間時初始化
@@ -200,8 +203,9 @@ onMounted(() => {
   align-items: center;
   text-align: center;
 }
+
 @media (max-width: 767px) {
-  .item-card{
+  .item-card {
     width: 5rem;
   }
 }
@@ -246,10 +250,6 @@ onMounted(() => {
   color: #f56c6c;
   font-weight: bold;
   text-decoration: line-through;
-}
-
-.leave-btn {
-  margin-top: 3rem;
 }
 
 .detail-container {

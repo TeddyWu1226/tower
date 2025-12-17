@@ -2,9 +2,9 @@
 import {ref, onMounted, onUnmounted, computed} from "vue";
 import {getEnumColumn} from "@/utils/enum";
 import {CharEnum} from "@/enums/char-enum";
-import {UserInfo} from "@/storage/userinfo-storage";
 import {QualityEnum} from "@/enums/quilty-enum";
 import {EquipmentPosition} from "@/enums/enums";
+import {usePlayerStore} from "@/store/player-store";
 
 const fabRef = ref<HTMLElement | null>(null);
 const position = ref({x: 0, y: 100});
@@ -78,17 +78,22 @@ const handleClick = () => {
     isShowStats.value = true;
   }
 };
-const playerStats = computed(() => UserInfo.value);
 
-// 1. 定義 UI 佈局配置，對應 Equipment 介面的 Key
+
+// 欄位資訊
+
+const playerStore = usePlayerStore()
+const playerStats = computed(() => playerStore.info);
 const equipmentLayout = [
-  { key: 'head',       label: '頭部', icon: '🦲' },
-  { key: 'weapon',     label: '武器', icon: '🗡️' },
-  { key: 'body',       label: '身體', icon: '👕' },
-  { key: 'offhand',    label: '副手', icon: '🛡️' },
-  { key: 'accessory1', label: '飾品 I', icon: '💍' },
-  { key: 'accessory2', label: '飾品 II', icon: '📿' },
+  {key: 'head', label: '頭部', icon: '🦲'},
+  {key: 'weapon', label: '武器', icon: '🗡️'},
+  {key: 'body', label: '身體', icon: '👕'},
+  {key: 'offhand', label: '副手', icon: '🛡️'},
+  {key: 'accessory1', label: '飾品 I', icon: '💍'},
+  {key: 'accessory2', label: '飾品 II', icon: '📿'},
 ] as const;
+
+
 </script>
 
 <template>
@@ -103,7 +108,7 @@ const equipmentLayout = [
       @touchstart.prevent="onDragStart"
       @click="handleClick"
   >
-    <div class="icon-inner">{{ UserInfo.icon }}</div>
+    <div class="icon-inner">{{ playerStore.info.icon }}</div>
 
     <el-dialog v-model="isShowStats" title="角色狀態" width="350px" append-to-body>
       <div class="stats-container">

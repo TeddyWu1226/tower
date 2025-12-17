@@ -8,13 +8,14 @@ import {computed, Reactive, ref} from "vue";
 import {MonsterType} from "@/types";
 import {Monster} from "@/constants/monster-info";
 import {applyDamage, applyRandomFloatAndRound, canEscape, triggerDamageEffect} from "@/constants/fight-func";
-import {UserInfo} from "@/storage/userinfo-storage";
 import {ElMessage} from "element-plus";
 import {LogView} from "@/components/LogView";
 import {create} from "@/utils/create";
+import {usePlayerStore} from "@/store/player-store";
 
 const emit = defineEmits(['playerDead', 'runFailed'])
 const gameStateStore = useGameStateStore()
+const playerStore = usePlayerStore()
 
 const currentRoomValue = computed(() => {
       return gameStateStore.currentRoomValue
@@ -58,7 +59,7 @@ const handleMonsterSelect = (index: number) => {
 
 const monsterMove = (selectedMonster: MonsterType) => {
   // 傷害計算
-  const damageOutput = applyDamage(selectedMonster, UserInfo.value);
+  const damageOutput = applyDamage(selectedMonster, playerStore.info);
   // 判斷玩家是否死亡
   if (damageOutput.isKilled) {
     emit('playerDead', damageOutput.isKilled)
@@ -81,7 +82,7 @@ const onAttack = () => {
     return
   }
   // 傷害計算
-  const damageOutput = applyDamage(UserInfo.value, selectedMonster);
+  const damageOutput = applyDamage(playerStore.info, selectedMonster);
   const targetElement = monsterCardRefs.value[selectedMonsterIndex.value];
   triggerDamageEffect(damageOutput, targetElement.$el)
   if (damageOutput.isHit) {
@@ -105,13 +106,13 @@ const onAttack = () => {
   }
   // 怪物全部死亡
   if (monsters.value.length === 0) {
-    UserInfo.value.gold += monsterDropGold.value
+    playerStore.addGold(monsterDropGold.value)
     gameStateStore.setBattleWon(true)
   }
 }
 const isEscape = ref(false)
 const onRun = () => {
-  if (!canEscape(UserInfo.value, monsters.value)) {
+  if (!canEscape(playerStore.info, monsters.value)) {
     if (!selectedMonsterIndex.value) {
       selectedMonsterIndex.value = 0
     }

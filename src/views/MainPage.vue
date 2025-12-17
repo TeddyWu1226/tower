@@ -8,12 +8,12 @@ import {useGameStateStore} from "@/store/game-state-store";
 import {GameState} from "@/enums/enums";
 import {getEnumColumn} from "@/utils/enum";
 import {StageEnum} from "@/enums/stage-enum";
-import {UserInfo} from "@/storage/userinfo-storage";
-import {DEFAULT_USER_INFO} from "@/constants/default-const";
 import {UserValueLayout} from "@/components/UserValueLayout";
 import {UserDetailInfo} from "@/components/DetailInfo";
+import {usePlayerStore} from "@/store/player-store";
 
 const gameStateStore = useGameStateStore()
+const playerStore = usePlayerStore()
 const isDead = ref(false)
 const cardConfig = ref({
   shadow: 'never',
@@ -24,7 +24,7 @@ const buttonConfig = ref({
 
 const initAll = async () => {
   // 初始化角色
-  UserInfo.value = {...DEFAULT_USER_INFO}
+  playerStore.init()
   // 初始化
   gameStateStore.init()
   // 前往第一層

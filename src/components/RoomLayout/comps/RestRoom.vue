@@ -1,19 +1,21 @@
 <script setup lang="ts">
 
 import {ref} from "vue";
-import {UserInfo} from "@/storage/userinfo-storage";
 import {useGameStateStore} from "@/store/game-state-store";
 import {GameState} from "@/enums/enums";
+import {usePlayerStore} from "@/store/player-store";
+
+const playerStore = usePlayerStore();
+const gameStateStore = useGameStateStore()
 
 const isRested = ref<boolean>(false)
-const gameStateStore = useGameStateStore()
 const onRest = () => {
   isRested.value = true
-  if (UserInfo.value.hp < UserInfo.value.hpLimit) {
-    UserInfo.value.hp = UserInfo.value.hpLimit
+  if (playerStore.info.hp < playerStore.info.hpLimit) {
+    playerStore.info.hp = playerStore.info.hpLimit
   }
-  if (UserInfo.value.sp < UserInfo.value.spLimit) {
-    UserInfo.value.sp = UserInfo.value.spLimit
+  if (playerStore.info.sp < playerStore.info.spLimit) {
+    playerStore.info.sp = playerStore.info.spLimit
   }
   gameStateStore.transitionToNextState()
 }
