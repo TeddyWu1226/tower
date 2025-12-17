@@ -7,6 +7,7 @@ import {useGameStateStore} from "@/store/game-state-store";
 import RestRoom from "@/components/RoomLayout/comps/RestRoom.vue";
 import FightRoom from "@/components/RoomLayout/comps/FightRoom.vue";
 import EventRoomCard from "@/components/RoomLayout/comps/EventRoomCard.vue";
+import {useLogStore} from "@/store/log-store";
 
 const emit = defineEmits(['playerDead', 'runFailed'])
 const gameStateStore = useGameStateStore()
@@ -57,10 +58,11 @@ defineExpose({
 
 /** 初始化刷新 **/
 const roomKeyCounter = ref(0)
-
+const logStore = useLogStore();
 watch(() => gameStateStore.currentRoom,
     () => {
       roomKeyCounter.value++
+      logStore.logger.clear()
     },
     {
       immediate: true,
