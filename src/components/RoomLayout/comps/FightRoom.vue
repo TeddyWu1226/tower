@@ -6,11 +6,12 @@ import MonsterCard from "@/components/RoomLayout/comps/MonsterCard.vue";
 import {useGameStateStore} from "@/store/game-state-store";
 import {computed, Reactive, ref} from "vue";
 import {MonsterType} from "@/types";
-import {createMonster, Monster} from "@/assets/monster-info";
-import {applyDamage, applyRandomFloatAndRound, canEscape, triggerDamageEffect} from "@/assets/fight-func";
+import {Monster} from "@/constants/monster-info";
+import {applyDamage, applyRandomFloatAndRound, canEscape, triggerDamageEffect} from "@/constants/fight-func";
 import {UserInfo} from "@/storage/userinfo-storage";
 import {ElMessage} from "element-plus";
 import {LogView} from "@/components/LogView";
+import {create} from "@/utils/create";
 
 const emit = defineEmits(['playerDead', 'runFailed'])
 const gameStateStore = useGameStateStore()
@@ -32,7 +33,7 @@ const clearMonsters = () => {
 const genMonster = (layer: number) => {
   // 緩存召喚的怪物
   // gameStateStore.setCurrentEnemy(['Slime'])
-  monsters.value.push(createMonster(Monster.Slime))
+  monsters.value.push(create(Monster.Slime))
 }
 const selectedMonsterIndex = ref<number | null>(null);
 
@@ -58,8 +59,6 @@ const handleMonsterSelect = (index: number) => {
 const monsterMove = (selectedMonster: MonsterType) => {
   // 傷害計算
   const damageOutput = applyDamage(selectedMonster, UserInfo.value);
-  // 文字
-  // triggerDamageEffect(damageOutput)
   // 判斷玩家是否死亡
   if (damageOutput.isKilled) {
     emit('playerDead', damageOutput.isKilled)

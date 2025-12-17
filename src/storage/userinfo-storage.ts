@@ -1,6 +1,6 @@
 import {StorageSerializers, useStorage} from "@vueuse/core";
 import {UserType} from "@/types";
-import {DEFAULT_USER_INFO} from "@/assets/default-const";
+import {DEFAULT_USER_INFO} from "@/constants/default-const";
 
 
 export const UserInfo = useStorage<UserType>('user-info',

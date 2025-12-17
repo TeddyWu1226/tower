@@ -8,6 +8,11 @@
     font-size: 14px;
 }
 
+/* 如果是遊戲，通常建議讓整個 main 內容都無法被選取 */
+html, body {
+    user-select: none;
+}
+
 
 @media (min-width: 1024px) {
     body {

@@ -9,8 +9,9 @@ import {GameState} from "@/enums/enums";
 import {getEnumColumn} from "@/utils/enum";
 import {StageEnum} from "@/enums/stage-enum";
 import {UserInfo} from "@/storage/userinfo-storage";
-import {DEFAULT_USER_INFO} from "@/assets/default-const";
+import {DEFAULT_USER_INFO} from "@/constants/default-const";
 import {UserValueLayout} from "@/components/UserValueLayout";
+import {UserDetailInfo} from "@/components/DetailInfo";
 
 const gameStateStore = useGameStateStore()
 const isDead = ref(false)
@@ -131,6 +132,7 @@ const onRunFailed = () => {
           <UserLayout class="user-layout"/>
         </el-main>
       </el-container>
+      <UserDetailInfo v-if="!gameStateStore.stateIs(GameState.INITIAL)"/>
     </div>
   </el-config-provider>
 </template>
@@ -138,6 +140,7 @@ const onRunFailed = () => {
 
 <style scoped>
 .common-layout {
+  position: relative;
   background-color: #303133;
 
 }

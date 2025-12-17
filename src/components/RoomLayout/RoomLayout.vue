@@ -8,6 +8,7 @@ import RestRoom from "@/components/RoomLayout/comps/RestRoom.vue";
 import FightRoom from "@/components/RoomLayout/comps/FightRoom.vue";
 import EventRoomCard from "@/components/RoomLayout/comps/EventRoomCard.vue";
 import {useLogStore} from "@/store/log-store";
+import ShopRoom from "@/components/RoomLayout/comps/ShopRoom.vue";
 
 const emit = defineEmits(['playerDead', 'runFailed'])
 const gameStateStore = useGameStateStore()
@@ -39,6 +40,8 @@ const onRest = () => {
   RestRoomRef.value?.onRest()
 }
 
+/** 購物房間 **/
+const ShopRoomRef = ref()
 
 /** 綜合取消 **/
 const onCancel = () => {
@@ -46,6 +49,10 @@ const onCancel = () => {
     case RoomEnum.Rest.value:
       gameStateStore.transitionToNextState()
       break;
+    case RoomEnum.Shop.value:
+      gameStateStore.transitionToNextState()
+      break;
+
   }
 }
 
@@ -85,6 +92,7 @@ watch(() => gameStateStore.currentRoom,
         :key="roomKeyCounter"
     />
     <RestRoom ref="RestRoomRef" v-if="currentRoomValue === RoomEnum.Rest.value" :key="roomKeyCounter"/>
+    <ShopRoom ref="ShopRoomRef" v-if="currentRoomValue === RoomEnum.Shop.value" :key="roomKeyCounter"/>
   </el-card>
 </template>
 

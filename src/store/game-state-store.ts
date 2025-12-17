@@ -1,10 +1,10 @@
 import {defineStore} from 'pinia';
 import {GameState, SpecialEventEnum} from "@/enums/enums";
 import {RoomEnum} from "@/enums/room-enum";
-import {Monster} from "@/assets/monster-info";
+import {Monster} from "@/constants/monster-info";
 import {RoomCoordinateTuple, TrapezoidData} from "@/types";
 import {createTrapezoidDataWithWeights} from "@/utils/create-floor";
-import {DEFAULT_ROOM_WEIGHTS} from "@/assets/default-const";
+import {DEFAULT_ROOM_WEIGHTS} from "@/constants/default-const";
 
 type MonsterKey = keyof typeof Monster
 
