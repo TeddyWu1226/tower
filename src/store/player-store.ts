@@ -1,7 +1,8 @@
-import { defineStore } from 'pinia';
-import { ref, computed } from 'vue';
-import type { UserType, Equipment, EquipmentType } from '@/types';
-import { DEFAULT_USER_INFO } from '@/constants/default-const';
+import {defineStore} from 'pinia';
+import {ref, computed} from 'vue';
+import type {UserType, Equipment, EquipmentType} from '@/types';
+import {DEFAULT_USER_INFO} from '@/constants/default-const';
+import {create} from "@/utils/create";
 
 export const usePlayerStore = defineStore('player-info', () => {
     // --- State ---
@@ -47,60 +48,73 @@ export const usePlayerStore = defineStore('player-info', () => {
      * 獲得物品 (存入 items 背包)
      */
     const gainItem = (item: any) => {
-        if (!info.value.items) info.value.items = [];
-        info.value.items.push(JSON.parse(JSON.stringify(item)));
-    };
-
-    /**
-     * 移除背包中的物品
-     */
-    const removeItem = (index: number) => {
-        if (info.value.items && info.value.items[index]) {
-            info.value.items.splice(index, 1);
+        info.value.items = info.value.items || [];
+        info.value.equipments = info.value.equipments || [];
+        info.value.consumeItems = info.value.consumeItems || [];
+        const newItem = create(item);
+        // 分類加入
+        if (item?.position) {
+            info.value.equipments.push(newItem)
+        } else if (item?.usable) {
+            info.value.consumeItems.push(newItem)
+        } else {
+            info.value.items.push(newItem)
         }
     };
 
     /**
-     * 卸下裝備
+     * 通用的移除物品方法
+     * @param type 背包類型
+     * @param index 索引
+     */
+    const _removeItemFromBag = (type: 'items' | 'equipments' | 'consumeItems', index: number) => {
+        const bag = info.value[type];
+        if (bag && bag[index]) {
+            bag.splice(index, 1);
+        }
+    };
+
+    /**
+     * 裝備物品 (從 equipments 背包移動到 equips 狀態)
+     */
+    const equipItem = (item: EquipmentType, inventoryIndex: number, targetSlot?: keyof Equipment) => {
+        if (!info.value.equips) info.value.equips = {};
+
+        // 決定位置 (優先使用指定位置，否則使用裝備預設位置)
+        const slot = targetSlot || (item.position as keyof Equipment);
+
+        // 1. 如果該位置已有裝備，卸下 (unequipItem 會自動呼叫 gainItem 放回正確背包)
+        if (info.value.equips[slot]) {
+            unequipItem(slot);
+        }
+
+        // 2. 穿上新裝備
+        info.value.equips[slot] = item
+
+        // 3. 從「裝備背包」中移除
+        _removeItemFromBag('equipments', inventoryIndex);
+
+        if (info.value.hp > finalStats.value.hpLimit) {
+            info.value.hp = finalStats.value.hpLimit;
+        }
+    };
+
+    /**
+     * 卸下裝備 (從 equips 狀態移動到 equipments 背包)
      */
     const unequipItem = (slot: keyof Equipment) => {
         if (!info.value.equips || !info.value.equips[slot]) return null;
 
         const itemToUnequip = info.value.equips[slot];
-        delete info.value.equips[slot];
+        // 移除位置上的裝備
+        info.value.equips[slot] = undefined;
 
         if (itemToUnequip) {
-            gainItem(itemToUnequip);
+            gainItem(itemToUnequip); // 會自動分類到 equipments
         }
         return itemToUnequip;
     };
 
-    /**
-     * 裝備物品
-     * @param item 裝備物件
-     * @param inventoryIndex 背包中的索引 (裝備後需移除)
-     * @param targetSlot 強制指定的槽位 (用於飾品1、飾品2的選擇)
-     */
-    const equipItem = (item: EquipmentType, inventoryIndex?: number, targetSlot?: keyof Equipment) => {
-        if (!info.value.equips) info.value.equips = {};
-
-        // 決定要穿在哪個位置
-        // 如果有指定 targetSlot (如 accessory1) 就用指定的，否則用裝備預設的 position
-        const slot = targetSlot || (item.position as keyof Equipment);
-
-        // 1. 如果該位置已有裝備，先卸下並放回背包
-        if (info.value.equips[slot]) {
-            unequipItem(slot);
-        }
-
-        // 2. 穿上裝備
-        info.value.equips[slot] = JSON.parse(JSON.stringify(item));
-
-        // 3. 如果是從背包穿上的，將其從背包移除
-        if (inventoryIndex !== undefined) {
-            removeItem(inventoryIndex);
-        }
-    };
 
     const addGold = (amount: number) => {
         info.value.gold = (info.value.gold || 0) + amount;
@@ -118,7 +132,6 @@ export const usePlayerStore = defineStore('player-info', () => {
         unequipItem,
         addGold,
         gainItem,
-        removeItem,
         init
     };
 }, {

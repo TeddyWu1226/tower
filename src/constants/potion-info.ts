@@ -1,6 +1,6 @@
 import {PotionType} from "@/types";
 
-export const Potions: Record<string, PotionType> = {
+export const Potions = {
     // --- 品質 0: 破舊的 (Tattered) ---
     DilutedWater: {
         name: '稀釋的草藥水',
@@ -9,7 +9,7 @@ export const Potions: Record<string, PotionType> = {
         quality: 0,
         heal: 25,
         usable: true
-    },
+    } as PotionType,
     CloudyJuice: {
         name: '混濁的果汁',
         description: '感覺放了很久，只能稍微提神。',
@@ -17,7 +17,7 @@ export const Potions: Record<string, PotionType> = {
         quality: 0,
         magic: 10,
         usable: true
-    },
+    } as PotionType,
 
     // --- 品質 1: 普通的 (Common) ---
     SmallHealingPotion: {
@@ -27,7 +27,7 @@ export const Potions: Record<string, PotionType> = {
         quality: 1,
         heal: 50,
         usable: true
-    },
+    } as PotionType,
     SmallManaPotion: {
         name: '初級法力藥水',
         description: '淡淡的藍色液體。',
@@ -35,7 +35,7 @@ export const Potions: Record<string, PotionType> = {
         quality: 1,
         magic: 20,
         usable: true
-    },
+    } as PotionType,
 
     // --- 品質 2: 精良的 (Fine) ---
     RegularHealthBrew: {
@@ -45,14 +45,14 @@ export const Potions: Record<string, PotionType> = {
         quality: 2,
         heal: 100,
         usable: true
-    },
+    } as PotionType,
     ClearManaPotion: {
         name: '清澈法力藥水',
         description: '精煉過的魔力液體，恢復感極強。',
         icon: '🍹',
         quality: 2,
         magic: 50
-    },
+    } as PotionType,
 
     // --- 品質 3: 傳奇的 (Epic) ---
     GreatElixir: {
@@ -62,7 +62,7 @@ export const Potions: Record<string, PotionType> = {
         quality: 3,
         heal: 300,
         usable: true
-    },
+    } as PotionType,
     MysticEther: {
         name: '神秘以太劑',
         description: '彷彿星空凝聚在瓶中。',
@@ -70,7 +70,7 @@ export const Potions: Record<string, PotionType> = {
         quality: 3,
         magic: 100,
         usable: true
-    },
+    } as PotionType,
 
     // --- 品質 4: 傳說的 (Mythic) ---
     DivineNectar: {
@@ -81,7 +81,7 @@ export const Potions: Record<string, PotionType> = {
         heal: 1000,
         magic: 300,
         usable: true
-    },
+    } as PotionType,
     YggdrasilSap: {
         name: '世界樹汁液',
         description: '包含著純粹的生命精華。',
@@ -90,7 +90,7 @@ export const Potions: Record<string, PotionType> = {
         heal: 2000,
         hpLimit: 50,// 附加永久效果 (來自 qualityType),
         usable: true
-    },
+    } as PotionType,
 
     // --- 品質 5: 詛咒的 (Cursed) ---
     VampiresBlood: {
@@ -101,7 +101,7 @@ export const Potions: Record<string, PotionType> = {
         heal: 500,
         magic: -100,
         usable: true
-    },
+    } as PotionType,
     ChaosDistillate: {
         name: '混沌蒸餾液',
         description: '極不穩定的藥水，誰知道會發生什麼？',
@@ -111,5 +111,5 @@ export const Potions: Record<string, PotionType> = {
         magic: 500,
         ad: 10, // 暫時或永久提升攻擊力,
         usable: true
-    }
+    } as PotionType
 };

@@ -23,7 +23,7 @@ const isRun = ref(false)
 /**
  * 根據品質計算價格的簡單公式
  */
-const potionPrices = [50, 100, 200, 400, 1000, 3000]
+const potionPrices = [25, 50, 150, 300, 1000, 3000]
 const calculatePrice = (quality: number) => {
   const basePrice = [20, 100, 500, 2000, 10000, 5000][quality] || 50;
   // 加入一點隨機波動 (±10%)

@@ -8,7 +8,7 @@ export const Boss = {
         icon: '🐻',
         name: '森林巨熊',
         description: '貌似是這片森林的動物之主,有厚重的毛皮以及強大的破壞力,需要小心謹慎',
-        ad: 20,
+        ad: 10,
         critIncrease: WorldDefault.critIncrease,
         critRate: 25,
         adDefend: 10,

@@ -227,7 +227,7 @@ export function escapePercent(runner: UnitType, chasers: UnitType[]): number {
     const BASE_CHANCE = 25; // 基礎成功率 (居中值)
     const LEVEL_WEIGHT = 3; // 每 1 級差距影響 3% 的機率
     const MAX_CHANCE = 100;  // 最高成功率
-    const MIN_CHANCE = 1;   // 最低成功率 0%
+    const MIN_CHANCE = 0;   // 最低成功率 0%
 
     // --- 核心計算 ---
 

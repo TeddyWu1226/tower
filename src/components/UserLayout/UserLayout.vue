@@ -7,6 +7,7 @@ import {EquipmentEnum} from "@/enums/enums";
 import {ItemInfo} from "@/components/Shared/itemInfo";
 import {EquipmentType, PotionType, qualityType, statLabels} from "@/types";
 import {ElMessage} from "element-plus";
+import {Potions} from "@/constants/potion-info";
 
 const playerStore = usePlayerStore()
 const activeName = ref('item')
@@ -35,30 +36,66 @@ const getItemDescriptionLine = (data: Partial<qualityType & PotionType>): string
 // --- 分類邏輯 ---
 
 // 1. 道具：具有 usable 屬性
-const consumableItems = computed(() => {
-  return playerStore.info.items?.filter(i => 'usable' in i && i.usable) || []
-})
+// 聚合後的列表
+const aggregatedConsumables = computed(() => {
+  const map = new Map<string, { item: PotionType; count: number }>();
 
-// 2. 裝備：具有 position 屬性
-const equipmentItems = computed(() => {
-  return playerStore.info.items?.filter(i => 'position' in i) || []
-})
+  playerStore.info.consumeItems.forEach((item) => {
+    const key = item.name;
+    if (map.has(key)) {
+      map.get(key)!.count++;
+    } else {
+      map.set(key, { item: { ...item }, count: 1 });
+    }
+  });
 
-// 3. 其他：既不是道具也不是裝備的物品
-const otherItems = computed(() => {
-  return playerStore.info.items?.filter(i => !('usable' in i && i.usable) && !('position' in i)) || []
-})
+  // 將 Array 轉出後進行排序
+  return Array.from(map.values()).sort((a, b) => {
+    // 1. 優先按品質排序 (高等級在前)
+    if ((b.item.quality || 0) !== (a.item.quality || 0)) {
+      return (b.item.quality || 0) - (a.item.quality || 0);
+    }
+    // 2. 品質相同時，按名稱字母排序
+    return a.item.name.localeCompare(b.item.name);
+  });
+});
+
 
 /**
  * 點擊物品的處理 (例如：使用藥水或穿上裝備)
  */
-const handleItemClick = (item: any) => {
-  console.log('點擊了物品:', item.name)
+const handleUseConsume = (potion: any) => {
+  if (!potion.usable) return;
+
+  // 1. 執行效果（例如增加玩家 HP/MP）
+  if (potion.heal) {
+    playerStore.info.hp = Math.min(playerStore.finalStats.hpLimit, playerStore.info.hp + potion.heal);
+  }
+  if (potion.magic) {
+    playerStore.info.sp = Math.min(playerStore.finalStats.spLimit, playerStore.info.sp + potion.magic);
+  }
+
+  // 2. 從原始背包中移除「一個」該道具
+  const index = playerStore.info.consumeItems.findIndex(i => i.name === potion.name);
+  if (index > -1) {
+    playerStore.info.consumeItems.splice(index, 1);
+  }
 }
 const handleEquipmentClick = (item: any, index: number) => {
   playerStore.equipItem(item, index)
-  ElMessage.success(`已裝備 ${item.name}!`)
+  ElMessage.success(`${index} 已裝備 ${item.name}!`)
 }
+
+const test = () => {
+  playerStore.gainItem(Potions.DilutedWater)
+  playerStore.gainItem(Potions.SmallHealingPotion)
+  playerStore.gainItem(Potions.DilutedWater)
+  playerStore.gainItem(Potions.DilutedWater)
+  playerStore.gainItem(Potions.SmallHealingPotion)
+  playerStore.gainItem(Potions.SmallHealingPotion)
+  playerStore.gainItem(Potions.SmallHealingPotion)
+}
+test()
 </script>
 
 <template>
@@ -66,15 +103,36 @@ const handleEquipmentClick = (item: any, index: number) => {
     <el-tabs v-model="activeName" stretch>
       <el-tab-pane label="道具" name="item">
         <el-scrollbar height="7rem">
-          <div v-if="consumableItems.length > 0" class="item-grid">
+          <div v-if="playerStore.info.consumeItems?.length > 0" class="potion-grid">
             <div
-                v-for="(item, index) in consumableItems"
-                :key="index"
-                class="inventory-item"
-                @click="handleItemClick(item)"
+                v-for="entry in aggregatedConsumables"
+                :key="entry.item.name"
+                class="item-slot"
+                @dblclick="handleUseConsume(entry.item)"
             >
-              <span class="item-icon">{{ item.icon }}</span>
-              <span class="item-name">{{ item.name }}</span>
+              <el-tooltip
+                  placement="top"
+                  :fallback-placements="['bottom']"
+                  effect="light"
+              >
+                <template #content>
+                  <div class="tooltip-content">
+                    <b :class="`text-quality-${entry.item.quality}`">{{ entry.item.name }}(雙擊使用)</b>
+                    <p class="desc">{{ entry.item.description }}</p>
+                    <hr v-if="entry.item.heal || entry.item.magic" class="divider"/>
+                    <span v-if="entry.item.heal" class="effect-text">❤️ 回復生命: {{ entry.item.heal }}</span>
+                    <span v-if="entry.item.magic" class="effect-text">💧 回復魔力: {{ entry.item.magic }}</span>
+                  </div>
+                </template>
+
+                <div class="icon-wrapper" :class="`quality-${entry.item.quality}`">
+                  <span class="icon">{{ entry.item.icon }}</span>
+                  <span v-if="entry.item.heal" class="heal-effect" >+{{ entry.item.heal }}</span>
+                  <span v-if="entry.item.magic" class="magic-effect">+{{ entry.item.magic }}</span>
+                  <div class="item-count">{{ entry.count }}</div>
+                </div>
+              </el-tooltip>
+              <div class="item-name">{{ entry.item.name }}</div>
             </div>
           </div>
           <span v-else class="empty">無任何道具</span>
@@ -83,9 +141,9 @@ const handleEquipmentClick = (item: any, index: number) => {
 
       <el-tab-pane label="裝備" name="equipment">
         <el-scrollbar height="7rem">
-          <div v-if="equipmentItems.length > 0" class="item-grid">
+          <div v-if="playerStore.info.equipments?.length > 0" class="item-grid">
             <el-tooltip
-                v-for="(item, index) in equipmentItems"
+                v-for="(item, index) in playerStore.info.equipments"
                 :key="index"
                 effect="light"
             >
@@ -118,8 +176,8 @@ const handleEquipmentClick = (item: any, index: number) => {
 
       <el-tab-pane label="其他" name="other">
         <el-scrollbar height="7rem">
-          <div v-if="otherItems.length > 0" class="item-grid">
-            <div v-for="(item, index) in otherItems" :key="index" class="inventory-item">
+          <div v-if="playerStore.info.items?.length > 0" class="item-grid">
+            <div v-for="(item, index) in playerStore.info.items" :key="index" class="inventory-item">
               <span class="item-icon">{{ item.icon }}</span>
               <span class="item-name">{{ item.name }}</span>
             </div>
@@ -191,4 +249,94 @@ const handleEquipmentClick = (item: any, index: number) => {
 :deep(.el-tabs__item) {
   padding: 0;
 }
+
+
+.potion-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  gap: 0.5rem;
+  padding: 0.5rem;
+}
+
+.item-slot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  user-select: none; /* 防止雙擊選中文字 */
+  /* 平滑過渡效果 */
+  transition: transform 0.2s ease-out;
+}
+
+/* Hover 效果：放大並變亮 */
+.item-slot:hover {
+  transform: scale(1.1);
+  z-index: 10;
+}
+
+/* Hover 時邊框發光 */
+.item-slot:hover .icon-wrapper {
+  border-color: #fff;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+  filter: brightness(1.2);
+}
+
+.icon-wrapper {
+  position: relative; /* 關鍵：讓數量標籤相對於此定位 */
+  width: 60px;
+  height: 60px;
+  background: #3c3f41;
+  border: 2px solid #555;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2rem;
+}
+
+.heal-effect {
+  position: absolute;
+  color: #3ff149;
+  top: 0;
+  right: -2px;
+  padding: 0 4px;
+  font-size: 12px;
+  font-family: 'Courier New', Courier, monospace;
+  min-width: 18px;
+  text-align: center;
+}
+.magic-effect{
+  position: absolute;
+  color: #268cef;
+  top: 0;
+  left: -2px;
+  padding: 0 4px;
+  font-size: 12px;
+  font-family: 'Courier New', Courier, monospace;
+  min-width: 18px;
+  text-align: center;
+}
+
+.item-count {
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: #00ff00; /* 綠色數量文字，更有遊戲感 */
+  padding: 0 4px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-family: 'Courier New', Courier, monospace;
+  border: 1px solid #444;
+  min-width: 18px;
+  text-align: center;
+}
+
+.item-name {
+  margin-top: 4px;
+  font-size: 12px;
+  color: #eee;
+  text-align: center;
+}
+
 </style>

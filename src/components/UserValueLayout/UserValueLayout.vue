@@ -14,7 +14,7 @@ const cardRef = ref<typeof ElCard | null>(null);
 const isShaking = ref(false);
 
 // 計算 HP 上限，用於計算大規模傷害或治療的閾值
-const hpLimit = computed(() => playerStore.info.hpLimit);
+const hpLimit = computed(() => playerStore.finalStats.hpLimit);
 
 // 震動動畫持續時間 (需與 CSS 中的 duration 匹配)
 const SHAKE_DURATION_MS = 500;
@@ -24,6 +24,9 @@ watch(
     (newValue, oldValue) => {
       // 確保 HP 發生變化，且卡片元素已經掛載
       if (newValue === oldValue || !cardRef.value) {
+        return;
+      }
+      if (oldValue > newValue && newValue === hpLimit.value) {
         return;
       }
 
