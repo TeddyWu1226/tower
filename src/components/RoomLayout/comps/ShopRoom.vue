@@ -19,7 +19,7 @@ const playerStore = usePlayerStore();
 
 // 商店商品列表 (包含一個 'sold' 標記來處理售出狀態)
 const itemList = ref<((ItemType | PotionType | EquipmentType) & { sold?: boolean; price?: number })[]>([]);
-
+const isRun = ref(false)
 /**
  * 根據品質計算價格的簡單公式
  */
@@ -97,80 +97,84 @@ onMounted(() => {
   init();
   if (gameStateStore.stateIs(GameState.EVENT_PHASE)) {
     gameStateStore.transitionToNextState()
+  } else {
+    isRun.value = true
   }
 });
 </script>
 
 <template>
   <div class="shop-room">
-    <div class="shop-header">
-      <h2>🧌 神秘商人</h2>
-      <p>「我這裡有些好貨，看看吧!」</p>
-    </div>
-
-    <div class="shop-container">
-      <div
-          v-for="(item, index) in itemList"
-          :key="index"
-          class="item-card"
-          :style="{
+    <template v-if="!isRun">
+      <div class="shop-header">
+        <h2>🧌 神秘商人</h2>
+        <p>「我這裡有些好貨，看看吧!」</p>
+      </div>
+      <div class="shop-container">
+        <div
+            v-for="(item, index) in itemList"
+            :key="index"
+            class="item-card"
+            :style="{
             borderColor: getEnumColumn(QualityEnum,item?.quality,'color','white'),
             color:getEnumColumn(QualityEnum,item?.quality,'color','white')
           }"
-          :class="{ 'is-sold': item.sold }"
-          @click="onClickItem(item)"
-      >
-        <div class="item-icon">{{ item.icon }}</div>
-        <div class="item-info">
-          <div class="item-name">{{ item.name }}</div>
-          <div class="item-desc">{{ item.description }}</div>
-          <div class="item-price" v-if="!item.sold">
-            💰 {{ item.price }} G
+            :class="{ 'is-sold': item.sold }"
+            @click="onClickItem(item)"
+        >
+          <div class="item-icon">{{ item.icon }}</div>
+          <div class="item-info">
+            <div class="item-name">{{ item.name }}</div>
+            <div class="item-desc">{{ item.description }}</div>
+            <div class="item-price" v-if="!item.sold">
+              💰 {{ item.price }} G
+            </div>
+            <div class="item-sold-text" v-else>售出</div>
           </div>
-          <div class="item-sold-text" v-else>售出</div>
         </div>
       </div>
-    </div>
-    <el-dialog
-        v-model="isShowDetail"
-        :title="`物品詳情 💰 ${ (selectedItem as any)?.price } G`"
-        align-center
-    >
-      <div v-if="selectedItem" class="detail-container">
-        <div class="detail-icon">{{ selectedItem.icon }}</div>
-        <h3 :style="{ color: getEnumColumn(QualityEnum, selectedItem.quality, 'color', '#fff') }">
-          {{ selectedItem.name }}
-        </h3>
+      <el-dialog
+          v-model="isShowDetail"
+          :title="`物品詳情 💰 ${ (selectedItem as any)?.price } G`"
+          align-center
+      >
+        <div v-if="selectedItem" class="detail-container">
+          <div class="detail-icon">{{ selectedItem.icon }}</div>
+          <h3 :style="{ color: getEnumColumn(QualityEnum, selectedItem.quality, 'color', '#fff') }">
+            {{ selectedItem.name }}
+          </h3>
 
-        <p class="detail-desc">{{ selectedItem.description }}</p>
+          <p class="detail-desc">{{ selectedItem.description }}</p>
 
-        <el-divider content-position="left">屬性</el-divider>
+          <el-divider content-position="left">屬性</el-divider>
 
-        <div class="detail-stats">
-          <template v-for="(val, key) in selectedItem" :key="key">
-            <div v-if="statLabels[key] && val" class="stat-row">
-              <span class="stat-label">{{ statLabels[key] }}</span>
-              <span class="stat-value" :class="{ 'plus': (val as number) > 0, 'minus': (val as number) < 0 }">
+          <div class="detail-stats">
+            <template v-for="(val, key) in selectedItem" :key="key">
+              <div v-if="statLabels[key] && val" class="stat-row">
+                <span class="stat-label">{{ statLabels[key] }}</span>
+                <span class="stat-value" :class="{ 'plus': (val as number) > 0, 'minus': (val as number) < 0 }">
                 {{ (val as number) > 0 ? '+' : '' }}{{ val }}
               </span>
-            </div>
-          </template>
+              </div>
+            </template>
+          </div>
         </div>
-      </div>
 
-      <template #footer>
-        <div class="dialog-footer">
-          <el-button @click="isShowDetail = false">取消</el-button>
-          <el-button
-              type="warning"
-              :disabled="(selectedItem as any)?.sold"
-              @click="buyItem"
-          >
-            {{ (selectedItem as any)?.sold ? '已售出' : '確認購買' }}
-          </el-button>
-        </div>
-      </template>
-    </el-dialog>
+        <template #footer>
+          <div class="dialog-footer">
+            <el-button @click="isShowDetail = false">取消</el-button>
+            <el-button
+                type="warning"
+                :disabled="(selectedItem as any)?.sold"
+                @click="buyItem"
+            >
+              {{ (selectedItem as any)?.sold ? '已售出' : '確認購買' }}
+            </el-button>
+          </div>
+        </template>
+      </el-dialog>
+    </template>
+    <span v-else style="font-size: 2rem;text-align: center">因為你刷新了頁面<br/>商人覺得你不想買就跑了...</span>
   </div>
 </template>
 

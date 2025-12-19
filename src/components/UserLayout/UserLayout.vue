@@ -4,10 +4,34 @@ import {usePlayerStore} from '@/store/player-store'
 import {QualityEnum} from "@/enums/quilty-enum"
 import {getEnumColumn} from "@/utils/enum"
 import {EquipmentEnum} from "@/enums/enums";
+import {ItemInfo} from "@/components/Shared/itemInfo";
+import {EquipmentType, PotionType, qualityType, statLabels} from "@/types";
+import {ElMessage} from "element-plus";
 
 const playerStore = usePlayerStore()
 const activeName = ref('item')
 
+const getItemDescriptionLine = (data: Partial<qualityType & PotionType>): string => {
+  const descriptions: string[] = [];
+
+  // 定義哪些欄位需要顯示百分比
+  const percentStats = ['critRate', 'critIncrease'];
+
+  // 遍歷我們定義好的標籤字典
+  for (const [key, label] of Object.entries(statLabels)) {
+    const value = data[key as keyof (qualityType & PotionType)];
+
+    // 只有當數值存在且不為 0 時才顯示
+    if (value !== undefined && value !== 0) {
+      const prefix = (value as number) > 0 ? '+' : ''; // 正數顯示 +
+      const suffix = percentStats.includes(key) ? '%' : ''; // 判斷是否加 %
+
+      descriptions.push(`${label} ${prefix}${value}${suffix}`);
+    }
+  }
+
+  return descriptions.join(', ');
+};
 // --- 分類邏輯 ---
 
 // 1. 道具：具有 usable 屬性
@@ -32,8 +56,8 @@ const handleItemClick = (item: any) => {
   console.log('點擊了物品:', item.name)
 }
 const handleEquipmentClick = (item: any, index: number) => {
-  console.log('點擊了裝備:', item.name)
   playerStore.equipItem(item, index)
+  ElMessage.success(`已裝備 ${item.name}!`)
 }
 </script>
 
@@ -60,22 +84,33 @@ const handleEquipmentClick = (item: any, index: number) => {
       <el-tab-pane label="裝備" name="equipment">
         <el-scrollbar height="7rem">
           <div v-if="equipmentItems.length > 0" class="item-grid">
-            <div
+            <el-tooltip
                 v-for="(item, index) in equipmentItems"
                 :key="index"
-                class="inventory-item"
-                :style="{
+                effect="light"
+            >
+              <template #content>
+                <ItemInfo :item="item"/>
+              </template>
+              <div
+                  class="inventory-item"
+                  :style="{
                   borderColor: getEnumColumn(QualityEnum, item.quality, 'color', '#444'),
                   color:getEnumColumn(QualityEnum, item.quality, 'color', '#444')
                 }"
-                @click="handleEquipmentClick(item,index)"
-            >
-              <span class="item-icon">{{ item.icon }}</span>
-              <div class="equip-info">
-                <div class="item-name">{{ item.name }}</div>
-                <div class="pos-tag">{{ getEnumColumn(EquipmentEnum, item.position) }}</div>
+                  @dblclick="handleEquipmentClick(item,index)"
+              >
+                <span class="item-icon">{{ item.icon }}</span>
+                <div class="equip-info">
+                  <div class="item-name">{{ item.name }}</div>
+                  <div class="pos-tag">{{ getEnumColumn(EquipmentEnum, (item as EquipmentType).position) }}
+                  </div>
+                </div>
+                <span>{{ getItemDescriptionLine(item) }}</span>
+                <span class="equipment-hint">(雙擊可穿戴)</span>
               </div>
-            </div>
+            </el-tooltip>
+
           </div>
           <span v-else class="empty">無任何裝備</span>
         </el-scrollbar>
@@ -143,6 +178,10 @@ const handleEquipmentClick = (item: any, index: number) => {
   font-size: 0.7rem;
   color: #888;
   text-transform: uppercase;
+}
+
+.equipment-hint {
+  margin-left: auto;
 }
 
 :deep(.el-card__body) {

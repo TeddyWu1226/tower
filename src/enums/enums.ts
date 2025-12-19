@@ -56,7 +56,7 @@ export const EquipmentEnum = {
     Head: {
         value: 'head',
         label: '頭部',
-        icon: '🦲',
+        icon: '😑',
     },
     Weapon: {
         value: 'weapon',

@@ -22,7 +22,7 @@ export const Monster = {
     // 2. 昆蟲類 - 高命中/高閃避
     WoodTick: {
         icon: '🐜',
-        name: '硬殼木蝨',
+        name: '木兵蟻',
         description: '體型細小但甲殼堅硬，容易躲開笨重的攻擊',
         ad: 4,
         critIncrease: WorldDefault.critIncrease,
