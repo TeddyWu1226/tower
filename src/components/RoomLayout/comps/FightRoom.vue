@@ -187,6 +187,10 @@ const monsterMove = (selectedMonster: MonsterType) => {
 /**
  * 玩家行動
  */
+// 玩家回合結束
+const onPlayerTurnEnd = () => {
+  playerStore.nextTurnStatus()
+}
 // 攻擊
 const onAttack = () => {
 
@@ -205,6 +209,9 @@ const onAttack = () => {
   if (damageOutput.isHit) {
     targetElement?.shake()
   }
+
+  // 回合結束判定
+  onPlayerTurnEnd()
 
   // 怪物是否死亡
   if (!damageOutput.isKilled) {
@@ -230,12 +237,15 @@ const onAttack = () => {
       selectedMonsterIndex.value = null;
     }
   }
+
   // 怪物全部死亡
   if (monsters.value.length === 0) {
     gameStateStore.setCurrentEnemy([])
     gameStateStore.setBattleWon(true)
   }
+
 }
+
 const isEscape = ref(false)
 const onRun = () => {
   if (!canEscape(playerStore.info, monsters.value)) {
@@ -256,6 +266,8 @@ const onRun = () => {
     gameStateStore.setBattleWon(true)
     monsters.value = []
   }
+  // 回合結束判定
+  onPlayerTurnEnd()
 }
 
 

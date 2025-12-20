@@ -2,23 +2,42 @@
 import {useGameStateStore} from "@/store/game-state-store";
 import {usePlayerStore} from "@/store/player-store";
 import {ref} from "vue";
+import {UnitStatus} from "@/constants/status-info";
 
 const gameStateStore = useGameStateStore()
-const playerInfo = usePlayerStore()
+const playerStore = usePlayerStore()
 const isClose = ref(true);
+
+const onTest = () => {
+  playerStore.addStatus(UnitStatus.SlimeSlow)
+}
+onTest()
 </script>
 
 <template>
   <el-card class="test">
     <el-button @click="isClose = !isClose" style="width: 100%">縮放</el-button>
     <template v-if="!isClose">
-      <p v-for="key in Object.keys(gameStateStore.$state)">
-        {{ key }}: {{ gameStateStore.$state[key] }}
-      </p>
-      <p>PLAYER</p>
-      <p v-for="key in Object.keys(playerInfo.info)">
-        {{ key }}: {{ playerInfo.info[key] }}
-      </p>
+      <el-collapse>
+        <el-collapse-item title="回合環境參數">
+          <p v-for="key in Object.keys(gameStateStore.$state)">
+            {{ key }}: {{ gameStateStore.$state[key] }}
+          </p>
+        </el-collapse-item>
+        <el-collapse-item title="玩家資訊">
+          <p v-for="key in Object.keys(playerStore.info)">-->
+            {{ key }}: {{ playerStore.info[key] }}
+          </p>
+          <p>
+            status: {{ playerStore.statusEffects }}
+          </p>
+        </el-collapse-item>
+        <el-collapse-item title="裝備+狀態的加成效果">
+          <p v-for="key in Object.keys(playerStore.totalBonus)">
+            {{ key }}: {{ playerStore.totalBonus[key] }}
+          </p>
+        </el-collapse-item>
+      </el-collapse>
     </template>
   </el-card>
 </template>
@@ -28,6 +47,6 @@ const isClose = ref(true);
   position: absolute;
   right: 50px;
   z-index: 6000;
-  max-width: 30%
+  max-width: 30%;
 }
 </style>

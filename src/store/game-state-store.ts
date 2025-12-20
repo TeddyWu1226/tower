@@ -89,7 +89,6 @@ export const useGameStateStore = defineStore('game-state', {
         },
 
         transitionToNextState(): GameState {
-            console.log('執行了!')
             let nextState: GameState;
             switch (this.currentState) {
                 case GameState.INITIAL:

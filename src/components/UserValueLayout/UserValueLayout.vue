@@ -116,9 +116,47 @@ watch(
         />
       </el-form-item>
       <el-form-item label="狀態">
-        <span>
-          無
-        </span>
+        <div class="status-effects-container">
+          <div
+              v-for="effect in playerStore.statusEffects"
+              :key="effect.name"
+              class="status-icon-item"
+          >
+            <el-tooltip
+                effect="light"
+                placement="top"
+            >
+              <template #content>
+                <div class="status-tooltip">
+                  <div class="status-name">
+                    <strong :style="{color:effect.isBuff?'var(--el-color-success)':'var(--el-color-danger)'}">
+                      {{ effect.name }}
+                    </strong>
+                    <span class="duration-tag" v-if="effect.duration !== -1">
+                      {{ effect.duration }} 回合
+                    </span>
+                    <span class="duration-tag permanent" v-else>永久</span>
+                  </div>
+                  <div class="status-desc">{{ effect.description }}</div>
+                </div>
+              </template>
+
+              <div class="icon-badge-wrapper">
+                <span class="effect-icon">{{ effect.icon }}</span>
+                <span
+                    v-if="effect.duration !== -1"
+                    class="effect-duration-badge"
+                >
+                  {{ effect.duration }}
+                </span>
+              </div>
+            </el-tooltip>
+          </div>
+
+          <span v-if="playerStore.statusEffects.length === 0" class="no-status">
+            無
+          </span>
+        </div>
       </el-form-item>
     </el-form>
   </el-card>
@@ -154,6 +192,91 @@ watch(
 
 .massive-heal-font {
   text-shadow: 0 0 5px rgba(0, 255, 0, 0.8), /* 綠色發光 */ 0 0 10px rgba(0, 255, 0, 0.5);
+}
+
+
+/* 狀態容器佈局 */
+.status-effects-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  min-height: 32px;
+}
+
+.status-icon-item {
+  cursor: help;
+  transition: transform 0.1s ease;
+}
+
+.status-icon-item:hover {
+  transform: scale(1.1);
+}
+
+/* 圖示包裝層，用於定位右上角或右下角的回合數 */
+.icon-badge-wrapper {
+  position: relative;
+  width: 28px;
+  height: 28px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  font-size: 1.2rem;
+}
+
+/* 回合數標籤樣式 */
+.effect-duration-badge {
+  position: absolute;
+  bottom: -4px;
+  right: -4px;
+  background-color: #333;
+  color: #fff;
+  font-size: 10px;
+  padding: 0 3px;
+  border-radius: 3px;
+  line-height: 12px;
+  border: 1px solid #555;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.no-status {
+  color: #999;
+  font-size: 0.9rem;
+}
+
+/* Tooltip 內部美化 */
+.status-tooltip {
+  max-width: 180px;
+}
+
+.status-name {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #555;
+  padding-bottom: 4px;
+  margin-bottom: 4px;
+}
+
+.duration-tag {
+  font-size: 11px;
+  background: #555;
+  padding: 1px 4px;
+  border-radius: 3px;
+  margin-left: 8px;
+}
+
+.permanent {
+  background: #67c23a; /* 綠色代表永久 */
+}
+
+.status-desc {
+  font-size: 12px;
+  line-height: 1.4;
+  color: #ddd;
 }
 
 </style>

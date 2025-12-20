@@ -156,6 +156,7 @@ export interface StatusEffect {
     description: string;
     // 屬性加成 (正數為 Buff, 負數為 Debuff)
     bonus?: BonusType
+    isBuff?: boolean // 是否為正向BUFF,不填都是負向
     // 每回合觸發的邏輯類型
     type?: 'damage' | 'heal';
     value?: number; // 每回合跳血/回血的數值

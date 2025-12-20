@@ -150,7 +150,7 @@ export function triggerDamageEffect(damageOutCome: BattleOutcome, targetElement?
     const isPlayer = !targetElement; // 判斷是否為玩家自身
     const prefixText = isPlayer ? '你受到了' : '受到了';
 
-    let messageText = '';
+    let messageText: string;
     let messageColor = '#E0E0E0'; // 預設顏色
     // --- 2. 核心邏輯：根據結果決定訊息和樣式 ---
 
@@ -249,7 +249,7 @@ export function escapePercent(runner: UnitType, chasers: UnitType[]): number {
     let finalChance = BASE_CHANCE + levelModifier + dodgeIncrease;
 
     // 套用最大/最小機率限制
-    finalChance = Math.max(MIN_CHANCE, Math.min(MAX_CHANCE, Math.round((BASE_CHANCE + levelModifier + dodgeIncrease) * 100) / 100));
+    finalChance = Math.max(MIN_CHANCE, Math.min(MAX_CHANCE, Math.round((finalChance) * 100) / 100));
 
     return finalChance
 }
