@@ -29,8 +29,8 @@ export const statLabels: Record<string, string> = {
     hit: '命中值',
     hpLimit: '生命上限',
     spLimit: '法力上限',
-    heal: '生命恢復',
-    magic: '法力恢復'
+    heal: '回復生命',
+    magic: '回復法力'
 };
 
 export interface ItemType {

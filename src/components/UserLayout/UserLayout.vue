@@ -130,7 +130,7 @@ const handleEquipmentClick = (item: any, index: number) => {
               >
                 <template #content>
                   <div class="tooltip-content">
-                    <b :class="`text-quality-${entry.item.quality}`">{{ entry.item.name }}(雙擊使用)</b>
+                    <b :class="`text-quality-${entry.item.quality}`">{{ entry.item.name }}(雙擊消耗使用)</b>
                     <p class="desc">{{ entry.item.description }}</p>
                     <hr v-if="entry.item.heal || entry.item.magic" class="divider"/>
                     <span v-if="entry.item.heal" class="effect-text">❤️ 回復生命: {{ entry.item.heal }}</span>
