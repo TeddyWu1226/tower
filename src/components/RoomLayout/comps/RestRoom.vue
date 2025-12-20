@@ -31,7 +31,7 @@ defineExpose({
     <div v-if="isRested" style="color: var(--el-color-success);text-align: center">
       休息了一會,<br/>你的HP跟SP完全恢復了!
     </div>
-    <div v-else-if="gameStateStore.getCurrentState === GameState.SELECTION_PHASE">
+    <div v-else-if="gameStateStore.currentState === GameState.SELECTION_PHASE">
       但現在的我不想休息!
     </div>
     <div v-else>

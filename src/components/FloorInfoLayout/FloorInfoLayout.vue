@@ -12,17 +12,20 @@ const playerStore = usePlayerStore();
 
 const isShowMapDialog = ref(false);
 
+const onClick = () => {
+  isShowMapDialog.value = true
+}
 
 </script>
 
 <template>
   <el-card body-class="flex justify-between items-center">
     <span style="font-size: 16px">第 {{
-        gameStateStore.getCurrentStage
-      }} 階段 - {{ getEnumColumn(StageEnum, gameStateStore.getCurrentStage) }}</span>
+        gameStateStore.currentStage
+      }} 階段 - {{ getEnumColumn(StageEnum, gameStateStore.currentStage) }}</span>
     <div class="flex items-center">
       <span class="gold">{{ playerStore.info.gold }}💰</span>
-      <el-button @click="()=>{isShowMapDialog = true}">地圖</el-button>
+      <el-button @click="onClick">地圖</el-button>
     </div>
   </el-card>
   <MapDialog v-model="isShowMapDialog"></MapDialog>

@@ -27,7 +27,7 @@ const setRoomRef = (el: any, layerIndex: number, roomIndex: number) => {
 watch(model, (isOpened) => {
   if (isOpened) {
     nextTick(() => {
-      const [layer, index] = gameStateStore.getCurrentRoom;
+      const [layer, index] = gameStateStore.currentRoom;
       const targetLayerIndex = layer - 1;
       let targetRoomInstance = roomRefs.value[targetLayerIndex]?.[index];
       let finalElement: HTMLElement | undefined;
@@ -73,7 +73,7 @@ watch(model, (isOpened) => {
 }, {immediate: true});
 
 const isDisabled = (layerIndex: number) => {
-  return layerIndex < gameStateStore.getCurrentRoom[0]
+  return layerIndex < gameStateStore.currentRoom[0]
 }
 
 /** 操作 **/
@@ -85,7 +85,7 @@ const selectRoom = (layerIndex: number, roomIndex: number, value: number) => {
 };
 
 // 獲取總層數
-const totalLayers = computed(() => gameStateStore.getCurrentStageRooms.length);
+const totalLayers = computed(() => gameStateStore.currentStageRooms.length);
 
 // 判斷是否為倒數兩層的邏輯
 const isLastTwoLayers = (layerIndex: number) => {
@@ -98,7 +98,7 @@ const isLastTwoLayers = (layerIndex: number) => {
     <el-scrollbar max-height="60vh" style="width: 100%; overflow-x: auto;">
       <div class="trapezoid-container">
         <div
-            v-for="(layer, layerIndex) in gameStateStore.getCurrentStageRooms"
+            v-for="(layer, layerIndex) in gameStateStore.currentStageRooms"
             :key="layerIndex"
             class="grid-layer"
         >

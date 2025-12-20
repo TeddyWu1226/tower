@@ -59,6 +59,48 @@ export const usePlayerStore = defineStore('player-info', () => {
 
     // --- Actions ---
     /**
+     * 檢查背包中是否有指定名稱或 ID 的道具
+     * @param itemName 道具名稱
+     * @param amount 需要的數量 (預設為 1)
+     */
+    const hasItem = (itemName: string, amount: number = 1): boolean => {
+        // 合併所有背包並計算名稱相同的物件個數
+        const allItems = [
+            ...(info.value.items || []),
+            ...(info.value.equipments || []),
+            ...(info.value.consumeItems || [])
+        ];
+
+        const count = allItems.filter(item => item && item.name === itemName).length;
+        return count >= amount;
+    };
+    /**
+     * 移除指定名稱的道具 (每次只移除 1 個)
+     * @param itemName 道具名稱
+     * @param amount 要移除的個數
+     */
+    const removeItem = (itemName: string, amount: number = 1): boolean => {
+        if (!hasItem(itemName, amount)) return false;
+
+        let removedCount = 0;
+        // 定義搜尋順序
+        const bagKeys: ('consumeItems' | 'items' | 'equipments')[] = ['consumeItems', 'items', 'equipments'];
+
+        for (const key of bagKeys) {
+            const bag = info.value[key];
+            if (!bag) continue;
+            // 從後往前搜尋，方便刪除
+            for (let i = bag.length - 1; i >= 0; i--) {
+                if (bag[i] && bag[i].name === itemName) {
+                    bag.splice(i, 1); // 找到一個，刪除一個
+                    removedCount++;
+                    if (removedCount >= amount) return true; // 達到目標數量，提前結束
+                }
+            }
+        }
+        return removedCount >= amount;
+    };
+    /**
      * 獲得物品 (存入 items 背包)
      */
     const gainItem = (item: any) => {
@@ -242,8 +284,10 @@ export const usePlayerStore = defineStore('player-info', () => {
         statusEffects,
         equipItem,
         unequipItem,
-        addGold,
         gainItem,
+        hasItem,
+        removeItem,
+        addGold,
         addStatus,
         nextTurnStatus,
         init

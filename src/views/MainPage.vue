@@ -29,7 +29,7 @@ const initAll = async () => {
   // 初始化
   gameStateStore.init()
   // 前往第一層
-  gameStateStore.setRoom(gameStateStore.getCurrentRoom)
+  gameStateStore.setRoom(gameStateStore.currentRoom)
 }
 
 
@@ -40,7 +40,7 @@ const startGame = async () => {
 
 const restartGame = async () => {
   isDead.value = false
-  gameStateStore.$reset()
+  gameStateStore.init()
 }
 
 const resetGame = async () => {
@@ -54,7 +54,7 @@ const resetGame = async () => {
       }
   )
       .then(() => {
-        gameStateStore.$reset()
+        gameStateStore.init()
       })
       .catch(() => {
       })
@@ -92,7 +92,7 @@ const onRunFailed = () => {
 // **【新增】房間唯一 ID/計數器**
 // 每次進入一個「新房間」時，這個值就會增加，無論房間類型是否相同。
 const showLoadingSuccess = () => {
-  if (gameStateStore.getCurrentRoom) {
+  if (!gameStateStore.stateIs(GameState.INITIAL)) {
     ElNotification.success('已讀取緩存數據成功!')
   }
 }
@@ -113,8 +113,8 @@ onMounted(() => {
           🪦YOU DIED🪦
         </h1>
         <h1 style="color:var(--el-color-danger);text-align: center">
-          你倒在了第 {{ gameStateStore.getCurrentStage }} 階段 - {{
-            getEnumColumn(StageEnum, gameStateStore.getCurrentStage)
+          你倒在了第 {{ gameStateStore.currentStage }} 階段 - {{
+            getEnumColumn(StageEnum, gameStateStore.currentStage)
           }} 的旅途上
         </h1>
         <el-button type="danger" style="width: 100%;height: 5rem" @click="restartGame">

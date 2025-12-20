@@ -39,6 +39,8 @@ export enum SpecialEventEnum {
     Gamble = 'Gamble',
     // 祝福或詛咒
     BlessingOrCurse = 'BlessingOrCurse',
+    // 魔樹事件
+    GetFruit = 'GetFruit',
 }
 
 /**

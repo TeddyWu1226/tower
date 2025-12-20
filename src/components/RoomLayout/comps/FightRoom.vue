@@ -96,7 +96,7 @@ const genEliteMonster = (layer: number) => {
 
 // 生成BOSS
 const createBoss = () => {
-  let newMonsters: MonsterType[] = [];
+  let newMonsters: MonsterType[]
   switch (gameStateStore.currentStage) {
     case StageEnum.BeginForest.value:
       newMonsters = [create(Boss.BigBear)]
@@ -217,7 +217,7 @@ const onRun = () => {
     if (!selectedMonsterIndex.value) {
       selectedMonsterIndex.value = 0
     }
-    let selectedMonster: MonsterType | null = null
+    let selectedMonster: MonsterType | null
     if (monsters.value.length >= 1) {
       const randomIndex = Math.floor(Math.random() * monsters.value.length);
       selectedMonster = monsters.value[randomIndex];
@@ -244,7 +244,7 @@ defineExpose({
 // --- 初始化邏輯 (讀檔機制) ---
 
 const init = () => {
-  const layer = gameStateStore.getCurrentRoom[0];
+  const layer = gameStateStore.currentRoom[0];
   isEscape.value = false;
   selectedMonsterIndex.value = null;
 
@@ -269,7 +269,7 @@ const init = () => {
   }
 }
 
-if (!gameStateStore.isWon) {
+if (!gameStateStore.isBattleWon) {
   init()
 }
 </script>
@@ -284,7 +284,7 @@ if (!gameStateStore.isWon) {
         :is-selected="selectedMonsterIndex === index"
         @select="handleMonsterSelect(index)"
     />
-    <div CLASS="victory-container" v-if="gameStateStore.isWon">
+    <div CLASS="victory-container" v-if="gameStateStore.isBattleWon">
       <span v-if="isEscape" class="run-message">你成功逃跑了!</span>
       <span v-else class="victory-message">勝利!</span>
       <span v-if="monsterDropGold">獲得了 {{ monsterDropGold }} G!</span>

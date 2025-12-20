@@ -4,117 +4,133 @@ import {RoomEnum} from "@/enums/room-enum";
 import {MonsterType, RoomCoordinateTuple, TrapezoidData} from "@/types";
 import {createTrapezoidDataWithWeights} from "@/utils/create-floor";
 import {DEFAULT_ROOM_WEIGHTS} from "@/constants/default-const";
+import {computed, ref} from "vue";
 
 
-export const useGameStateStore = defineStore('game-state', {
-    state: () => ({
-        currentRoomValue: RoomEnum.Rest.value as number,
-        currentRoom: [1, 0] as RoomCoordinateTuple,
-        currentStage: 1,
-        currentStageRooms: [] as TrapezoidData,
-        currentState: GameState.INITIAL as GameState,
-        isBattleWon: false as boolean,
-        // 1. 修改為儲存怪物物件陣列
-        currentEnemy: [] as MonsterType[],
-        currentEventType: SpecialEventEnum.None as SpecialEventEnum
-    }),
+export const useGameStateStore = defineStore('game-state', () => {
+    // --- State (用 ref 代替) ---
+    const currentRoomValue = ref<number>(RoomEnum.Rest.value);
+    const currentRoom = ref<RoomCoordinateTuple>([1, 0]);
+    const currentStage = ref(1);
+    const currentStageRooms = ref<TrapezoidData>([]);
+    const currentState = ref<GameState>(GameState.INITIAL);
+    const isBattleWon = ref(false);
+    const currentEnemy = ref<MonsterType[]>([]);
+    const currentEventType = ref<SpecialEventEnum>(SpecialEventEnum.None);
+    const eventProcess = ref<Record<SpecialEventEnum, number>>({} as Record<SpecialEventEnum, number>);
 
-    getters: {
-        getCurrentRoomValue: (state) => state.currentRoomValue,
-        getCurrentRoom: (state) => state.currentRoom,
-        getCurrentStageRooms: (state) => state.currentStageRooms,
-        getCurrentStage: (state) => state.currentStage,
-        getCurrentState: (state) => state.currentState,
-        isWon: (state) => state.isBattleWon,
-        // 返回怪物物件列表
-        getCurrentEnemy: (state) => state.currentEnemy,
-        getCurrentEventType: (state) => state.currentEventType,
+    // --- Getters (用 computed 代替) ---
+    /**
+     * 不存在或0代表沒發生過
+     * -1 永久不發生
+     */
+    const getEventProcess = computed(() => (event: SpecialEventEnum): number => {
+        return eventProcess.value[event] ?? 0;
+    });
 
-        stateIs: (state) => (stateToCheck: GameState): boolean => {
-            return state.currentState === stateToCheck;
-        },
-        roomIs: (state) => (roomValue: number | number[]): boolean => {
-            if (Array.isArray(roomValue)) {
-                return roomValue.includes(state.currentRoomValue)
-            } else {
-                return state.currentRoomValue === roomValue;
+    const stateIs = computed(() => (stateToCheck: GameState): boolean => {
+        return currentState.value === stateToCheck;
+    });
+
+    const roomIs = computed(() => (roomValue: number | number[]): boolean => {
+        if (Array.isArray(roomValue)) {
+            return roomValue.includes(currentRoomValue.value);
+        }
+        return currentRoomValue.value === roomValue;
+    });
+
+    // --- Actions (用普通 function 代替) ---
+    function init(): void {
+        currentStage.value = 1;
+        currentRoomValue.value = RoomEnum.Rest.value;
+        currentRoom.value = [1, 0];
+        // 這裡可以呼叫你的生成邏輯
+        currentStageRooms.value = createTrapezoidDataWithWeights(DEFAULT_ROOM_WEIGHTS, 19, 17);
+        currentState.value = GameState.INITIAL;
+        isBattleWon.value = false;
+        currentEnemy.value = [];
+        currentEventType.value = SpecialEventEnum.None;
+        eventProcess.value = {} as Record<SpecialEventEnum, number>;
+        console.log('遊戲狀態已重置 (Setup Store)');
+    }
+
+    function setRoom(room: RoomCoordinateTuple): void {
+        currentRoom.value = room;
+        currentRoomValue.value = getRoomValue(room) ?? RoomEnum.Rest.value;
+        isBattleWon.value = false;
+        currentEnemy.value = [];
+        currentEventType.value = SpecialEventEnum.None;
+        currentState.value = GameState.EVENT_PHASE;
+    }
+
+    function setCurrentEnemy(monsters: MonsterType[]): void {
+        // 使用深拷貝防止引用污染
+        currentEnemy.value = monsters
+    }
+
+    function setBattleWon(won: boolean): void {
+        const battleRooms = [RoomEnum.Fight.value, RoomEnum.EliteFight.value, RoomEnum.Boss.value];
+        if (battleRooms.includes(currentRoomValue.value)) {
+            isBattleWon.value = won;
+            if (won) {
+                currentEnemy.value = [];
+                transitionToNextState();
             }
-        },
-    },
+        }
+    }
 
-    actions: {
-        init(): void {
-            this.currentStage = 1;
-            this.currentRoomValue = RoomEnum.Rest.value;
-            this.currentRoom = [1, 0];
-            this.currentStageRooms = createTrapezoidDataWithWeights(DEFAULT_ROOM_WEIGHTS, 19, 17);
-            this.currentState = GameState.INITIAL;
-            this.isBattleWon = false;
-            // 2. 初始化為空陣列
-            this.currentEnemy = [];
-            console.log('遊戲狀態管理器初始化完成。');
-        },
+    function transitionToNextState(): void {
+        switch (currentState.value) {
+            case GameState.INITIAL:
+            case GameState.SELECTION_PHASE:
+                currentState.value = GameState.EVENT_PHASE;
+                break;
+            case GameState.EVENT_PHASE:
+                currentState.value = GameState.SELECTION_PHASE;
+                break;
+        }
+    }
 
-        setRoom(room: RoomCoordinateTuple): number {
-            this.currentRoom = room;
-            this.currentRoomValue = getRoomValue(room) ?? RoomEnum.Rest.value;
-            this.isBattleWon = false;
-            this.currentState = GameState.EVENT_PHASE;
-            return this.currentRoomValue;
-        },
+    function setEvent(event: SpecialEventEnum) {
+        currentEventType.value = event;
+    }
 
-        setStageRooms(rooms: TrapezoidData): void {
-            this.currentStageRooms = rooms;
-        },
+    function isEventClose(event: SpecialEventEnum) {
+        if (!eventProcess.value[event]) {
+            return false;
+        }
+        return eventProcess.value[event] === -1;
+    }
 
-        /**
-         * 3. 配置當前怪物資訊 (更新參數型別)
-         */
-        setCurrentEnemy(monsters: MonsterType[]): void {
-            this.currentEnemy = monsters;
-        },
+    function addEventProcess(event: SpecialEventEnum, close: boolean = false) {
+        if (close) {
+            eventProcess.value[event] = -1
+        } else {
+            const currentCount = eventProcess.value[event] ?? 0;
+            eventProcess.value[event] = currentCount + 1;
+        }
 
-        setBattleWon(won: boolean): void {
-            const currentType = this.currentRoomValue;
-            if (currentType === RoomEnum.Fight.value ||
-                currentType === RoomEnum.EliteFight.value ||
-                currentType === RoomEnum.Boss.value) {
-                this.isBattleWon = won;
-                if (won) {
-                    // 戰鬥結束清空怪物緩存
-                    this.currentEnemy = [];
-                    this.transitionToNextState();
-                }
-            }
-        },
+    }
 
-        transitionToNextState(): GameState {
-            let nextState: GameState;
-            switch (this.currentState) {
-                case GameState.INITIAL:
-                case GameState.SELECTION_PHASE:
-                    nextState = GameState.EVENT_PHASE;
-                    break;
-                case GameState.EVENT_PHASE:
-                    nextState = GameState.SELECTION_PHASE;
-                    break;
-                default:
-                    console.error("狀態機錯誤：遇到未知的狀態！");
-                    return this.currentState;
-            }
-            this.currentState = nextState;
-            return this.currentState;
-        },
-
-        setEvent(event: SpecialEventEnum = SpecialEventEnum.None) {
-            this.currentEventType = event;
-        },
-    },
-
-    // 4. 開啟持久化
-    persist: true
+    // --- 記得導出所有要在組件中使用的東西 ---
+    return {
+        currentRoomValue,
+        currentRoom,
+        currentStage,
+        currentStageRooms,
+        currentState,
+        isBattleWon,
+        currentEnemy,
+        currentEventType,
+        eventProcess,
+        getEventProcess,
+        stateIs,
+        roomIs,
+        init, setRoom, setCurrentEnemy, setBattleWon, transitionToNextState, setEvent, isEventClose, addEventProcess
+    };
+}, {
+    persist: true // 持久化依然有效
 });
-
 
 /**
  * 根據房間座標，從當前樓層資料中獲取該房間的數值（標記/權重）。
@@ -125,7 +141,7 @@ export const useGameStateStore = defineStore('game-state', {
 export function getRoomValue(coordinate: RoomCoordinateTuple): number | null {
 
     const [layer, index] = coordinate;
-    const roomsData: TrapezoidData = useGameStateStore().getCurrentStageRooms;
+    const roomsData: TrapezoidData = useGameStateStore().currentStageRooms;
     const maxLayers = roomsData.length;
 
     // 1. 檢查層次有效性 (1-based)
@@ -162,8 +178,8 @@ export function getNextAvailableRooms(): RoomCoordinateTuple[] {
     const gameStateStore = useGameStateStore();
 
     // layer 是 1-based (從 1 開始)
-    const [layer, currentRoomIndex] = gameStateStore.getCurrentRoom;
-    const currentStageRooms = gameStateStore.getCurrentStageRooms;
+    const [layer, currentRoomIndex] = gameStateStore.currentRoom;
+    const currentStageRooms = gameStateStore.currentStageRooms;
     const maxLayers = currentStageRooms.length;
     const availableCoordinates: RoomCoordinateTuple[] = [];
 
