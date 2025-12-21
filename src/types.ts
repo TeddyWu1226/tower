@@ -21,10 +21,10 @@ export interface qualityType {
 
 // 用來動態顯示屬性名稱的字典 (可選，讓顯示更友善)
 export const statLabels: Record<string, string> = {
-    ad: '攻擊力',
+    ad: '攻擊',
     critRate: '暴擊率',
-    critIncrease: '爆擊傷害',
-    adDefend: '物理防禦',
+    critIncrease: '爆傷',
+    adDefend: '防禦',
     dodge: '閃避值',
     hit: '命中值',
     hpLimit: '生命上限',

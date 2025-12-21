@@ -4,10 +4,10 @@ export const UnitStatus = {
     SlimeSlow: {
         name: '黏液阻饒',
         icon: '🟢',
-        duration: 2,
-        description: '降低 10 點 閃避值',
+        duration: 4,
+        description: '降低 30 點 閃避值',
         bonus: {
-            dodge: -10
+            dodge: -30
         }
     } as StatusEffect,
     WolfRoarWarning: {

@@ -1,112 +1,30 @@
 <script setup lang="ts">
-import {ref, computed, onBeforeUnmount} from "vue";
+import {ref} from "vue";
 import {getEnumColumn} from "@/utils/enum";
 import {QualityEnum} from "@/enums/quilty-enum";
-import {EquipmentEnum} from "@/enums/enums";
+import {EquipmentEnum, StatEnum} from "@/enums/enums";
 import {usePlayerStore} from "@/store/player-store";
 import {ItemInfo} from "@/components/Shared/itemInfo";
-
-// --- 狀態控制 ---
-const fabRef = ref<HTMLElement | null>(null);
-const position = ref({x: 0, y: 100});
-const isDragging = ref(false);
-const isShowStats = ref(false);
-const isSnapping = ref(false);
-
-// --- 內部變數 (不需要響應式) ---
-let startTime = 0;
-let startX = 0;
-let startY = 0;
+import {ElMessage} from "element-plus";
+import {useDraggable} from "@/components/DetailInfo/useDraggble";
+import type {Equipment} from "@/types";
 
 const playerStore = usePlayerStore();
-const playerStats = computed(() => playerStore.finalStats);
 
 /**
- * 核心：開始拖拽/點擊
+ * 拖曳圖示功能
  */
-const onDragStart = (e: MouseEvent | TouchEvent) => {
-  if (!fabRef.value) return;
-
-  const parent = fabRef.value.offsetParent as HTMLElement;
-  if (!parent) return;
-
-  // 1. 初始化狀態
-  isSnapping.value = false;
-  isDragging.value = false;
-  startTime = Date.now();
-
-  const parentRect = parent.getBoundingClientRect();
-  const fabRect = fabRef.value.getBoundingClientRect();
-
-  // 取得初始座標
-  const clientX = e instanceof MouseEvent ? e.clientX : e.touches[0].clientX;
-  const clientY = e instanceof MouseEvent ? e.clientY : e.touches[0].clientY;
-
-  startX = clientX;
-  startY = clientY;
-
-  // 計算手指在 Icon 內的相對位置偏移
-  const offsetX = clientX - fabRect.left;
-  const offsetY = clientY - fabRect.top;
-
-  const onMouseMove = (moveEvent: MouseEvent | TouchEvent) => {
-    const curX = moveEvent instanceof MouseEvent ? moveEvent.clientX : moveEvent.touches[0].clientX;
-    const curY = moveEvent instanceof MouseEvent ? moveEvent.clientY : moveEvent.touches[0].clientY;
-
-    // 🚩 判定閾值：位移超過 5px 才算拖拽
-    const distance = Math.sqrt(Math.pow(curX - startX, 2) + Math.pow(curY - startY, 2));
-    if (!isDragging.value && distance > 5) {
-      isDragging.value = true;
-    }
-
-    if (isDragging.value) {
-      // 拖拽中阻止捲動
-      if (moveEvent.cancelable) moveEvent.preventDefault();
-
-      let newX = curX - parentRect.left - offsetX;
-      let newY = curY - parentRect.top - offsetY;
-
-      // 邊界限制
-      const maxX = parent.clientWidth - fabRef.value!.clientWidth;
-      const maxY = parent.clientHeight - fabRef.value!.clientHeight;
-
-      position.value.x = Math.max(0, Math.min(newX, maxX));
-      position.value.y = Math.max(0, Math.min(newY, maxY));
-    }
-  };
-
-  const onMouseUp = () => {
-    const duration = Date.now() - startTime;
-
-    // 🚩 核心：手動判定點擊
-    // 如果位移極小 (!isDragging) 且 按壓時間短，視為點擊
-    if (!isDragging.value && duration < 250) {
-      isShowStats.value = true;
-    } else if (isDragging.value) {
-      // 執行貼邊動畫
-      isSnapping.value = true;
-      const parentWidth = parent.clientWidth;
-      const fabWidth = fabRef.value?.clientWidth || 0;
-      // 貼靠最近的左右邊緣
-      position.value.x = (position.value.x + fabWidth / 2 < parentWidth / 2) ? 5 : (parentWidth - fabWidth - 5);
-    }
-
-    removeEvents(onMouseMove, onMouseUp);
-  };
-
-  // 綁定全域監聽
-  window.addEventListener("mousemove", onMouseMove);
-  window.addEventListener("mouseup", onMouseUp);
-  window.addEventListener("touchmove", onMouseMove, {passive: false});
-  window.addEventListener("touchend", onMouseUp);
-};
-
-// 移除監聽函數
-const removeEvents = (moveFn: any, upFn: any) => {
-  window.removeEventListener("mousemove", moveFn);
-  window.removeEventListener("mouseup", upFn);
-  window.removeEventListener("touchmove", moveFn);
-  window.removeEventListener("touchend", upFn);
+const fabRef = ref<HTMLElement | null>(null);
+const isShowStats = ref(false);
+const {position, isDragging, isSnapping, handleStart} = useDraggable(fabRef, {
+  onSelect: () => isShowStats.value = true
+});
+// 移動端雙擊判定優化
+let lastTap = 0;
+const handleTouchUnequip = (slotKey: keyof Equipment) => {
+  const now = Date.now();
+  if (now - lastTap < 300) handleUnequip(slotKey);
+  lastTap = now;
 };
 
 /**
@@ -123,10 +41,15 @@ const getBackgroundColor = (slotKey: string) => {
   return `color-mix(in srgb, ${qColor}, white 1%)`;
 };
 
-// 元件卸載前清理
-onBeforeUnmount(() => {
-  // 確保沒有殘留的監聽
-});
+/**
+ * 脫下裝備邏輯
+ */
+const handleUnequip = (slotKey: keyof Equipment) => {
+  playerStore.equipItem(null, null, slotKey)
+  ElMessage.success('脫下裝備')
+};
+
+
 </script>
 
 <template>
@@ -138,8 +61,8 @@ onBeforeUnmount(() => {
       left: `${position.x}px`,
       top: `${position.y}px`
     }"
-      @mousedown.stop="onDragStart"
-      @touchstart.stop="onDragStart"
+      @mousedown.stop="handleStart"
+      @touchstart.stop="handleStart"
   >
     <div class="icon-inner">{{ playerStore.info.icon }}</div>
 
@@ -151,14 +74,14 @@ onBeforeUnmount(() => {
     >
       <div class="stats-container">
         <div class="stats-grid">
-          <div class="stat-item">❤️ 生命: {{ playerStats.hp }} / {{ playerStats.hpLimit }}</div>
-          <div class="stat-item">✨ 法力: {{ playerStats.sp }} / {{ playerStats.spLimit }}</div>
-          <div class="stat-item">⚔️ 攻擊: {{ playerStats.ad }}</div>
-          <div class="stat-item">🛡️ 防禦: {{ playerStats.adDefend }}</div>
-          <div class="stat-item">💥 爆擊: {{ playerStats.critRate }}%</div>
-          <div class="stat-item">💢 爆傷: {{ playerStats.critIncrease }}%</div>
-          <div class="stat-item">🎯 命中: {{ playerStats.hit }}</div>
-          <div class="stat-item">💨 閃避: {{ playerStats.dodge }}</div>
+          <div v-for="stat in StatEnum" :key="stat.value" class="stat-item">
+            {{ stat.icon }} {{ stat.label }}:
+            {{ playerStore.finalStats[stat.value] }}
+            <template v-if="(stat as any)?.maxKey">
+              / {{ playerStore.finalStats[(stat as any)?.maxKey] }}
+            </template>
+            {{ stat.unit }}
+          </div>
         </div>
 
         <el-divider>當前裝備</el-divider>
@@ -166,16 +89,21 @@ onBeforeUnmount(() => {
         <div class="equipment-slots">
           <div
               v-for="pos in EquipmentEnum"
-              :key="pos.value"
               class="equip-slot"
               :style="{ backgroundColor: getBackgroundColor(pos.value) }"
+              @dblclick="handleUnequip(pos.value)"
+              @touchend="handleTouchUnequip(pos.value)"
           >
             <el-tooltip
                 v-if="playerStore.info.equips?.[pos.value as keyof typeof playerStore.info.equips]"
                 effect="light"
+                :disabled="isDragging"
             >
               <template #content>
                 <ItemInfo :item="playerStore.info.equips[pos.value as keyof typeof playerStore.info.equips]"/>
+                <div style="font-size: 0.8rem; color: #999; text-align: center; margin-top: 5px;">
+                  ( 雙擊卸下裝備 )
+                </div>
               </template>
               <span class="equip-item-icon">
                 {{ playerStore.info.equips[pos.value as keyof typeof playerStore.info.equips]?.icon }}
@@ -260,6 +188,7 @@ onBeforeUnmount(() => {
 
 .equip-item-icon {
   font-size: 1.8rem;
+  cursor: pointer;
 }
 
 .equip-placeholder-icon {

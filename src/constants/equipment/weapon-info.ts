@@ -99,10 +99,10 @@ export const Weapon: Record<string, EquipmentType> = {
     SpikeSpear: {
         name: '尖刺木槍',
         icon: '🪾',
-        description: '從枯死的魔樹枝幹削製而成的簡陋長槍,但使用上有點扎手。',
+        description: '從枯死的魔樹枝幹削製而成的尖刺長槍,但使用時會奪去部分生命。',
         position: EquipmentPosition.WEAPON,
         ad: 8,
-        hpLimit: -20,
+        hpLimit: -50,
         hit: 5,
         quality: 5
     }

@@ -131,60 +131,71 @@ export const usePlayerStore = defineStore('player-info', () => {
     };
 
     /**
-     * 裝備物品 (從 equipments 背包移動到 equips 狀態)
+     * 裝備物品
+     * @param item 裝備物件，若傳入 null/undefined 則視為卸下該位置裝備
+     * @param inventoryIndex 物品在背包中的索引 (卸下時可不傳)
+     * @param targetSlot 指定裝備位置
      */
-    const equipItem = (item: EquipmentType, inventoryIndex: number, targetSlot?: keyof Equipment) => {
+    const equipItem = (item: EquipmentType | null | undefined, inventoryIndex?: number, targetSlot?: keyof Equipment) => {
         if (!info.value.equips) info.value.equips = {};
-        // 決定位置 (優先使用指定位置，否則使用裝備預設位置)
-        const slot = targetSlot || (item.position as keyof Equipment);
 
-        // 紀錄更換前的「血量/魔力比例」
+        // 1. 取得目標位置：如果有傳 item 就用 item.position，否則必須傳入 targetSlot
+        const slot = targetSlot || (item?.position as keyof Equipment);
+        if (!slot) return; // 安全檢查：找不到位置就跳出
+
+        // 2. 紀錄更換前的「血量/魔力比例」
         const oldMaxHp = finalStats.value.hpLimit;
         const oldMaxSp = finalStats.value.spLimit;
-        const hpRatio = info.value.hp / oldMaxHp;
-        const spRatio = info.value.sp / oldMaxSp;
+        const hpRatio = info.value.hp / (oldMaxHp || 1);
+        const spRatio = info.value.sp / (oldMaxSp || 1);
 
-        // 如果該位置已有裝備，卸下 (unequipItem 會自動呼叫 gainItem 放回正確背包)
-        if (info.value.equips[slot]) {
-            unequipItem(slot);
+        // 🚩 核心邏輯：判定是「裝備」還是「卸下」
+        if (!item) {
+            // 情況 A：傳入空值 -> 卸下裝備
+            if (info.value.equips[slot]) {
+                _unequipItem(slot);
+            }
+        } else {
+            // 情況 B：穿上裝備
+            // 如果該位置已有裝備，先卸下
+            if (info.value.equips[slot]) {
+                _unequipItem(slot);
+            }
+
+            // 穿上新裝備
+            info.value.equips[slot] = item;
+
+            // 從背包移除（只有穿上時需要 inventoryIndex）
+            if (inventoryIndex !== undefined) {
+                _removeItemFromBag('equipments', inventoryIndex);
+            }
         }
 
-        // 穿上新裝備
-        info.value.equips[slot] = item
-
-        // 從「裝備背包」中移除
-        _removeItemFromBag('equipments', inventoryIndex);
-        stopValueChangeAnimation.value = true
+        // 3. 處理數值同步 (縮放動畫與上限控制)
+        stopValueChangeAnimation.value = true;
 
         // 根據新上限等比縮放現有血量/魔力
         const newMaxHp = finalStats.value.hpLimit;
         const newMaxSp = finalStats.value.spLimit;
 
-        // 套用比例並取整，同時確保不低於 1 (除非原本就是 0)
         info.value.hp = info.value.hp > 0
-            ? Math.max(1, Math.round(newMaxHp * hpRatio))
+            ? Math.min(newMaxHp, Math.max(1, Math.round(newMaxHp * hpRatio)))
             : 0;
 
         info.value.sp = info.value.sp > 0
-            ? Math.max(1, Math.round(newMaxSp * spRatio))
+            ? Math.min(newMaxSp, Math.max(1, Math.round(newMaxSp * spRatio)))
             : 0;
 
-        // 額外保險：確保不超過新上限
-        if (info.value.hp > newMaxHp) info.value.hp = newMaxHp;
-        if (info.value.sp > newMaxSp) info.value.sp = newMaxSp;
-
-        nextTick().then(
-            () => {
-                stopValueChangeAnimation.value = false
-            }
-        )
-
+        // 恢復動畫
+        nextTick().then(() => {
+            stopValueChangeAnimation.value = false;
+        });
     };
 
     /**
      * 卸下裝備 (從 equips 狀態移動到 equipments 背包)
      */
-    const unequipItem = (slot: keyof Equipment): EquipmentType => {
+    const _unequipItem = (slot: keyof Equipment): EquipmentType => {
         if (!info.value.equips || !info.value.equips[slot]) return null;
 
         const itemToUnequip = info.value.equips[slot];
@@ -283,7 +294,6 @@ export const usePlayerStore = defineStore('player-info', () => {
         finalStats,
         statusEffects,
         equipItem,
-        unequipItem,
         gainItem,
         hasItem,
         removeItem,

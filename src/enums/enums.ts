@@ -86,3 +86,56 @@ export const EquipmentEnum = {
         icon: '📿',
     },
 } as const;
+
+export const StatEnum = {
+    hp: {
+        value: 'hp',
+        maxKey: 'hpLimit',
+        label: '生命',
+        icon: '❤️',
+        unit: ''
+    },
+    sp: {
+        value: 'sp',
+        maxKey: 'spLimit',
+        label: '法力',
+        icon: '✨',
+        unit: ''
+    },
+    ad: {
+        value: 'ad',
+        label: '攻擊',
+        icon: '⚔️',
+        unit: ''
+    },
+    adDefend: {
+        value: 'adDefend',
+        label: '防禦',
+        icon: '🛡️',
+        unit: ''
+    },
+    critRate: {
+        value: 'critRate',
+        label: '爆擊',
+        icon: '💥',
+        unit: '%'
+    },
+    critIncrease: {
+        value: 'critIncrease',
+        label: '爆傷',
+        icon: '💢',
+        unit: '%'
+    },
+    hit: {
+        value: 'hit',
+        label: '命中',
+        icon: '🎯',
+        unit: ''
+    },
+    dodge: {
+        value: 'dodge',
+        label: '閃避',
+        icon: '💨',
+        unit: ''
+    }
+};
