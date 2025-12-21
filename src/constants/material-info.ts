@@ -28,7 +28,7 @@ export const MATERIAL = {
     } as ItemType,
     RabbitHorn: {
         name: '角兔的小角',
-        icon: '🦴',
+        icon: '𓄏',
         description: '尖銳的小型角，可用作武器尖端',
         quality: 0,
     } as ItemType,

@@ -105,7 +105,7 @@ const handleUseConsume = (potion: any) => {
 }
 const handleEquipmentClick = (item: any, index: number) => {
   playerStore.equipItem(item, index)
-  ElMessage.success(`${index} 已裝備 ${item.name}!`)
+  ElMessage.success(`裝備了 ${item.name}!`)
 }
 
 
@@ -167,13 +167,16 @@ const handleEquipmentClick = (item: any, index: number) => {
                   class="inventory-item"
                   :style="{
                   borderColor: getEnumColumn(QualityEnum, item.quality, 'color', '#444'),
-                  color:getEnumColumn(QualityEnum, item.quality, 'color', '#444')
+
                 }"
                   @dblclick="handleEquipmentClick(item,index)"
               >
                 <span class="item-icon">{{ item.icon }}</span>
                 <div class="equip-info">
-                  <div class="item-name">{{ item.name }}</div>
+                  <div class="item-name"
+                       :style="{color:getEnumColumn(QualityEnum, item.quality, 'color', '#444')}">
+                    {{ item.name }}
+                  </div>
                   <div class="pos-tag">{{ getEnumColumn(EquipmentEnum, (item as EquipmentType).position) }}
                   </div>
                 </div>
@@ -201,7 +204,8 @@ const handleEquipmentClick = (item: any, index: number) => {
                   effect="light"
               >
                 <template #content>
-                  <div class="tooltip-content"  :style="{borderColor:getEnumColumn(QualityEnum,entry.item.quality,'color')}">
+                  <div class="tooltip-content"
+                       :style="{borderColor:getEnumColumn(QualityEnum,entry.item.quality,'color')}">
                     <b :class="`text-quality-${entry.item.quality}`"
                        :style="{color:getEnumColumn(QualityEnum,entry.item.quality,'color')}">
                       {{ entry.item.name }}

@@ -5,6 +5,7 @@ import EventTemplate from "@/components/RoomLayout/event/EventTemplate.vue";
 import {computed, ref} from "vue";
 import {GameState, SpecialEventEnum} from "@/enums/enums";
 import {ElMessage} from "element-plus";
+import {Weapon} from "@/constants/equipment/weapon-info";
 
 const gameStateStore = useGameStateStore();
 const playerStore = usePlayerStore();
@@ -17,14 +18,14 @@ const isAdvanced = computed(() => {
   return gameStateStore.getEventProcess(SpecialEventEnum.GetFruit) == 1
 })
 
-const handleChoice = (type: 'herb' | 'juice' | 'sacrifice_hp' | 'sacrifice_sp') => {
+const handleChoice = (type: 'herb' | 'juice' | 'destroy' | 'sacrifice_hp' | 'sacrifice_sp') => {
   answer.value = 1;
   switch (type) {
     case 'herb':
-      playerStore.removeItem('粗製的草藥水')
+      playerStore.removeItem('粗製的草藥水');
       break;
     case 'juice':
-      playerStore.removeItem('混濁的果汁')
+      playerStore.removeItem('混濁的果汁');
       break;
   }
   setTimeout(() => {
@@ -37,6 +38,10 @@ const handleChoice = (type: 'herb' | 'juice' | 'sacrifice_hp' | 'sacrifice_sp') 
         playerStore.info.hpLimit += 30;
         playerStore.info.hp += 30; // 上限增加時同時補血
         finalText.value = "枯樹長出了嫩芽，生長出一個鮮紅色的嫩葉，你吃下後生命上限提升了！";
+        break;
+      case 'destroy':
+        playerStore.gainItem(Weapon.SpikeSpear);
+        finalText.value = "你粗暴地拆下了最堅硬樹枝，削成了一把尖刺木槍。枯樹發出了最後的哀鳴後彻底枯萎了。";
         break;
       case 'sacrifice_hp':
         if (playerStore.info.hp <= 50) {
@@ -61,7 +66,11 @@ const handleChoice = (type: 'herb' | 'juice' | 'sacrifice_hp' | 'sacrifice_sp') 
     }
     answer.value = 2;
     gameStateStore.transitionToNextState();
-    gameStateStore.addEventProcess(SpecialEventEnum.GetFruit)
+    if (type === 'destroy') {
+      gameStateStore.addEventProcess(SpecialEventEnum.GetFruit, true)
+    } else {
+      gameStateStore.addEventProcess(SpecialEventEnum.GetFruit)
+    }
   }, 1000);
 };
 
@@ -122,6 +131,11 @@ const onLeave = () => {
               type="warning"
               @click="handleChoice('juice')">
             提供 [混濁的果汁]
+          </el-button>
+          <el-button
+              type="danger"
+              @click="handleChoice('destroy')">
+            拆毀枯樹
           </el-button>
         </template>
         <template v-else>
