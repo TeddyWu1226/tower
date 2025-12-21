@@ -3,7 +3,7 @@ import {ref, onMounted, computed} from "vue";
 import {useGameStateStore} from "@/store/game-state-store";
 import {EquipmentType, ItemType, PotionType, statLabels} from "@/types";
 import {getRandomItemsByQuality} from "@/utils/create";
-import {QualityEnum} from "@/enums/quilty-enum";
+import {QualityEnum} from "@/enums/quality-enum";
 import {Armor} from "@/constants/equipment/armor-info";
 import {Head} from "@/constants/equipment/head-info";
 import {Offhand} from "@/constants/equipment/offhand-info";

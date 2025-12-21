@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {ref} from "vue";
 import {getEnumColumn} from "@/utils/enum";
-import {QualityEnum} from "@/enums/quilty-enum";
+import {QualityEnum} from "@/enums/quality-enum";
 import {EquipmentEnum, StatEnum} from "@/enums/enums";
 import {usePlayerStore} from "@/store/player-store";
 import {ItemInfo} from "@/components/Shared/itemInfo";

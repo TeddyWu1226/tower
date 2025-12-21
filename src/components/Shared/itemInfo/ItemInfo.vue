@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
 import {getEnumColumn} from "@/utils/enum";
-import {QualityEnum} from "@/enums/quilty-enum";
+import {QualityEnum} from "@/enums/quality-enum";
 import {EquipmentType, ItemType, PotionType, statLabels} from "@/types";
 import {PropType} from "vue";
 
