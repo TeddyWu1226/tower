@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {ref, onMounted} from "vue";
 import {useGameStateStore} from "@/store/game-state-store";
-import {EquipmentType, ItemType, PotionType} from "@/types";
+import {EquipmentType, ItemType, PotionType, statLabels} from "@/types";
 import {getRandomItemsByQuality} from "@/utils/create";
 import {QualityEnum} from "@/enums/quilty-enum";
 import {Armor} from "@/constants/equipment/armor-info";
@@ -132,7 +132,7 @@ onMounted(() => {
 
 <template>
   <div class="shop-room">
-    <template v-if="!isRun">
+    <template v-if="true">
       <div>
         <h2 style="display: flex;align-items: center">
           🧌 神秘商人
@@ -166,7 +166,7 @@ onMounted(() => {
       <div v-else class="sell-container">
         <p class="gold-hint">我的金幣: 💰 {{ playerStore.info.gold }}</p>
 
-        <div v-for="bagType in (['consumeItems', 'items', 'equipments'] as const)" :key="bagType" class="bag-section">
+        <div v-for="bagType in (['items', 'equipments','consumeItems',] as const)" :key="bagType" class="bag-section">
           <h4 v-if="playerStore.info[bagType]?.length">
             {{ bagType === 'consumeItems' ? '消耗品' : bagType === 'equipments' ? '裝備' : '一般道具' }}</h4>
           <div class="shop-container">
@@ -174,12 +174,12 @@ onMounted(() => {
                 v-for="(item, index) in playerStore.info[bagType]"
                 :key="'sell-' + bagType + index"
                 class="item-card sell-card"
-                @click="sellItem(item, index, bagType)"
+                @dblclick="sellItem(item, index, bagType)"
             >
               <div class="item-icon">{{ item.icon }}</div>
               <div class="item-name">{{ item.name }}</div>
               <div class="sell-price-tag">回收價: {{ getSellPrice(item) }} G</div>
-              <div class="sell-action-overlay">點擊販賣</div>
+              <div class="sell-action-overlay">雙擊販賣</div>
             </div>
           </div>
         </div>
@@ -192,8 +192,47 @@ onMounted(() => {
       </div>
 
     </template>
-
     <span v-else class="run-text">因為你刷新了頁面<br/>商人覺得你不想買就跑了...</span>
+    <el-dialog
+        v-model="isShowDetail"
+        :title="`物品詳情 💰 ${ (selectedItem as any)?.price } G`"
+        align-center
+    >
+      <div v-if="selectedItem" class="detail-container">
+        <div class="detail-icon">{{ selectedItem.icon }}</div>
+        <h3 :style="{ color: getEnumColumn(QualityEnum, selectedItem.quality, 'color', '#fff') }">
+          {{ selectedItem.name }}
+        </h3>
+
+        <p class="detail-desc">{{ selectedItem.description }}</p>
+
+        <el-divider content-position="left">屬性</el-divider>
+
+        <div class="detail-stats">
+          <template v-for="(val, key) in selectedItem" :key="key">
+            <div v-if="statLabels[key] && val" class="stat-row">
+              <span class="stat-label">{{ statLabels[key] }}</span>
+              <span class="stat-value" :class="{ 'plus': (val as number) > 0, 'minus': (val as number) < 0 }">
+                {{ (val as number) > 0 ? '+' : '' }}{{ val }}
+              </span>
+            </div>
+          </template>
+        </div>
+      </div>
+
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button @click="isShowDetail = false">取消</el-button>
+          <el-button
+              type="warning"
+              :disabled="(selectedItem as any)?.sold"
+              @click="buyItem"
+          >
+            {{ (selectedItem as any)?.sold ? '已售出' : '確認購買' }}
+          </el-button>
+        </div>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
@@ -350,6 +389,21 @@ onMounted(() => {
   color: #67c23a;
   font-size: 0.85rem;
   margin-top: 5px;
+}
+
+.detail-price {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.detail-price span {
+  color: #e6a23c;
+}
+
+.dialog-footer {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
 }
 
 /* 販賣時的遮罩效果 */
