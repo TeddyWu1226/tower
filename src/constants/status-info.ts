@@ -20,12 +20,12 @@ export const UnitStatus = {
             dodge: 1000000000000
         }
     } as StatusEffect,
-    Poison: {
+    SlimePoison: {
         name: '中毒',
         icon: '🤢',
-        duration: 3,
-        description: '每回合失去 5 點生命值',
+        duration: 4,
+        description: '每回合失去 10 點生命值',
         type: 'damage',
-        value: 5
+        value: 10
     } as StatusEffect
 }

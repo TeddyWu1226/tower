@@ -22,10 +22,10 @@ export const Boss = {
         dropGold: 100
     } as MonsterType,
     SunkenGrove: {
-        icon: '🍄',
-        name: '變異巨菇',
-        description: '受魔力影響長大的真菌，散發著毒孢子。',
-        ad: 1,
+        icon: '🟣',
+        name: '劇毒史萊姆',
+        description: '受到此環境而產生的變異體,具有一定毒性',
+        ad: 5,
         critIncrease: 100,
         critRate: 0,
         adDefend: 10,
@@ -34,7 +34,8 @@ export const Boss = {
         hp: 450,
         hpLimit: 450,
         level: 4,
-        dropGold: 150
+        dropGold: 150,
+        onAttack: 'onPoisonousSlimeAttack'
     } as MonsterType,
     AncientRoots: {
         icon: '🌳',

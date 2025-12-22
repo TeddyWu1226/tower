@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import {ref} from "vue";
+import {effect, ref} from "vue";
 import {useGameStateStore} from "@/store/game-state-store";
 import {GameState} from "@/enums/enums";
 import {usePlayerStore} from "@/store/player-store";
@@ -17,6 +17,7 @@ const onRest = () => {
   if (playerStore.info.sp < playerStore.finalStats.spLimit) {
     playerStore.info.sp = playerStore.finalStats.spLimit
   }
+  playerStore.statusEffects = playerStore.statusEffects.filter(effect => effect.isBuff)
   gameStateStore.transitionToNextState()
 }
 

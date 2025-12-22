@@ -1,5 +1,4 @@
 // 定義所有怪物的特殊行為
-import {usePlayerStore} from "@/store/player-store";
 import {UnitStatus} from "@/constants/status-info";
 import {BattleOutcome, MonsterType} from "@/types";
 
@@ -18,5 +17,10 @@ export const MonsterActions: Record<string, (params: MonsterActionParams) => voi
     },
     onWolfAttack: () => {
         console.log('狼發動了撕咬！');
-    }
+    },
+    onPoisonousSlimeAttack: ({playerStore, logStore}) => {
+        playerStore.addStatus(UnitStatus.SlimePoison)
+        playerStore.addStatus(UnitStatus.SlimeSlow)
+        logStore.logger.add(`你沾滿了劇毒黏液。`);
+    },
 };

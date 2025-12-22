@@ -6,7 +6,7 @@ import {WorldDefault} from "@/assets/const";
 export const DEFAULT_USER_INFO: UserType = {
 	name: '玩家',
 	icon: '🌟',
-	ad: 1000,
+	ad: 10,
 	adDefend: 0,
 	critIncrease: WorldDefault.critIncrease,
 	critRate: WorldDefault.critRate,
