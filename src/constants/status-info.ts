@@ -24,9 +24,9 @@ export const UnitStatus = {
         name: '中毒',
         icon: '🤢',
         duration: 2,
-        description: '每回合失去 10 點生命值',
+        description: '每回合失去 5 點生命值',
         type: 'damage',
-        value: 10
+        value: 5
     } as StatusEffect,
     BeePoison: {
         name: '中毒',

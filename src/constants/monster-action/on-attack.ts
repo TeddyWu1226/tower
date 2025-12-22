@@ -19,9 +19,7 @@ export const MonsterOnAttack: Record<string, (params: MonsterActionParams) => vo
     poisonSlimeOnAttack: ({monster, playerStore, targetElement, logStore}) => {
         // 防禦減少
         showEffect(targetElement, "🛡️⬇️", "debuff");
-        if (monster.adDefend >= 5) {
-            monster.adDefend -= 5
-        }
+        monster.adDefend -= 2
         if (monster.adDefend < 0) {
             monster.adDefend = 0
         }
