@@ -18,4 +18,5 @@ export default defineConfig({
             '@': fileURLToPath(new URL('./src', import.meta.url))
         },
     },
+    base: '/god-note/', // 例如 '/my-vite-site/'，記得前後都要有斜線
 })
