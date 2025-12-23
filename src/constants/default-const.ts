@@ -4,28 +4,11 @@ import {RoomWeights, UserType} from "@/types";
 import {WorldDefault} from "@/assets/const";
 
 // todo:測試用
-export const DEFAULT_USER_INFO: UserType = {
-    name: '作者',
-    icon: 'TED',
-    ad: 15,
-    adDefend: 10,
-    critIncrease: WorldDefault.critIncrease,
-    critRate: WorldDefault.critRate,
-    dodge: 0,
-    hit: 0,
-    hp: 100,
-    hpLimit: 100,
-    sp: 100,
-    spLimit: 100,
-    level: 1,
-    char: CharEnum.Beginner.value,
-    gold: 0
-}
 // export const DEFAULT_USER_INFO: UserType = {
-//     name: '玩家',
-//     icon: '🌟',
-//     ad: 10,
-//     adDefend: 0,
+//     name: '作者',
+//     icon: 'TED',
+//     ad: 15,
+//     adDefend: 10,
 //     critIncrease: WorldDefault.critIncrease,
 //     critRate: WorldDefault.critRate,
 //     dodge: 0,
@@ -38,6 +21,23 @@ export const DEFAULT_USER_INFO: UserType = {
 //     char: CharEnum.Beginner.value,
 //     gold: 0
 // }
+export const DEFAULT_USER_INFO: UserType = {
+    name: '玩家',
+    icon: '🌟',
+    ad: 10,
+    adDefend: 0,
+    critIncrease: WorldDefault.critIncrease,
+    critRate: WorldDefault.critRate,
+    dodge: 0,
+    hit: 0,
+    hp: 100,
+    hpLimit: 100,
+    sp: 100,
+    spLimit: 100,
+    level: 1,
+    char: CharEnum.Beginner.value,
+    gold: 0
+}
 
 // 房間類型權重
 export const DEFAULT_ROOM_WEIGHTS: RoomWeights = {
