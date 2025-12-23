@@ -8,6 +8,7 @@ import RestOperation from "@/components/OperationLayout/comps/RestOperation.vue"
 import {ref} from "vue";
 import {useFloatingMessage} from "@/components/Shared/FloatingMessage/useFloatingMessage";
 import LeaveOperation from "@/components/OperationLayout/comps/LeaveOperation.vue";
+import BlessOperation from "@/components/OperationLayout/comps/BlessOperation.vue";
 
 
 const emit = defineEmits(['attack', 'rest', 'cancel', 'run']);
@@ -74,6 +75,12 @@ defineExpose({
       gameStateStore.stateIs(GameState.EVENT_PHASE)"
       @cancel="onCancel"
   />
+  <BlessOperation
+      v-else-if="gameStateStore.roomIs(RoomEnum.Bless.value) &&
+      gameStateStore.stateIs(GameState.EVENT_PHASE)"
+      @cancel="onCancel"
+  />
+
 </template>
 
 <style scoped>

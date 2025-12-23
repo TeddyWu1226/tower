@@ -54,10 +54,11 @@ export function createTrapezoidDataWithWeights(
 
     const result: TrapezoidData = [];
 
-    // ⭐️ 移除 customLabelCycle 的建立和打亂，我們不再需要它。
+    // 建立初始神像房間
+    result.push([6]);
 
     // --- 建立梯形結構並分配標記 (徹底隨機化) ---
-    for (let i = 1; i <= maxLayers; i++) {
+    for (let i = 2; i <= maxLayers; i++) {
         // 第 i 層的元素數量：E_i = 1 + (i - 1) * 2
         let elementsInLayer = 1 + (i - 1) * 2;
         if (elementsInLayer >= maxRooms) {

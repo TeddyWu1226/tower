@@ -2,7 +2,7 @@
 import {useGameStateStore} from "@/store/game-state-store";
 import {usePlayerStore} from "@/store/player-store";
 import {ref} from "vue";
-import {UnitStatus} from "@/constants/status-info";
+import {UnitStatus} from "@/constants/status-info/unit-status";
 import {Potions} from "@/constants/potion-info";
 
 const gameStateStore = useGameStateStore()

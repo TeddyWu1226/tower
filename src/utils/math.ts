@@ -43,3 +43,42 @@ export const checkProbability = (chance: number): boolean => {
   // Math.random() 會產生一個 [0, 1) 之間的浮點數
   return Math.random() < chance;
 };
+
+
+/**
+ * 從陣列中隨機抽取元素
+ * @param arr 來源陣列
+ * @param count 抽取數量 (預設 1)
+ * @param allowDuplicate 是否允許重複抽取 (預設 false)
+ * @returns 抽出的元素陣列
+ */
+export const getRandomElements = <T>(
+    arr: T[],
+    count: number = 1,
+    allowDuplicate: boolean = false
+): T[] => {
+  // 安全檢查
+  if (arr.length === 0) return [];
+  if (!allowDuplicate && count > arr.length) {
+    console.warn("抽取數量超過陣列長度且不允許重複，將回傳陣列最大長度");
+    count = arr.length;
+  }
+
+  const result: T[] = [];
+  const source = [...arr]; // 複製原陣列，避免修改到原始資料
+
+  for (let i = 0; i < count; i++) {
+    const randomIndex = Math.floor(Math.random() * source.length);
+
+    if (allowDuplicate) {
+      // 允許重複：直接取值，不移除原陣列內容
+      result.push(source[randomIndex]);
+    } else {
+      // 不允許重複：取值後從來源中移除 (使用 splice)
+      const element = source.splice(randomIndex, 1)[0];
+      result.push(element);
+    }
+  }
+
+  return result;
+};

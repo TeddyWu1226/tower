@@ -9,6 +9,7 @@ import FightRoom from "@/components/RoomLayout/comps/FightRoom.vue";
 import EventRoomCard from "@/components/RoomLayout/comps/EventRoomCard.vue";
 import {useLogStore} from "@/store/log-store";
 import ShopRoom from "@/components/RoomLayout/comps/ShopRoom.vue";
+import BlessRoom from "@/components/RoomLayout/comps/BlessRoom.vue";
 
 const emit = defineEmits(['playerDead', 'runFailed'])
 const gameStateStore = useGameStateStore()
@@ -90,6 +91,7 @@ watch(() => gameStateStore.currentRoom,
     />
     <RestRoom ref="RestRoomRef" v-if="currentRoomValue === RoomEnum.Rest.value" :key="roomKeyCounter"/>
     <ShopRoom ref="ShopRoomRef" v-if="currentRoomValue === RoomEnum.Shop.value" :key="roomKeyCounter"/>
+    <BlessRoom ref="ShopRoomRef" v-if="currentRoomValue === RoomEnum.Bless.value" :key="roomKeyCounter"/>
   </el-card>
 </template>
 

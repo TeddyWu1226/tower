@@ -35,5 +35,11 @@ export const RoomEnum = {
         label: '階段BOSS',
         icon: '☠️',
         color: '#D32F2F',
+    },
+    Bless: {
+        value: 6,
+        label: '祈禱之像',
+        icon: '🗿',
+        color: '#dda900',
     }
 };
