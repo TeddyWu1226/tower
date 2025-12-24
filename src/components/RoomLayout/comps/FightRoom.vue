@@ -4,7 +4,7 @@ import {QualityEnum} from "@/enums/quality-enum";
 import {RoomEnum} from "@/enums/room-enum";
 import {MonsterCardExposed} from "@/components/RoomLayout/comps/types";
 import MonsterCard from "@/components/RoomLayout/comps/MonsterCard.vue";
-import {useGameStateStore} from "@/store/game-state-store";
+import {getEffectiveStats, useGameStateStore} from "@/store/game-state-store";
 import {computed, nextTick, ref} from "vue";
 import {ItemType, MonsterType} from "@/types";
 import {
@@ -31,6 +31,7 @@ import {useLogStore} from "@/store/log-store";
 import {useFloatingMessage} from "@/components/Shared/FloatingMessage/useFloatingMessage";
 import {MonsterOnStart} from "@/constants/monster-action/on-start";
 import {MonsterOnAttacked} from "@/constants/monster-action/on-attacked";
+import {UnitStatus} from "@/constants/status-info/unit-status";
 
 const emit = defineEmits(['playerDead', 'runFailed'])
 const gameStateStore = useGameStateStore()
@@ -136,7 +137,7 @@ const handleMonsterSelect = (index: number) => {
 
 const monsterMove = (selectedMonster: MonsterType) => {
   // 傷害計算
-  const damageOutput = applyDamage(selectedMonster, playerStore.finalStats);
+  const damageOutput = applyDamage(getEffectiveStats(selectedMonster), playerStore.finalStats);
   // 特殊效果
   if (selectedMonster.onAttack && MonsterOnAttack[selectedMonster.onAttack]) {
     // 執行對應的函式
@@ -146,7 +147,7 @@ const monsterMove = (selectedMonster: MonsterType) => {
       playerStore: playerStore,
       logStore: logStore,
       damage: damageOutput,
-      targetElement:targetElement.$el
+      targetElement: targetElement.$el
     });
   }
   // 判斷玩家是否死亡
@@ -155,6 +156,41 @@ const monsterMove = (selectedMonster: MonsterType) => {
   }
 }
 
+const whenMonsterDead = (selectedMonster: MonsterType) => {
+  // 掉落金幣
+  const dropMoney = applyRandomFloatAndRound(selectedMonster.dropGold ?? 0)
+  playerStore.addGold(dropMoney)
+  monsterDropGold.value += dropMoney
+
+  // 掉落物品
+  const earnedItems = getLootFromTable(selectedMonster.drop);
+  earnedItems.forEach((item) => {
+    playerStore.gainItem(item);
+    monsterDropItems.value.push(item)
+  });
+  // 移除死亡怪
+  monsters.value.splice(selectedMonsterIndex.value, 1);
+  gameStateStore.setCurrentEnemy(monsters.value); // 再次同步
+  // 確保選中狀態同步：如果選中的怪物被移除了，則取消選中
+  if (selectedMonsterIndex.value >= monsters.value.length) {
+    selectedMonsterIndex.value = null;
+  }
+}
+
+const checkAllMonsterDead = () => {
+  //檢查每個怪物血量
+  monsters.value.forEach((monster) => {
+    if (monster.hp <= 0) {
+      whenMonsterDead(monster)
+    }
+  })
+
+  // 怪物全部死亡
+  if (monsters.value.length === 0) {
+    gameStateStore.setCurrentEnemy([])
+    gameStateStore.setBattleWon(true)
+  }
+}
 
 /**
  * 玩家行動
@@ -180,9 +216,8 @@ const onAttack = () => {
   triggerDamageEffect(damageOutput, targetElement.$el)
   if (damageOutput.isHit) {
     targetElement?.shake()
-    // 受到傷害效果
+    // 若怪物受到傷害觸發
     if (selectedMonster.onAttacked && MonsterOnAttacked[selectedMonster.onAttacked]) {
-      // 執行對應的函式
       MonsterOnAttacked[selectedMonster.onAttacked]({
         monster: selectedMonster,
         playerStore: playerStore,
@@ -200,33 +235,9 @@ const onAttack = () => {
   if (!damageOutput.isKilled) {
     // 怪物行動
     monsterMove(selectedMonster)
-  } else {
-    // 掉落金幣
-    const dropMoney = applyRandomFloatAndRound(selectedMonster.dropGold ?? 0)
-    playerStore.addGold(dropMoney)
-    monsterDropGold.value += dropMoney
-
-    // 掉落物品
-    const earnedItems = getLootFromTable(selectedMonster.drop);
-    earnedItems.forEach((item) => {
-      playerStore.gainItem(item);
-      monsterDropItems.value.push(item)
-    });
-    // 移除死亡怪
-    monsters.value.splice(selectedMonsterIndex.value, 1);
-    gameStateStore.setCurrentEnemy(monsters.value); // 再次同步
-    // 確保選中狀態同步：如果選中的怪物被移除了，則取消選中
-    if (selectedMonsterIndex.value >= monsters.value.length) {
-      selectedMonsterIndex.value = null;
-    }
+    gameStateStore.tickAllMonsters()
   }
-
-  // 怪物全部死亡
-  if (monsters.value.length === 0) {
-    gameStateStore.setCurrentEnemy([])
-    gameStateStore.setBattleWon(true)
-  }
-
+  checkAllMonsterDead()
 }
 
 const isEscape = ref(false)
@@ -244,6 +255,8 @@ const onRun = () => {
     }
     emit('runFailed', true)
     monsterMove(selectedMonster)
+    gameStateStore.tickAllMonsters()
+    checkAllMonsterDead()
   } else {
     isEscape.value = true
     gameStateStore.setBattleWon(true)
@@ -251,6 +264,7 @@ const onRun = () => {
   }
   // 回合結束判定
   onPlayerTurnEnd()
+
 }
 
 

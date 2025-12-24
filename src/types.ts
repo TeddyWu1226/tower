@@ -122,6 +122,7 @@ export interface MonsterType extends UnitType {
     class?: string // 卡片的特殊特效
     drop?: DropEntry[]
     dropGold?: number
+    status?: StatusEffect[]
     onStart?: MonsterOnStartType
     onAttack?: MonsterOnAttackType,
     onAttacked?: MonsterOnAttackedType

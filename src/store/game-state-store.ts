@@ -1,11 +1,46 @@
 import {defineStore} from 'pinia';
 import {GameState, SpecialEventEnum} from "@/enums/enums";
 import {RoomEnum} from "@/enums/room-enum";
-import {MonsterType, RoomCoordinateTuple, TrapezoidData} from "@/types";
+import {MonsterType, RoomCoordinateTuple, StatusEffect, TrapezoidData} from "@/types";
 import {createTrapezoidDataWithWeights} from "@/utils/create-floor";
 import {DEFAULT_ROOM_WEIGHTS} from "@/constants/default-const";
 import {computed, ref} from "vue";
+import {useLogStore} from "@/store/log-store";
 
+export const getEffectiveStats = (monster: MonsterType): MonsterType => {
+    // 基礎數值作為基底
+    const finalStats = {
+        icon: monster.icon,
+        name: monster.name,
+        description: monster.description,
+        level: monster.level,
+        hp: monster.hp,
+        ad: monster.ad || 0,
+        adDefend: monster.adDefend || 0,
+        hpLimit: monster.hpLimit || 0,
+        dodge: monster.dodge || 0,
+        hit: monster.hit || 0,
+        critRate: monster.critRate || 0,
+        critIncrease: monster.critIncrease || 0
+    };
+
+    // 遍歷所有狀態，疊加 Bonus
+    monster.status?.forEach(eff => {
+        if (eff.bonus) {
+            (Object.keys(eff.bonus) as Array<keyof typeof eff.bonus>).forEach(key => {
+                const val = eff.bonus![key];
+                if (typeof val === 'number') {
+                    // 根據 key 加上對應的數值
+                    if (key in finalStats) {
+                        (finalStats as any)[key] += val;
+                    }
+                }
+            });
+        }
+    });
+
+    return finalStats;
+};
 
 export const useGameStateStore = defineStore('game-state', () => {
     // --- State (用 ref 代替) ---
@@ -111,8 +146,58 @@ export const useGameStateStore = defineStore('game-state', () => {
             const currentCount = eventProcess.value[event] ?? 0;
             eventProcess.value[event] = currentCount + 1;
         }
-
     }
+
+    // 施加怪物狀態
+    function addEffectToMonster(monsterIndex: number, effect: StatusEffect) {
+        const monster = currentEnemy.value[monsterIndex]
+        const logStore = useLogStore();
+        if (!monster) return;
+        logStore.logger.add(`${monster.name} 受到 [${effect.name}] 效果。`);
+        // 邏輯：如果已有同名狀態，則更新持續時間，否則新增
+        if (!monster.status) {
+            monster.status = []
+        }
+        const existingIdx = monster.status.findIndex(e => e.name === effect.name);
+        if (existingIdx > -1) {
+            monster.status[existingIdx].duration = effect.duration;
+        } else {
+            monster.status.push({...effect});
+        }
+    }
+
+    // 每回合觸發：更新所有怪物的狀態
+    function tickAllMonsters() {
+        const logStore = useLogStore();
+        currentEnemy.value.forEach(monster => {
+
+            if (monster.hp <= 0) return;
+
+            // 1. 處理每回合跳血/回血 (DoT/HoT)
+            monster.status?.forEach(eff => {
+                let logMessage: string | undefined
+                if (eff.type === 'damage' && eff.value) {
+                    logMessage = `${monster.name} 因[${eff.name}]受到了 ${eff.value} 點傷害。`;
+                    monster.hp = Math.max(0, monster.hp - eff.value);
+                } else if (eff.type === 'heal' && eff.value) {
+                    const finalStats = getEffectiveStats(monster); // 計算包含 buff 的上限
+                    monster.hp = Math.min(finalStats.hpLimit, monster.hp + eff.value);
+                    logMessage = `${monster.name} 因[${eff.name}]回復了 ${eff.value} 點生命。`;
+                }
+                if (logMessage) {
+                    logStore.logger.add(logMessage);
+                }
+            });
+
+            // 2. 減少持續時間並過濾掉已結束的狀態
+            monster.status = monster.status?.map(eff => ({
+                ...eff,
+                duration: eff.duration === -1 ? -1 : eff.duration - 1
+            }))
+                .filter(eff => eff.duration !== 0);
+        });
+    }
+
 
     // --- 記得導出所有要在組件中使用的東西 ---
     return {
@@ -128,7 +213,9 @@ export const useGameStateStore = defineStore('game-state', () => {
         getEventProcess,
         stateIs,
         roomIs,
-        init, setRoom, setCurrentEnemy, setBattleWon, transitionToNextState, setEvent, isEventClose, addEventProcess
+        init,
+        setRoom, setCurrentEnemy, setBattleWon, transitionToNextState, setEvent, isEventClose, addEventProcess,
+        addEffectToMonster, tickAllMonsters
     };
 }, {
     persist: true // 持久化依然有效

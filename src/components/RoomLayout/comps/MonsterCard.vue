@@ -3,6 +3,7 @@ import './boss-animation.css'
 import {computed, PropType, ref} from 'vue'; // 引入 ref 和 computed
 import {MonsterType} from "@/types";
 import {HpProgress} from "@/components/Shared/Progress";
+import {getEffectiveStats} from "@/store/game-state-store";
 
 const props = defineProps({
   info: {type: Object as PropType<MonsterType>},
@@ -13,7 +14,9 @@ const handleClick = () => {
   emit('select', props.info);
 };
 
-// ⭐️ 新增狀態：用於控制抖動動畫
+const finalStats = computed(() => getEffectiveStats(props.info));
+
+// 新增狀態：用於控制抖動動畫
 const isShaking = ref(false);
 // 設置動畫持續時間 (需與 CSS @keyframes shake 的時間匹配)
 const SHAKE_DURATION = 500;
@@ -38,6 +41,14 @@ defineExpose({
   shake
 });
 
+const valueClass = (valueKey: string) => {
+  if (finalStats[valueKey] > props.info[valueKey]) {
+    return 'buff'
+  }
+  if (finalStats[valueKey] < props.info[valueKey]) {
+    return 'debuff'
+  }
+}
 </script>
 
 <template>
@@ -54,6 +65,18 @@ defineExpose({
       shadow="hover"
       @click="handleClick"
   >
+    <div class="status-bar">
+      <el-tooltip
+          v-for="eff in info.status"
+          :key="eff.name"
+          :content="`${eff.name}: ${eff.description} (${eff.duration === -1 ? '∞' : eff.duration + '回'})`"
+      >
+        <div class="status-icon" :class="{ 'is-debuff': !eff.isBuff }">
+          <span>{{ eff.icon }}</span>
+          <small v-if="eff.duration !== -1">{{ eff.duration }}</small>
+        </div>
+      </el-tooltip>
+    </div>
     <el-tooltip>
       <template #content>
         <p>{{ props.info.name }}</p>
@@ -77,19 +100,20 @@ defineExpose({
         <el-col style="text-align: center;" :span="24">
           <span>{{ props.info.name }}</span>
         </el-col>
-        <el-col :span="12">
+        <el-col :span="12" :class="valueClass('ad')">
           <span>⚔️</span>
-          <span>{{ props.info.ad }}</span>
+          <span>{{ finalStats.ad }}</span>
         </el-col>
-        <el-col :span="12">
+        <el-col :span="12" :class="valueClass('adDefend')">
           <span>🛡️</span>
-          <span>{{ props.info.adDefend }}</span>
+          <span>{{ finalStats.adDefend }}</span>
         </el-col>
         <el-col :span="24">
-          <HpProgress :current-value="props.info.hp" :total-value="props.info.hpLimit"/>
+          <HpProgress :current-value="props.info.hp" :total-value="finalStats.hpLimit"/>
         </el-col>
       </el-row>
     </el-tooltip>
+
   </el-card>
 </template>
 
@@ -132,15 +156,58 @@ p {
 
 /* ⭐️ 應用抖動動畫的類別 */
 .monster-card.is-shaking {
-  animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+  animation: shake 0.5s cubic-bezier(.36, .07, .19, .97) both;
   transform: translate3d(0, 0, 0); /* 啟用硬體加速 */
 }
 
 @keyframes shake {
   /* 輕微的、快速的水平位移 */
-  10%, 90% { transform: translate3d(-1px, 0, 0); }
-  20%, 80% { transform: translate3d(2px, 0, 0); }
-  30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
-  40%, 60% { transform: translate3d(4px, 0, 0); }
+  10%, 90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+  20%, 80% {
+    transform: translate3d(2px, 0, 0);
+  }
+  30%, 50%, 70% {
+    transform: translate3d(-4px, 0, 0);
+  }
+  40%, 60% {
+    transform: translate3d(4px, 0, 0);
+  }
+}
+
+.buff {
+  color: var(--el-color-success);
+}
+
+.debuff {
+  color: var(--el-color-danger);
+}
+/* ------------------- 狀態效果列 ------------------- */
+.status-bar {
+  position: relative;
+  display: flex;
+  gap: 4px;
+  height: 24px;
+}
+
+.status-icon {
+  position: relative;
+  font-size: 1.2rem;
+}
+
+.status-icon small {
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  border-radius: 50%;
+  padding: 0 4px;
+  font-size: 10px;
+}
+
+.is-debuff {
+  filter: drop-shadow(0 0 2px red);
 }
 </style>
