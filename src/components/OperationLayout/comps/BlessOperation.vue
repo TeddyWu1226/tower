@@ -51,6 +51,16 @@ const bless = (): void => {
   gameStateStore.transitionToNextState()
 }
 
+const MoneyBtnRef = ref()
+const money = (): void => {
+  taken.value = true
+  const money = 50
+  playerStore.info.gold += money
+  const text = `獲得 💰${money}G`
+  showEffect(MoneyBtnRef.value?.$el, text, "buff")
+  gameStateStore.transitionToNextState()
+}
+
 const cancel = (): void => {
   emit('cancel');
 }
@@ -61,8 +71,11 @@ const cancel = (): void => {
     <el-button ref="StrengthenBtnRef" type="success" :disabled="props.disabled||taken" @click="strengthen">
       強化
     </el-button>
-    <el-button ref="BlessBtnRef" type="warning" :disabled="props.disabled||taken" @click="bless">
+    <el-button ref="BlessBtnRef" type="primary" :disabled="props.disabled||taken" @click="bless">
       祝福
+    </el-button>
+    <el-button ref="MoneyBtnRef" type="warning" :disabled="props.disabled||taken" @click="money">
+      財富
     </el-button>
     <el-button type="info" :disabled="props.disabled" @click="cancel">
       繼續前進
