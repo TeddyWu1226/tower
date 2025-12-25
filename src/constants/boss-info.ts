@@ -11,7 +11,7 @@ export const Boss = {
         name: '森林守護者',
         class: 'boss',
         description: '貌似是這片森林的動物之主,有厚重的毛皮以及強大的破壞力,需要小心謹慎',
-        ad: 10,
+        ad: 5,
         critIncrease: WorldDefault.critIncrease,
         critRate: 25,
         adDefend: 10,

@@ -19,18 +19,14 @@ import {LogView} from "@/components/LogView";
 import {create} from "@/utils/create";
 import {usePlayerStore} from "@/store/player-store";
 import {StageEnum} from "@/enums/stage-enum";
-import {
-  AncientRootsWeights,
-  BeginForestWeights, EndlessWeights,
-  FairyBarrierWeights, GuardiansDenWeights,
-  SunkenGroveWeights
-} from "@/constants/stage-monster-weights";
+import {EndlessWeights} from "@/constants/stage-monster-weights";
 import {Boss} from "@/constants/boss-info";
 import {MonsterOnAttack} from "@/constants/monster-action/on-attack";
 import {useLogStore} from "@/store/log-store";
 import {MonsterOnStart} from "@/constants/monster-action/on-start";
 import {MonsterOnAttacked} from "@/constants/monster-action/on-attacked";
 import {useFloatingMessage} from "@/components/Shared/FloatingMessage/useFloatingMessage";
+import {stageMonsterWeightsMap} from "@/constants/stage-weights";
 
 const emit = defineEmits(['playerDead', 'runFailed'])
 const gameStateStore = useGameStateStore()
@@ -56,14 +52,7 @@ const genMonsters = (count: number, weight: Record<string, number>, eliteBoost =
 
 
 const getWeightByStage = () => {
-  const stageMap: Record<number, Record<string, number>> = {
-    1: BeginForestWeights,
-    2: SunkenGroveWeights,
-    3: AncientRootsWeights,
-    4: FairyBarrierWeights,
-    5: GuardiansDenWeights
-  }
-  return stageMap[gameStateStore.currentStage] || EndlessWeights;
+  return stageMonsterWeightsMap[gameStateStore.currentStage] || EndlessWeights;
 }
 
 //生成菁英戰鬥

@@ -4,15 +4,13 @@ import {useGameStateStore} from "@/store/game-state-store";
 import {EquipmentType, ItemType, PotionType, statLabels} from "@/types";
 import {getRandomItemsByQuality} from "@/utils/create";
 import {QualityEnum} from "@/enums/quality-enum";
-import {Armor} from "@/constants/equipment/armor-info";
-import {Head} from "@/constants/equipment/head-info";
-import {Offhand} from "@/constants/equipment/offhand-info";
-import {Weapon} from "@/constants/equipment/weapon-info";
 import {ElMessage} from "element-plus";
 import {getEnumColumn} from "@/utils/enum";
 import {Potions} from "@/constants/potion-info";
 import {usePlayerStore} from "@/store/player-store";
 import {GameState} from "@/enums/enums";
+import {getRandomElements} from "@/utils/math";
+import {stageShopSaleEquipmentMap} from "@/constants/stage-weights";
 
 const gameStateStore = useGameStateStore();
 const playerStore = usePlayerStore();
@@ -111,11 +109,7 @@ const sellStackedItem = (stackedItem: StackedItem) => {
 
 const init = () => {
   itemList.value = []
-  const randomEquips = getRandomItemsByQuality(
-      5,
-      QualityEnum.Tattered.value,
-      Armor, Head, Offhand, Weapon
-  );
+  const randomEquips = getRandomElements(stageShopSaleEquipmentMap[1], 2)
   const randomPotion = getRandomItemsByQuality(
       3,
       QualityEnum.Tattered.value,
