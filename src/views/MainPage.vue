@@ -11,11 +11,12 @@ import {StageEnum} from "@/enums/stage-enum";
 import {UserValueLayout} from "@/components/UserValueLayout";
 import {UserDetailInfo} from "@/components/DetailInfo";
 import {usePlayerStore} from "@/store/player-store";
-import {ElMessageBox, ElNotification} from "element-plus";
+import {ElMessage, ElMessageBox, ElNotification} from "element-plus";
 import {StageTransition} from "@/components/StageTransition";
+import DeadPage from "@/views/DeadPage.vue";
+import IntroPage from "@/views/IntroPage.vue";
 
 const gameStateStore = useGameStateStore()
-const playerStore = usePlayerStore()
 const isDead = ref(false)
 const cardConfig = ref({
   shadow: 'never',
@@ -24,26 +25,18 @@ const buttonConfig = ref({
   autoInsertSpace: true,
 })
 
-const initAll = async () => {
-  // 初始化角色
-  playerStore.init()
-  // 初始化
-  gameStateStore.init()
-  // 前往第一層
-  gameStateStore.setRoom(gameStateStore.currentRoom)
+/** 成就 **/
+const showAchievement = () => {
+  ElMessage.warning('開發中,盡請期待')
 }
 
-
-const startGame = async () => {
-  await initAll()
-
+/** 成就 **/
+const isShowIllustration = ref(false)
+const showIllustrate = () => {
+  isShowIllustration.value = true
 }
 
-const restartGame = async () => {
-  isDead.value = false
-  gameStateStore.init()
-}
-
+/** 重新開始 **/
 const resetGame = async () => {
   ElMessageBox.confirm(
       '確定要重新開始?',
@@ -65,34 +58,29 @@ const resetGame = async () => {
 /** 觸發 **/
 const RoomLayoutRef = ref()
 const OperationLayoutRef = ref()
+
 const onAttack = () => {
   RoomLayoutRef.value?.onAttack()
 }
-
 const onRun = () => {
   RoomLayoutRef.value?.onRun()
 }
 const onRest = () => {
   RoomLayoutRef.value?.onRest()
 }
-
 const onCancel = () => {
   RoomLayoutRef.value?.onCancel()
 }
-
 const onPlayerDead = (dead: boolean) => {
   if (!dead) {
     return
   }
   isDead.value = true
 }
-
 const onRunFailed = () => {
   OperationLayoutRef.value?.showEscapeFailedMessage()
 }
 
-// **【新增】房間唯一 ID/計數器**
-// 每次進入一個「新房間」時，這個值就會增加，無論房間類型是否相同。
 const showLoadingSuccess = () => {
   if (!gameStateStore.stateIs(GameState.INITIAL)) {
     ElNotification.success('已讀取緩存數據成功!')
@@ -101,7 +89,7 @@ const showLoadingSuccess = () => {
 onMounted(() => {
   showLoadingSuccess()
 })
-
+// 好看的進入階層動畫
 const StageTransitionRef = ref()
 watch(
     () => gameStateStore.currentStage,
@@ -117,48 +105,22 @@ watch(
 <template>
   <el-config-provider :card="cardConfig" :button="buttonConfig" :message="{max:3}">
     <div class="common-layout">
-      <el-card
+      <DeadPage
           v-if="isDead"
-          :class="{'dead': isDead}"
-          body-class="flex items-center justify-center flex-column"
-      >
-        <h1 style="color:var(--el-color-danger)">
-          🪦YOU DIED🪦
-        </h1>
-        <h1 style="color:var(--el-color-danger);text-align: center">
-          你倒在了第 {{ gameStateStore.currentStage }} 階段 - {{
-            getEnumColumn(StageEnum, gameStateStore.currentStage)
-          }} 的旅途上
-        </h1>
-        <el-button type="danger" style="width: 100%;height: 5rem" @click="restartGame">
-          重新開始
-        </el-button>
-      </el-card>
-      <el-card
-          class="start-view"
-          v-else-if="gameStateStore.stateIs(GameState.INITIAL)"
-      >
-        <div class="content-wrapper">
-          <h1 class="game-title">神之筆記</h1>
-          <h2 class="game-subtitle">~無盡之塔~</h2>
-
-          <div class="story-box">
-            <p class="typewriter">傳說，高塔之巔棲息著能實現一切願望的神明</p>
-            <p class="typewriter delay-1">千年來，無數勇者化作枯骨，卻無人能觸及雲端</p>
-            <p class="typewriter delay-2">陌生的登塔者啊，你是命運的第幾次輪迴？</p>
-          </div>
-
-          <div class="action-zone">
-            <el-button class="start-btn" @click="startGame">
-              登上旅途
-            </el-button>
-          </div>
-        </div>
-      </el-card>
+          @restart="()=>{
+            isDead = false
+          }"
+      />
+      <IntroPage v-else-if="gameStateStore.stateIs(GameState.INITIAL)"/>
       <el-container v-else>
         <el-header class="header">
-          <span>🏛️ 神之塔 🏛️</span>
-          <el-button type="danger" style="height: 2rem" size="small" @click="resetGame">重新開始</el-button>
+          <span>𝄞神之筆記𝄞</span>
+          <div>
+            <el-button type="warning" style="height: 2rem" size="small" @click="showAchievement" plain>成就</el-button>
+            <el-button type="primary" style="height: 2rem" size="small" @click="showIllustrate" plain>說明
+            </el-button>
+            <el-button type="danger" style="height: 2rem" size="small" @click="resetGame" plain>放棄</el-button>
+          </div>
         </el-header>
         <el-main>
           <FloorInfoLayout/>
@@ -183,6 +145,13 @@ watch(
       <UserDetailInfo v-if="!gameStateStore.stateIs(GameState.INITIAL)"/>
     </div>
     <StageTransition ref="StageTransitionRef"/>
+    <el-dialog v-model="isShowIllustration" title="說明" width="40rem">
+      <p>1. 無盡之塔是階層式結構,唯有打敗該層BOSS才能前往下一層</p>
+      <p>2. 在達成指定條件前, 無法挑戰該層BOSS</p>
+      <p>3. 你可以盡情的選擇你所想要走的路線,但請做好萬全準備後再選擇挑戰BOSS</p>
+      <p>4. 命只有一次,死亡即是終點,也是新的開始</p>
+      <p>5. 道具怪物基本都有相關提示,也許多看點對你有幫助</p>
+    </el-dialog>
   </el-config-provider>
 </template>
 
@@ -223,121 +192,5 @@ watch(
 
 .user-layout {
   height: 20vh;
-}
-
-
-.dead {
-  height: 82vh;
-  padding-bottom: 15vh;
-}
-
-/* 首頁背景與佈局 */
-.start-view {
-  height: 90vh;
-  background: radial-gradient(circle at center, #1a1a1a 0%, #000000 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid #444;
-  position: relative;
-  overflow: hidden;
-}
-
-/* 裝飾性光暈 */
-.start-view::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 300px;
-  height: 300px;
-  background: rgba(255, 215, 0, 0.05);
-  filter: blur(80px);
-  transform: translate(-50%, -50%);
-}
-
-.content-wrapper {
-  text-align: center;
-  z-index: 1;
-}
-
-/* 標題特效 */
-.game-title {
-  font-size: 3.5rem;
-  font-family: "serif";
-  letter-spacing: 0.5rem;
-  background: linear-gradient(to bottom, #ffffff 0%, #888888 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
-  margin-bottom: 0.5rem;
-}
-
-.game-subtitle {
-  color: #ffd700;
-  font-size: 1.2rem;
-  letter-spacing: 0.8rem;
-  margin-bottom: 3rem;
-  opacity: 0.8;
-}
-
-/* 故事文字與打字機動畫 */
-.story-box {
-  margin-bottom: 4rem;
-  min-height: 120px;
-}
-
-.typewriter {
-  color: #ccc;
-  font-size: 1rem;
-  margin: 0.8rem 0;
-  overflow: hidden;
-  white-space: nowrap;
-  border-right: 2px solid transparent;
-  animation: typing 0.5s steps(40, end), fade-in 2s forwards;
-}
-
-.delay-1 {
-  animation-delay: 0.5s;
-  opacity: 0;
-}
-
-.delay-2 {
-  animation-delay: 1s;
-  opacity: 0;
-}
-
-/* 按鈕美化 */
-.start-btn {
-  background: transparent !important;
-  border: 1px solid #ffd700 !important;
-  color: #ffd700 !important;
-  font-size: 1.5rem !important;
-  padding: 2.5rem 4rem !important;
-  transition: all 0.3s !important;
-  position: relative;
-}
-
-.start-btn:hover {
-  background: #ffd700 !important;
-  color: #000 !important;
-  box-shadow: 0 0 20px rgba(255, 214, 0, 0.6);
-}
-
-
-/* 動畫定義 */
-@keyframes typing {
-  from {
-    width: 0
-  }
-  to {
-    width: 100%
-  }
-}
-
-@keyframes fade-in {
-  to {
-    opacity: 1;
-  }
 }
 </style>
