@@ -56,15 +56,15 @@ export enum EquipmentPosition {
 }
 
 export const EquipmentEnum = {
-    Head: {
-        value: 'head',
-        label: '頭部',
-        icon: '😑',
-    },
     Weapon: {
         value: 'weapon',
         label: '武器',
         icon: '🗡️',
+    },
+    Head: {
+        value: 'head',
+        label: '頭部',
+        icon: '😑',
     },
     Body: {
         value: 'body',

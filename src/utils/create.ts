@@ -21,36 +21,53 @@ export function create<T extends object>(source: T): T {
 
 
 /**
- * 從多個裝備庫中，根據品質隨機抽取指定數量的道具
+ * 從多個裝備庫中，根據品質隨機抽取道具
  * @param count 想要獲得的道具數量
- * @param quality 目標品質 (0-5)
+ * @param quality 目標品質
+ * @param allowDuplicate 是否允許重複抽取 (預設為 true)
  * @param dataSources 裝備 Record 對象
  * @returns 包含隨機道具的陣列
  */
 export const getRandomItemsByQuality = (
     count: number,
     quality: number,
+    allowDuplicate: boolean = true,
     ...dataSources: Record<string, EquipmentType | PotionType>[]
 ): (EquipmentType | PotionType)[] => {
     // 1. 合併並過濾出符合品質的道具池
-    const pool: (EquipmentType | PotionType)[] = dataSources
+    const pool = dataSources
         .flatMap(source => Object.values(source))
         .filter(item => item.quality === quality);
 
-    // 2. 防錯處理：如果完全沒道具，回傳空陣列
     if (pool.length === 0) {
         console.warn(`未找到品質為 ${quality} 的道具。`);
         return [];
     }
 
-    // 3. 隨機洗牌 (Fisher-Yates Shuffle) 並取出前 N 個
-    // 這可以確保在道具充足的情況下不會重複抽中同一個
-    const shuffled = [...pool].sort(() => Math.random() - 0.5);
+    const results: (EquipmentType | PotionType)[] = [];
 
-    // 4. 如果要求的數量超過現有總數，就回傳現有的全部
-    const finalCount = Math.min(count, shuffled.length);
+    if (allowDuplicate) {
+        // --- 情況 A: 允許重複 ---
+        for (let i = 0; i < count; i++) {
+            const randomIndex = Math.floor(Math.random() * pool.length);
+            results.push(create(pool[randomIndex]) as EquipmentType | PotionType);
+        }
+    } else {
+        // --- 情況 B: 不允許重複 ---
+        // 如果要求的數量超過池子總數，強制下修數量以免死循環
+        const finalCount = Math.min(count, pool.length);
 
-    return shuffled.slice(0, finalCount);
+        // 拷貝一份池子用來做「抽取後刪除」
+        const tempPool = [...pool];
+        for (let i = 0; i < finalCount; i++) {
+            const randomIndex = Math.floor(Math.random() * tempPool.length);
+            // 使用 splice 移除已抽中的項
+            const selectedItem = tempPool.splice(randomIndex, 1)[0];
+            results.push(create(selectedItem) as EquipmentType | PotionType);
+        }
+    }
+
+    return results;
 };
 
 /**

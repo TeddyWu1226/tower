@@ -11,6 +11,10 @@ import {usePlayerStore} from "@/store/player-store";
 import {GameState} from "@/enums/enums";
 import {getRandomElements} from "@/utils/math";
 import {stageShopSaleEquipmentMap} from "@/constants/stage-weights";
+import {Armor} from "@/constants/equipment/armor-info";
+import {Head} from "@/constants/equipment/head-info";
+import {Offhand} from "@/constants/equipment/offhand-info";
+import {Weapon} from "@/constants/equipment/weapon-info";
 
 const gameStateStore = useGameStateStore();
 const playerStore = usePlayerStore();
@@ -109,12 +113,19 @@ const sellStackedItem = (stackedItem: StackedItem) => {
 
 const init = () => {
   itemList.value = []
-  const randomEquips = getRandomElements(stageShopSaleEquipmentMap[1], 2)
-  const randomPotion = getRandomItemsByQuality(
-      3,
+  const randomEquips = getRandomItemsByQuality(
+      5,
       QualityEnum.Tattered.value,
-      Potions
+      false,
+      Armor, Head, Offhand, Weapon
   );
+  const randomPotion = getRandomItemsByQuality(
+          3,
+          QualityEnum.Tattered.value,
+          true,
+          Potions
+      )
+  ;
   // 初始化商品，加入價格與售出狀態
   itemList.value = randomEquips.map(item => ({
     ...item,

@@ -38,8 +38,8 @@ export const statLabels: Record<keyof qualityType | 'heal' | 'magic', string> = 
     spLimit: '法力上限',
     heal: '回復生命',
     magic: '回復法力',
-    adIncrease: 'AD增傷',
-    apIncrease: 'AP增傷',
+    adIncrease: '物理增傷',
+    apIncrease: '法術增傷',
     defendIncrease: '抗性',
     lifeSteal: '吸血'
 };

@@ -6,6 +6,7 @@ import {computed, ref} from "vue";
 import {GameState, SpecialEventEnum} from "@/enums/enums";
 import {ElMessage} from "element-plus";
 import {Weapon} from "@/constants/equipment/weapon-info";
+import {Potions} from "@/constants/potion-info";
 
 const gameStateStore = useGameStateStore();
 const playerStore = usePlayerStore();
@@ -22,10 +23,10 @@ const handleChoice = (type: 'herb' | 'juice' | 'destroy' | 'sacrifice_hp' | 'sac
   answer.value = 1;
   switch (type) {
     case 'herb':
-      playerStore.removeItem('粗製的草藥水');
+      playerStore.removeItem(Potions.heal0.name);
       break;
     case 'juice':
-      playerStore.removeItem('混濁的果汁');
+      playerStore.removeItem(Potions.magic0.name);
       break;
   }
   setTimeout(() => {
@@ -121,16 +122,16 @@ const onLeave = () => {
       <template v-if="answer === 0">
         <template v-if="!isAdvanced">
           <el-button
-              :disabled="!playerStore.hasItem('粗製的草藥水')[0]"
+              :disabled="!playerStore.hasItem(Potions.heal0.name)[0]"
               type="success"
               @click="handleChoice('herb')">
-            提供 [粗製的草藥水]
+            提供 [{{ Potions.heal0.name }}]
           </el-button>
           <el-button
-              :disabled="!playerStore.hasItem('混濁的果汁')[0]"
+              :disabled="!playerStore.hasItem(Potions.magic0.name)[0]"
               type="warning"
               @click="handleChoice('juice')">
-            提供 [混濁的果汁]
+            提供 [{{ Potions.magic0.name }}]
           </el-button>
           <el-button
               type="danger"
