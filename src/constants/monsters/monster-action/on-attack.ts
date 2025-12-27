@@ -1,5 +1,5 @@
 // 定義所有怪物的特殊行為
-import {UnitStatus} from "@/constants/status-info/unit-status";
+import {UnitStatus} from "@/constants/status/unit-status";
 import {MonsterOnAttackParams} from "@/types";
 import {checkProbability} from "@/utils/math";
 import {showEffect} from "@/components/Shared/FloatingEffect/EffectManager";

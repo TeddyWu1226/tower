@@ -20,11 +20,11 @@ import {create} from "@/utils/create";
 import {usePlayerStore} from "@/store/player-store";
 import {StageEnum} from "@/enums/stage-enum";
 import {EndlessWeights} from "@/constants/stage-monster-weights";
-import {Boss} from "@/constants/boss-info";
-import {MonsterOnAttack} from "@/constants/monster-action/on-attack";
+import {Boss} from "@/constants/monsters/boss-info";
+import {MonsterOnAttack} from "@/constants/monsters/monster-action/on-attack";
 import {useLogStore} from "@/store/log-store";
-import {MonsterOnStart} from "@/constants/monster-action/on-start";
-import {MonsterOnAttacked} from "@/constants/monster-action/on-attacked";
+import {MonsterOnStart} from "@/constants/monsters/monster-action/on-start";
+import {MonsterOnAttacked} from "@/constants/monsters/monster-action/on-attacked";
 import {useFloatingMessage} from "@/components/Shared/FloatingMessage/useFloatingMessage";
 import {stageMonsterWeightsMap} from "@/constants/stage-weights";
 

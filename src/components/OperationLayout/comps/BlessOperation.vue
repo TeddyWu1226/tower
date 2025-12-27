@@ -6,7 +6,7 @@ import {useGameStateStore} from "@/store/game-state-store";
 import {checkProbability, getRandomElements} from "@/utils/math";
 import {showEffect} from "@/components/Shared/FloatingEffect/EffectManager";
 import {ref} from "vue";
-import {BlessStatus} from "@/constants/status-info/bless-status";
+import {BlessStatus} from "@/constants/status/bless-status";
 import type {StatusEffect} from "@/types";
 
 const emit = defineEmits(['cancel']);

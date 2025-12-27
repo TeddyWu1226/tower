@@ -130,3 +130,40 @@ export function getRandomLabelByWeight(weights: RoomWeights): number {
     // 3. 返回該索引對應的標記值
     return weightedChoices[randomIndex];
 }
+
+/**
+ * 通用權重隨機選取工具
+ * @param weightMap 權重對照表 (例如 { 'Slime': 70, 'Wolf': 30 })
+ * @param dataPool 資料來源池 (例如 Monster 物件、Equipment 物件)
+ * @param shouldClone 是否需要深拷貝 (預設為 true)
+ * @returns 隨機選出的實例
+ */
+export const getRandomItemByWeight = <T extends object>(
+    weightMap: Record<string, number>,
+    dataPool: Record<string, T>,
+    shouldClone: boolean = true
+): T => {
+    const keys = Object.keys(weightMap);
+
+    // 1. 過濾掉 dataPool 中不存在的 key，避免 undefined 型別問題
+    const validKeys = keys.filter(key => key in dataPool);
+
+    if (validKeys.length === 0) {
+        throw new Error("getRandomItemByWeight: No valid keys found in dataPool");
+    }
+
+    const totalWeight = validKeys.reduce((sum, key) => sum + weightMap[key], 0);
+    let randomNum = Math.random() * totalWeight;
+
+    for (const key of validKeys) {
+        if (randomNum < weightMap[key]) {
+            const item = dataPool[key]; // 此時 TS 知道 item 必為 T
+            return shouldClone ? create<T>(item) : item;
+        }
+        randomNum -= weightMap[key];
+    }
+
+    // 2. 兜底處理
+    const fallbackItem = dataPool[validKeys[0]];
+    return shouldClone ? create<T>(fallbackItem) : fallbackItem;
+};

@@ -1,6 +1,6 @@
 import {MonsterType} from "@/types";
 import {WorldDefault} from "@/assets/const";
-import {MATERIAL} from "@/constants/material-info";
+import {MATERIAL} from "@/constants/items/material-info";
 
 export const MistyForestMonster = {
     // 1. 基本新手怪

@@ -7,7 +7,7 @@ import {StageEnum} from "@/enums/stage-enum";
 import {GameState} from "@/enums/enums";
 import {ElMessageBox} from "element-plus";
 import {RoomEnum} from "@/enums/room-enum";
-import {MATERIAL} from "@/constants/material-info";
+import {MATERIAL} from "@/constants/items/material-info";
 
 
 const gameStateStore = useGameStateStore();

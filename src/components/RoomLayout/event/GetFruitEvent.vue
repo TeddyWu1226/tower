@@ -5,8 +5,8 @@ import EventTemplate from "@/components/RoomLayout/event/EventTemplate.vue";
 import {computed, ref} from "vue";
 import {GameState, SpecialEventEnum} from "@/enums/enums";
 import {ElMessage} from "element-plus";
-import {Weapon} from "@/constants/equipment/weapon-info";
-import {Potions} from "@/constants/potion-info";
+import {Weapon} from "@/constants/items/equipment/weapon-info";
+import {Potions} from "@/constants/items/usalbe-item/potion-info";
 
 const gameStateStore = useGameStateStore();
 const playerStore = usePlayerStore();

@@ -1,7 +1,7 @@
 import {EquipmentPosition} from "@/enums/enums";
-import {MonsterOnAttack} from "@/constants/monster-action/on-attack";
-import {MonsterOnStart} from "@/constants/monster-action/on-start";
-import {MonsterOnAttacked} from "@/constants/monster-action/on-attacked";
+import {MonsterOnAttack} from "@/constants/monsters/monster-action/on-attack";
+import {MonsterOnStart} from "@/constants/monsters/monster-action/on-start";
+import {MonsterOnAttacked} from "@/constants/monsters/monster-action/on-attacked";
 
 /**
  * 物品相關
