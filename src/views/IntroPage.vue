@@ -4,10 +4,12 @@ import {usePlayerStore} from "@/store/player-store";
 import {RoomEnum} from "@/enums/room-enum";
 import {Usable} from "@/constants/items/usalbe-item/usable-info";
 import {useTrackerStore} from "@/store/track-store";
+import {useAchievementStore} from "@/store/achievement-store";
 
 const gameStateStore = useGameStateStore()
 const playerStore = usePlayerStore()
 const trackStore = useTrackerStore()
+const achievementStore = useAchievementStore()
 
 const initAll = async () => {
   // 初始化角色
@@ -15,7 +17,7 @@ const initAll = async () => {
   // 初始化
   gameStateStore.init()
   trackStore.init()
-
+  achievementStore.init()
   // 前往第一層
   gameStateStore.setRoom(RoomEnum.Bless.value)
 }

@@ -8,18 +8,19 @@ import {useGameStateStore} from "@/store/game-state-store";
 import {usePlayerStore} from "@/store/player-store";
 import {AchievementType} from "@/types";
 import {ElNotification} from "element-plus";
+import {useAchievementStore} from "@/store/achievement-store";
 
 const model = defineModel({type: Boolean, default: false});
+const achievementStore = useAchievementStore()
 const trackerStore = useTrackerStore();
 const gameStateStore = useGameStateStore();
 const playerStore = usePlayerStore();
 
-const AchievementObject = ref<typeof Achievement>(JSON.parse(JSON.stringify(Achievement)));
 
 // 將成就物件轉為陣列，方便渲染，並將已解鎖的排在前面
 const sortedAchievements = computed(() => {
   // 將物件轉為陣列進行排序
-  return Object.values(AchievementObject.value).sort((a, b) => {
+  return Object.values(achievementStore.currentAchievement).sort((a, b) => {
     // 1. 如果解鎖狀態不同，已解鎖 (true) 的排前面
     if (a.isUnlocked !== b.isUnlocked) {
       return a.isUnlocked ? -1 : 1;
@@ -43,8 +44,8 @@ const triggerAchievementNotify = (ach: AchievementType) => {
     title: '🏆 成就解鎖',
     // 使用 h 函數自定義內容，增加圖示與名稱的質感
     message: h('div', {style: `color: ${achColor}; font-weight: bold; font-size: 16px;`}, [
-      h('span', {style: 'margin-right: 8px;'}, ach.icon),
-      h('span', ach.name)
+      h('h3', {style: `color: ${achColor}`}, `${ach.icon} ${ach.name}`),
+      h('span', {style: `font-size: 0.8rem;`}, ach.description)
     ]),
     position: 'bottom-right',
     duration: 4000,
@@ -61,7 +62,7 @@ watch(
     () => [trackerStore.currentKills, trackerStore.totalKills],
     () => {
       // 遍歷所有尚未解鎖的成就
-      Object.entries(AchievementObject.value).forEach(([key, ach]: [keyof typeof Achievement, AchievementType]) => {
+      Object.entries(achievementStore.currentAchievement).forEach(([key, ach]: [keyof typeof Achievement, AchievementType]) => {
         if (ach.isUnlocked) return; // 已經解鎖的跳過
 
         let isConditionMet = false;
