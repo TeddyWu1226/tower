@@ -11,8 +11,6 @@ const playerStore = usePlayerStore()
 const isClose = ref(true);
 
 const onTest = () => {
-  // playerStore.addStatus(UnitStatus.SlimeSlow)
-  playerStore.gainItem(Accessories.SoulAnchor)
 }
 onTest()
 </script>
