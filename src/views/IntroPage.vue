@@ -2,6 +2,7 @@
 import {useGameStateStore} from "@/store/game-state-store";
 import {usePlayerStore} from "@/store/player-store";
 import {RoomEnum} from "@/enums/room-enum";
+import {Usable} from "@/constants/items/usalbe-item/usable-info";
 
 const gameStateStore = useGameStateStore()
 const playerStore = usePlayerStore()
@@ -18,6 +19,7 @@ const initAll = async () => {
 
 const startGame = async () => {
   await initAll()
+  playerStore.gainItem(Usable.campfire)
 
 }
 

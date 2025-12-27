@@ -50,6 +50,7 @@ export interface ItemType {
     icon: string;
     quality?: number
     usable?: boolean // 是否可使用
+    skill?: string //使用的技能
 }
 
 export interface EquipmentType extends ItemType, qualityType {
