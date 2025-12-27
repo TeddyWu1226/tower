@@ -20,18 +20,20 @@ import {create} from "@/utils/create";
 import {usePlayerStore} from "@/store/player-store";
 import {StageEnum} from "@/enums/stage-enum";
 import {EndlessWeights} from "@/constants/stage-monster-weights";
-import {Boss} from "@/constants/boss-info";
-import {MonsterOnAttack} from "@/constants/monster-action/on-attack";
+import {Boss} from "@/constants/monsters/boss-info";
+import {MonsterOnAttack} from "@/constants/monsters/monster-action/on-attack";
 import {useLogStore} from "@/store/log-store";
-import {MonsterOnStart} from "@/constants/monster-action/on-start";
-import {MonsterOnAttacked} from "@/constants/monster-action/on-attacked";
+import {MonsterOnStart} from "@/constants/monsters/monster-action/on-start";
+import {MonsterOnAttacked} from "@/constants/monsters/monster-action/on-attacked";
 import {useFloatingMessage} from "@/components/Shared/FloatingMessage/useFloatingMessage";
 import {stageMonsterWeightsMap} from "@/constants/stage-weights";
+import {useTrackerStore} from "@/store/track-store";
 
 const emit = defineEmits(['playerDead', 'runFailed'])
 const gameStateStore = useGameStateStore()
 const playerStore = usePlayerStore()
 const logStore = useLogStore()
+const trackStore = useTrackerStore()
 const currentRoomValue = computed(() => {
       return gameStateStore.currentRoomValue
     }
@@ -136,6 +138,8 @@ const monsterMove = (selectedMonster: MonsterType) => {
 }
 
 const whenMonsterDead = (selectedMonster: MonsterType) => {
+  // 紀錄擊殺
+  trackStore.recordKill(selectedMonster.name)
   // 掉落金幣
   const dropMoney = applyRandomFloatAndRound(selectedMonster.dropGold ?? 0)
   playerStore.addGold(dropMoney)

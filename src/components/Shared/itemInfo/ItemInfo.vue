@@ -2,13 +2,13 @@
 
 import {getEnumColumn} from "@/utils/enum";
 import {QualityEnum} from "@/enums/quality-enum";
-import {EquipmentType, ItemType, PotionType, statLabels} from "@/types";
+import {EquipmentType, ItemType, UsableType, statLabels} from "@/types";
 import {PropType} from "vue";
 import {StatEnum} from "@/enums/enums";
 
 const props = defineProps({
   item: {
-    type: Object as PropType<ItemType | EquipmentType | PotionType>,
+    type: Object as PropType<ItemType | EquipmentType | UsableType>,
   }
 })
 </script>

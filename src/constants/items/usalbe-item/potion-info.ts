@@ -1,4 +1,4 @@
-import {PotionType} from "@/types";
+import {UsableType} from "@/types";
 
 const Heal = {
     heal0: {
@@ -8,7 +8,7 @@ const Heal = {
         quality: 0,
         heal: 25,
         usable: true
-    } as PotionType,
+    } as UsableType,
 
     heal1: {
         name: '初級生命藥水',
@@ -17,7 +17,7 @@ const Heal = {
         quality: 1,
         heal: 50,
         usable: true
-    } as PotionType,
+    } as UsableType,
 
     heal2: {
         name: '中級生命萃取液',
@@ -26,7 +26,7 @@ const Heal = {
         quality: 2,
         heal: 100,
         usable: true
-    } as PotionType,
+    } as UsableType,
 };
 
 
@@ -38,7 +38,7 @@ const Magic = {
         quality: 0,
         magic: 10,
         usable: true
-    } as PotionType,
+    } as UsableType,
     magic1: {
         name: '初級法力藥水',
         description: '淡淡的藍色液體。',
@@ -46,14 +46,14 @@ const Magic = {
         quality: 1,
         magic: 20,
         usable: true
-    } as PotionType,
+    } as UsableType,
     magic2: {
         name: '清澈法力藥水',
         description: '精煉過的魔力液體，恢復感極強。',
         icon: '🍷',
         quality: 2,
         magic: 50
-    } as PotionType,
+    } as UsableType,
 };
 
 

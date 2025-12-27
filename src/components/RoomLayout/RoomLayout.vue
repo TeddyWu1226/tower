@@ -10,9 +10,12 @@ import EventRoomCard from "@/components/RoomLayout/comps/EventRoomCard.vue";
 import {useLogStore} from "@/store/log-store";
 import ShopRoom from "@/components/RoomLayout/comps/ShopRoom.vue";
 import BlessRoom from "@/components/RoomLayout/comps/BlessRoom.vue";
+import {ItemSkill} from "@/constants/skill/item-skill";
+import {usePlayerStore} from "@/store/player-store";
 
 const emit = defineEmits(['playerDead', 'runFailed'])
 const gameStateStore = useGameStateStore()
+const playerStore = usePlayerStore()
 
 const currentRoomValue = computed(() => {
       return gameStateStore.currentRoomValue
@@ -33,6 +36,20 @@ const onAttack = () => {
 
 const onRun = () => {
   FightRoomRef.value?.onRun()
+}
+
+const onSkill = ({skillKey, callback, el}) => {
+  const specifySkill = ['campfire', 'smokeBomb']
+  if (specifySkill.includes(skillKey)) {
+    ItemSkill[skillKey](
+        {
+          playerStore: playerStore,
+          gameStateStore: gameStateStore,
+          callback: callback,
+          targetElement: el
+        }
+    )
+  }
 }
 
 /** 休息房間 **/
@@ -56,7 +73,8 @@ defineExpose({
   onAttack,
   onRun,
   onRest,
-  onCancel
+  onCancel,
+  onSkill
 })
 
 /** 初始化刷新 **/

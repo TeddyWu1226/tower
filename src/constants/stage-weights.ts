@@ -5,10 +5,10 @@ import {
     SunkenGroveWeights
 } from "@/constants/stage-monster-weights";
 import {EquipmentType} from "@/types";
-import {Weapon} from "@/constants/equipment/weapon-info";
-import {Armor} from "@/constants/equipment/armor-info";
-import {Head} from "@/constants/equipment/head-info";
-import {Offhand} from "@/constants/equipment/offhand-info";
+import {Weapon} from "@/constants/items/equipment/weapon-info";
+import {Armor} from "@/constants/items/equipment/armor-info";
+import {Head} from "@/constants/items/equipment/head-info";
+import {Offhand} from "@/constants/items/equipment/offhand-info";
 
 export const stageMonsterWeightsMap: Record<number, Record<string, number>> = {
     1: BeginForestWeights,

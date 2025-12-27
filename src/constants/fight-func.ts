@@ -3,8 +3,8 @@ import {BattleOutcome, DamageResult, MonsterType, UnitType} from "@/types";
 import {useFloatingMessage} from "@/components/Shared/FloatingMessage/useFloatingMessage";
 import {useLogStore} from "@/store/log-store";
 import {usePlayerStore} from "@/store/player-store";
-import {create} from "@/utils/create";
-import {Monster} from "@/constants/monster-info";
+import {getRandomItemByWeight} from "@/utils/create";
+import {Monster} from "@/constants/monsters/monster-info";
 
 const MAX_RATE = 100; // 命中率或暴擊率的最大值 (100%)
 
@@ -116,7 +116,7 @@ export function applyDamage(attacker: UnitType, defender: UnitType): BattleOutco
     // 輸出戰鬥日誌
     const logMessage = [
         `${attacker.name || '攻擊者'} 攻擊 ${defender.name || '防禦者'}，`,
-        outcome.isCrit ? `🔥 暴擊` : `命中`,
+        outcome.isCrit ? `💥 暴擊` : `命中`,
         `造成 ${damageTaken} 點傷害。`
     ].join('');
 
@@ -135,7 +135,7 @@ export function triggerDamageEffect(damageOutCome: BattleOutcome, targetElement?
 
     // --- 1. 定義基礎變數 ---
     const isPlayer = !targetElement; // 判斷是否為玩家自身
-    const prefixText = isPlayer ? '你受到了' : '受到了';
+    const prefixText = '-'
 
     let messageText: string;
     let messageColor = '#E0E0E0'; // 預設顏色
@@ -143,23 +143,21 @@ export function triggerDamageEffect(damageOutCome: BattleOutcome, targetElement?
 
     if (damageOutCome.isKilled) {
         // 💀 死亡：顯示總傷害並加上死亡符號
-        messageText = `${prefixText} 💀${damageOutCome.totalDamage} 傷害`;
-
-    } else if (damageOutCome.totalDamage === 0 && damageOutCome.isHit === true) {
-        // 🛡️ 完全格檔或閃避：無傷害
-        messageText = '🛡️格檔🛡️';
-        messageColor = '#B0C4DE'; // 淺藍色，強調防禦
+        messageText = `${prefixText} 💀${damageOutCome.totalDamage}`;
 
     } else if (damageOutCome.isHit) {
         // 命中，且總傷害 > 0
-
-        if (damageOutCome.isCrit) {
-            // 💥 暴擊：使用金色和暴擊樣式
-            messageText = `${prefixText} 💥${damageOutCome.totalDamage} 傷害`;
+        if (damageOutCome.totalDamage < damageOutCome.baseDamage * 0.5) {
+            // 大幅減傷
+            messageText = `${prefixText} ⛊${damageOutCome.totalDamage}`;
+            messageColor = '#74747c'; // 灰色
+        } else if (damageOutCome.isCrit) {
+            // 爆擊
+            messageText = `${prefixText} 💥${damageOutCome.totalDamage}`;
             messageColor = '#ff0000'; // 金色
         } else {
             // 普通命中
-            messageText = `${prefixText} ${damageOutCome.totalDamage} 傷害`;
+            messageText = `${prefixText} ${damageOutCome.totalDamage}`;
         }
     } else {
         // 處理未命中 (例如：Miss) 或其他未捕捉到的狀態
@@ -268,43 +266,7 @@ export function canEscape(runner: UnitType, chasers: UnitType[]): boolean {
 
 
 /**
- * 通用權重隨機選取工具
- * @param weightMap 權重對照表 (例如 { 'Slime': 70, 'Wolf': 30 })
- * @param dataPool 資料來源池 (例如 Monster 物件、Equipment 物件)
- * @param shouldClone 是否需要深拷貝 (預設為 true)
- * @returns 隨機選出的實例
- */
-export const getRandomItemByWeight = <T extends object>(
-    weightMap: Record<string, number>,
-    dataPool: Record<string, T>,
-    shouldClone: boolean = true
-): T => {
-    const keys = Object.keys(weightMap);
-
-    // 1. 過濾掉 dataPool 中不存在的 key，避免 undefined 型別問題
-    const validKeys = keys.filter(key => key in dataPool);
-
-    if (validKeys.length === 0) {
-        throw new Error("getRandomItemByWeight: No valid keys found in dataPool");
-    }
-
-    const totalWeight = validKeys.reduce((sum, key) => sum + weightMap[key], 0);
-    let randomNum = Math.random() * totalWeight;
-
-    for (const key of validKeys) {
-        if (randomNum < weightMap[key]) {
-            const item = dataPool[key]; // 此時 TS 知道 item 必為 T
-            return shouldClone ? create<T>(item) : item;
-        }
-        randomNum -= weightMap[key];
-    }
-
-    // 2. 兜底處理
-    const fallbackItem = dataPool[validKeys[0]];
-    return shouldClone ? create<T>(fallbackItem) : fallbackItem;
-};
-/**
- * 核心生成函數
+ * 核心生成怪物函數
  * @param count 生成數量
  * @param weight 權重表
  * @param strengthening 強化倍率(1.0為基準)

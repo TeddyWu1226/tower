@@ -1,10 +1,10 @@
-import { createApp, h } from 'vue';
+import {createApp, h} from 'vue';
 import FloatingEffect from './FloatingEffect.vue';
 
 export const showEffect = (
     el: HTMLElement,
     text: string,
-    type: 'buff' | 'debuff' = 'buff'
+    type: 'buff' | 'debuff' | 'fullscreen' = 'buff'
 ) => {
     // 1. 取得目標元素的位置
     const rect = el.getBoundingClientRect();

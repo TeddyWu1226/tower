@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {computed, ref} from "vue";
+import {computed} from "vue";
 import {useGameStateStore} from "@/store/game-state-store";
 import {usePlayerStore} from "@/store/player-store";
 import {getEnumColumn} from "@/utils/enum";
@@ -7,11 +7,14 @@ import {StageEnum} from "@/enums/stage-enum";
 import {GameState} from "@/enums/enums";
 import {ElMessageBox} from "element-plus";
 import {RoomEnum} from "@/enums/room-enum";
-import {MATERIAL} from "@/constants/material-info";
+import {MATERIAL} from "@/constants/items/material-info";
+import {useTrackerStore} from "@/store/track-store";
+import {Monster} from "@/constants/monsters/monster-info";
 
 
 const gameStateStore = useGameStateStore();
 const playerStore = usePlayerStore();
+const trackerStore = useTrackerStore();
 
 
 const onClick = () => {
@@ -37,22 +40,78 @@ const onClick = () => {
       })
 }
 
-const bossFightHint = ref('')
+// 任務類型枚舉
+enum QuestType {
+  COLLECT = 'COLLECT', // 收集物品
+  TARGET = 'TARGET', // 擊敗特定怪物
+  KILL = 'KILL', // 擊敗不特定怪物
+  SURVIVE = 'SURVIVE' // 生存天數
+}
+
+const STAGE_GOALS: Record<number, {
+  type: QuestType;
+  target?: string;
+  need: number;
+  label: string
+}> = {
+  1: {type: QuestType.COLLECT, target: MATERIAL.ForestWood.name, need: 3, label: '收集'},
+  2: {type: QuestType.KILL, need: 30, label: '狩獵'},
+  3: {type: QuestType.TARGET, target: Monster.SmallSpider.name, need: 1, label: '擊敗'},
+  4: {type: QuestType.SURVIVE, target: '天', need: 50, label: '生存'},
+};
+// 獲取當前階段的進度數據
+const stageProgress = computed(() => {
+  const goal = STAGE_GOALS[gameStateStore.currentStage];
+  if (!goal) return {finish: true, current: 0, need: 0, text: '準備挑戰 Boss'};
+
+  let current = 0;
+  let finish = false;
+
+  // 根據不同類型去不同的 Store 拿資料
+  switch (goal.type) {
+
+    case QuestType.COLLECT:
+      // 收集指定道具
+      const [has, count] = playerStore.hasItem(goal.target, goal.need);
+      current = count;
+      finish = has;
+      break;
+
+    case QuestType.TARGET:
+      // 擊殺特定怪物
+      current = trackerStore.getKillCount(goal.target, 'current');
+      finish = current >= goal.need;
+      break;
+
+    case QuestType.KILL:
+      // 擊殺不特定怪物
+      current = trackerStore.getKillCount('TOTAL', 'current');
+      finish = current >= goal.need;
+      break;
+
+
+    case QuestType.SURVIVE:
+      // 存活定天數
+      current = gameStateStore.days;
+      finish = current >= goal.need;
+      break;
+  }
+
+  return {
+    finish,
+    current,
+    need: goal.need,
+    text: `${goal.label} ${goal.target ?? '任意怪物'} (${current}/${goal.need})`
+  };
+});
+
+// 最終暴露給 UI 的變數
 const isCanFightBoss = computed(() => {
-  if (gameStateStore.stateIs(GameState.EVENT_PHASE)) {
-    return false
-  }
-  switch (gameStateStore.currentStage) {
-    case 1:
-      // 收集靈木細枝
-      const need = 3
-      const [finish, current] = playerStore.hasItem(MATERIAL.ForestWood.name, need)
-      bossFightHint.value = `收集 ${MATERIAL.ForestWood.name}(${current}/${need})`
-      return finish
-    default:
-      return true
-  }
-})
+  if (gameStateStore.stateIs(GameState.EVENT_PHASE)) return false;
+  return stageProgress.value.finish;
+});
+
+const bossFightHint = computed(() => stageProgress.value.text);
 
 </script>
 

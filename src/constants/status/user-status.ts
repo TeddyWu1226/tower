@@ -9,4 +9,14 @@ export const UserStatus = {
         type: 'damage',
         value: 2
     } as StatusEffect,
+    SmokeBomb: {
+        name: '煙霧迷漫',
+        icon: '💨',
+        duration: 1,
+        isBuff: true,
+        description: '煙霧迷漫狀態下,獲得必定逃跑效果',
+        bonus: {
+            dodge: 1000000000000
+        }
+    } as StatusEffect,
 }

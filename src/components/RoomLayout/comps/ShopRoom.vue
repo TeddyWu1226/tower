@@ -1,26 +1,25 @@
 <script setup lang="ts">
 import {ref, onMounted, computed} from "vue";
 import {useGameStateStore} from "@/store/game-state-store";
-import {EquipmentType, ItemType, PotionType, statLabels} from "@/types";
+import {EquipmentType, ItemType, UsableType, statLabels} from "@/types";
 import {getRandomItemsByQuality} from "@/utils/create";
 import {QualityEnum} from "@/enums/quality-enum";
 import {ElMessage} from "element-plus";
 import {getEnumColumn} from "@/utils/enum";
-import {Potions} from "@/constants/potion-info";
+import {Potions} from "@/constants/items/usalbe-item/potion-info";
 import {usePlayerStore} from "@/store/player-store";
 import {GameState} from "@/enums/enums";
-import {getRandomElements} from "@/utils/math";
-import {stageShopSaleEquipmentMap} from "@/constants/stage-weights";
-import {Armor} from "@/constants/equipment/armor-info";
-import {Head} from "@/constants/equipment/head-info";
-import {Offhand} from "@/constants/equipment/offhand-info";
-import {Weapon} from "@/constants/equipment/weapon-info";
+import {Armor} from "@/constants/items/equipment/armor-info";
+import {Head} from "@/constants/items/equipment/head-info";
+import {Offhand} from "@/constants/items/equipment/offhand-info";
+import {Weapon} from "@/constants/items/equipment/weapon-info";
+import {Usable} from "@/constants/items/usalbe-item/usable-info";
 
 const gameStateStore = useGameStateStore();
 const playerStore = usePlayerStore();
 
 // 商店商品列表 (包含一個 'sold' 標記來處理售出狀態)
-const itemList = ref<((ItemType | PotionType | EquipmentType) & { sold?: boolean; price?: number })[]>([]);
+const itemList = ref<((ItemType | UsableType | EquipmentType) & { sold?: boolean; price?: number })[]>([]);
 const isRun = ref(false)
 /**
  * 根據品質計算價格的簡單公式
@@ -49,7 +48,7 @@ const getSellPrice = (item: any) => {
 /**
  * 定義堆疊物品的型別
  */
-type StackedItem = (ItemType | PotionType | EquipmentType) & {
+type StackedItem = (ItemType | UsableType | EquipmentType) & {
   count: number;
   originalIndices: number[]; // 紀錄在原陣列中的索引，方便刪除
   bagType: 'items' | 'equipments' | 'consumeItems';
@@ -113,12 +112,21 @@ const sellStackedItem = (stackedItem: StackedItem) => {
 
 const init = () => {
   itemList.value = []
+  // 隨機裝備
   const randomEquips = getRandomItemsByQuality(
-      5,
+      4,
       QualityEnum.Tattered.value,
       false,
       Armor, Head, Offhand, Weapon
   );
+  //隨機好用道具
+  const randomUsableItems = getRandomItemsByQuality(
+      1,
+      QualityEnum.Rare.value,
+      false,
+      Usable
+  );
+  // 隨機藥水
   const randomPotion = getRandomItemsByQuality(
           3,
           QualityEnum.Tattered.value,
@@ -132,19 +140,26 @@ const init = () => {
     price: calculatePrice(item.quality ?? 0),
     sold: false
   })).concat(
-      randomPotion.map(item => ({
+      randomUsableItems.map(item => ({
         ...item,
-        price: potionPrices[item.quality ?? 0],
+        price: 500,
         sold: false
       }))
   )
+      .concat(
+          randomPotion.map(item => ({
+            ...item,
+            price: potionPrices[item.quality ?? 0],
+            sold: false
+          }))
+      )
 };
 /**
  * 點擊邏輯
  */
 const isShowDetail = ref(false);
-const selectedItem = ref<ItemType | PotionType | EquipmentType | undefined>()
-const onClickItem = (item: ItemType | PotionType | EquipmentType) => {
+const selectedItem = ref<ItemType | UsableType | EquipmentType | undefined>()
+const onClickItem = (item: ItemType | UsableType | EquipmentType) => {
   if (playerStore.info.gold < (item as any).price) {
     ElMessage.error("錢不夠啊，窮光蛋！");
     return;
@@ -315,7 +330,7 @@ onMounted(() => {
 }
 
 .item-card {
-  width: 8rem;
+  width: 7rem;
   background: var(--el-card-bg-color);
   border: 2px solid #ddd;
   border-radius: 8px;

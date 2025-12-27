@@ -1,7 +1,10 @@
 import {EquipmentPosition} from "@/enums/enums";
-import {MonsterOnAttack} from "@/constants/monster-action/on-attack";
-import {MonsterOnStart} from "@/constants/monster-action/on-start";
-import {MonsterOnAttacked} from "@/constants/monster-action/on-attacked";
+import {MonsterOnAttack} from "@/constants/monsters/monster-action/on-attack";
+import {MonsterOnStart} from "@/constants/monsters/monster-action/on-start";
+import {MonsterOnAttacked} from "@/constants/monsters/monster-action/on-attacked";
+import {useGameStateStore} from "@/store/game-state-store";
+import {usePlayerStore} from "@/store/player-store";
+import {useLogStore} from "@/store/log-store";
 
 /**
  * 物品相關
@@ -56,10 +59,11 @@ export interface EquipmentType extends ItemType, qualityType {
     position: EquipmentPosition,
 }
 
-export interface PotionType extends ItemType, qualityType {
+export interface UsableType extends ItemType, qualityType {
     // 立即效果
     heal?: number // 回血
     magic?: number // 回魔
+    skill?: string //使用的技能
 }
 
 
@@ -112,7 +116,7 @@ export interface UserType extends UnitType {
     equips?: Equipment // 目前裝備
     items?: ItemType[]  // 雜項
     equipments?: EquipmentType[] // 裝備
-    consumeItems?: (ItemType | PotionType)[] // 消耗品
+    consumeItems?: (ItemType | UsableType)[] // 消耗品
 }
 
 
@@ -190,13 +194,16 @@ export interface StatusEffect {
     value?: number; // 每回合跳血/回血的數值
 }
 
+type GameStateStore = ReturnType<typeof useGameStateStore>;
+type PlayerStore = ReturnType<typeof usePlayerStore>;
+type logStore = ReturnType<typeof useLogStore>;
 
-// 定義參數型別，未來如果要增加 LogStore 也可以直接加在這裡
+//
 export interface MonsterActionParams {
     monster?: MonsterType;
-    playerStore?: any;
-    gameStateStore?: any
-    logStore?: any;
+    playerStore?: PlayerStore;
+    gameStateStore?: GameStateStore
+    logStore?: logStore;
     damage?: BattleOutcome; // onAttack 沒有傳這值
     targetElement?: HTMLElement
 }
@@ -204,9 +211,33 @@ export interface MonsterActionParams {
 export interface MonsterOnAttackParams {
     monster?: MonsterType;
     monsterIndex?: number;
-    playerStore?: any;
-    gameStateStore?: any
-    logStore?: any;
+    playerStore?: PlayerStore;
+    gameStateStore?: GameStateStore
+    logStore?: logStore;
     damage?: BattleOutcome; // onAttack 沒有傳這值
     targetElement?: HTMLElement
+}
+
+
+//
+export interface NoneMonsterItemSkillParams {
+    playerStore?: PlayerStore;
+    gameStateStore?: GameStateStore
+    callback: (result: boolean) => void
+    targetElement?: HTMLElement
+}
+
+
+/**
+ * 成就
+ */
+export interface AchievementType {
+    name: string;
+    icon: string;
+    quality: number; // 顏色用
+    description: string;
+    reward?: { item: string; amount: number; exp?: number };
+    isUnlocked?: boolean; // 是否達成
+    isHide: boolean; // 是否為隱藏成就
+    hindHint?: string // 隱藏成就提示
 }

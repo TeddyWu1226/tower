@@ -6,8 +6,9 @@ import {useGameStateStore} from "@/store/game-state-store";
 import {checkProbability, getRandomElements} from "@/utils/math";
 import {showEffect} from "@/components/Shared/FloatingEffect/EffectManager";
 import {ref} from "vue";
-import {BlessStatus} from "@/constants/status-info/bless-status";
-import type {StatusEffect} from "@/types";
+import {BlessStatus} from "@/constants/status/bless-status";
+import type {StatusEffect, UsableType} from "@/types";
+import {Usable} from "@/constants/items/usalbe-item/usable-info";
 
 const emit = defineEmits(['cancel']);
 const props = defineProps({
@@ -42,11 +43,13 @@ const strengthen = (): void => {
 const BlessBtnRef = ref()
 const bless = (): void => {
   taken.value = true
-  const b: StatusEffect[] = [BlessStatus.ShieldBless, BlessStatus.WindBless, BlessStatus.HealLight,
-    BlessStatus.AccurateLight, BlessStatus.FightingSpirit]
-  const bless = getRandomElements(b)[0]
-  playerStore.addStatus(bless)
-  const text = `獲得 ${bless.icon}${bless.name}`
+  const b: UsableType[] = [Usable.smokeBomb, Usable.campfire]
+  const time = 3
+  const items = getRandomElements(b, time, true)
+  items.forEach(item => {
+    playerStore.gainItem(item)
+  })
+  const text = `獲得三個隨機有用的物品!`
   showEffect(StrengthenBtnRef.value?.$el, text, "buff")
   gameStateStore.transitionToNextState()
 }
@@ -69,13 +72,13 @@ const cancel = (): void => {
 <template>
   <div class="flex">
     <el-button ref="StrengthenBtnRef" type="success" :disabled="props.disabled||taken" @click="strengthen">
-      強化
+      變得更強
     </el-button>
     <el-button ref="BlessBtnRef" type="primary" :disabled="props.disabled||taken" @click="bless">
-      祝福
+      變得安全
     </el-button>
     <el-button ref="MoneyBtnRef" type="warning" :disabled="props.disabled||taken" @click="money">
-      財富
+      變得有錢
     </el-button>
     <el-button type="info" :disabled="props.disabled" @click="cancel">
       繼續前進

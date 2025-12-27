@@ -1,5 +1,5 @@
 import {reactive, Reactive} from "vue";
-import {EquipmentType, PotionType, RoomWeights} from "@/types";
+import {EquipmentType, UsableType, RoomWeights} from "@/types";
 
 /**
  * 建立物件
@@ -32,8 +32,8 @@ export const getRandomItemsByQuality = (
     count: number,
     quality: number,
     allowDuplicate: boolean = true,
-    ...dataSources: Record<string, EquipmentType | PotionType>[]
-): (EquipmentType | PotionType)[] => {
+    ...dataSources: Record<string, EquipmentType | UsableType>[]
+): (EquipmentType | UsableType)[] => {
     // 1. 合併並過濾出符合品質的道具池
     const pool = dataSources
         .flatMap(source => Object.values(source))
@@ -44,13 +44,13 @@ export const getRandomItemsByQuality = (
         return [];
     }
 
-    const results: (EquipmentType | PotionType)[] = [];
+    const results: (EquipmentType | UsableType)[] = [];
 
     if (allowDuplicate) {
         // --- 情況 A: 允許重複 ---
         for (let i = 0; i < count; i++) {
             const randomIndex = Math.floor(Math.random() * pool.length);
-            results.push(create(pool[randomIndex]) as EquipmentType | PotionType);
+            results.push(create(pool[randomIndex]) as EquipmentType | UsableType);
         }
     } else {
         // --- 情況 B: 不允許重複 ---
@@ -63,7 +63,7 @@ export const getRandomItemsByQuality = (
             const randomIndex = Math.floor(Math.random() * tempPool.length);
             // 使用 splice 移除已抽中的項
             const selectedItem = tempPool.splice(randomIndex, 1)[0];
-            results.push(create(selectedItem) as EquipmentType | PotionType);
+            results.push(create(selectedItem) as EquipmentType | UsableType);
         }
     }
 
@@ -130,3 +130,40 @@ export function getRandomLabelByWeight(weights: RoomWeights): number {
     // 3. 返回該索引對應的標記值
     return weightedChoices[randomIndex];
 }
+
+/**
+ * 通用權重隨機選取工具
+ * @param weightMap 權重對照表 (例如 { 'Slime': 70, 'Wolf': 30 })
+ * @param dataPool 資料來源池 (例如 Monster 物件、Equipment 物件)
+ * @param shouldClone 是否需要深拷貝 (預設為 true)
+ * @returns 隨機選出的實例
+ */
+export const getRandomItemByWeight = <T extends object>(
+    weightMap: Record<string, number>,
+    dataPool: Record<string, T>,
+    shouldClone: boolean = true
+): T => {
+    const keys = Object.keys(weightMap);
+
+    // 1. 過濾掉 dataPool 中不存在的 key，避免 undefined 型別問題
+    const validKeys = keys.filter(key => key in dataPool);
+
+    if (validKeys.length === 0) {
+        throw new Error("getRandomItemByWeight: No valid keys found in dataPool");
+    }
+
+    const totalWeight = validKeys.reduce((sum, key) => sum + weightMap[key], 0);
+    let randomNum = Math.random() * totalWeight;
+
+    for (const key of validKeys) {
+        if (randomNum < weightMap[key]) {
+            const item = dataPool[key]; // 此時 TS 知道 item 必為 T
+            return shouldClone ? create<T>(item) : item;
+        }
+        randomNum -= weightMap[key];
+    }
+
+    // 2. 兜底處理
+    const fallbackItem = dataPool[validKeys[0]];
+    return shouldClone ? create<T>(fallbackItem) : fallbackItem;
+};

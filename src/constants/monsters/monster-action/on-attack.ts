@@ -1,5 +1,5 @@
 // 定義所有怪物的特殊行為
-import {UnitStatus} from "@/constants/status-info/unit-status";
+import {UnitStatus} from "@/constants/status/unit-status";
 import {MonsterOnAttackParams} from "@/types";
 import {checkProbability} from "@/utils/math";
 import {showEffect} from "@/components/Shared/FloatingEffect/EffectManager";
@@ -24,7 +24,13 @@ export const MonsterOnAttack: Record<string, (params: MonsterOnAttackParams) => 
             monster.adDefend = 0
         }
     },
-    spiderOnAttack: ({monster, gameStateStore, monsterIndex, targetElement, playerStore}) => {
+    smallSpiderOnAttack: ({playerStore, logStore}) => {
+        if (checkProbability(0.2)) {
+            playerStore.addStatus(UnitStatus.SmallSpiderStuck)
+            logStore.logger.add(`你被綑綁了。`);
+        }
+    },
+    spiderOnAttack: ({gameStateStore, monsterIndex, playerStore}) => {
         // 獲得針對被綑綁的玩家必定爆擊的一回合效果
         if (playerStore.statusEffects?.find(e => e.name === '綑綁')) {
             gameStateStore.addEffectToMonster(monsterIndex, UnitStatus.SpiderHunter)
