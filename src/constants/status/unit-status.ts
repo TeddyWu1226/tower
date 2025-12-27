@@ -43,6 +43,13 @@ export const UnitStatus = {
         description: '你被綑綁了,任何行動都會失效',
         type: 'stuck',
     } as StatusEffect,
+    SmallSpiderStuck: {
+        name: '綑綁',
+        icon: '🕸',
+        duration: 1,
+        description: '你被綑綁了,任何行動都會失效',
+        type: 'stuck',
+    } as StatusEffect,
     SpiderHunter:{
         name: '獵殺者',
         icon: '⚠️',

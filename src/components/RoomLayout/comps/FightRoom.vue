@@ -27,11 +27,13 @@ import {MonsterOnStart} from "@/constants/monsters/monster-action/on-start";
 import {MonsterOnAttacked} from "@/constants/monsters/monster-action/on-attacked";
 import {useFloatingMessage} from "@/components/Shared/FloatingMessage/useFloatingMessage";
 import {stageMonsterWeightsMap} from "@/constants/stage-weights";
+import {useTrackerStore} from "@/store/track-store";
 
 const emit = defineEmits(['playerDead', 'runFailed'])
 const gameStateStore = useGameStateStore()
 const playerStore = usePlayerStore()
 const logStore = useLogStore()
+const trackStore = useTrackerStore()
 const currentRoomValue = computed(() => {
       return gameStateStore.currentRoomValue
     }
@@ -136,6 +138,8 @@ const monsterMove = (selectedMonster: MonsterType) => {
 }
 
 const whenMonsterDead = (selectedMonster: MonsterType) => {
+  // 紀錄擊殺
+  trackStore.recordKill(selectedMonster.name.replace(/^【菁英】/, ""))
   // 掉落金幣
   const dropMoney = applyRandomFloatAndRound(selectedMonster.dropGold ?? 0)
   playerStore.addGold(dropMoney)

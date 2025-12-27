@@ -6,13 +6,14 @@ import {useGameStateStore} from "@/store/game-state-store";
 import {usePlayerStore} from "@/store/player-store";
 import {getRandomLabelByWeight} from "@/utils/create";
 import {DEFAULT_ROOM_WEIGHTS} from "@/constants/default-const";
+import {useTrackerStore} from "@/store/track-store";
 
 const props = defineProps({
   disabled: Boolean,
 })
 const gameStateStore = useGameStateStore()
 const playerStore = usePlayerStore()
-
+const trackerStore = useTrackerStore()
 const nextRooms = ref<number[]>([])
 const createNextRooms = () => {
   nextRooms.value = []
@@ -28,8 +29,9 @@ const selectRoom = (roomValue: number) => {
   gameStateStore.days += 1
 };
 
-const goNestStage = () => {
+const goNextStage = () => {
   playerStore.healFull()
+  trackerStore.init(false)
   gameStateStore.init(gameStateStore.currentStage + 1)
   gameStateStore.setRoom(RoomEnum.Bless.value)
 }
@@ -60,7 +62,7 @@ onMounted(() => {
         v-if="gameStateStore.isBattleWon && gameStateStore.roomIs(RoomEnum.Boss.value)"
         color="var(--el-color-success)"
         :disabled="props.disabled"
-        @click="goNestStage"
+        @click="goNextStage"
     >
       前往下一區域🚪
     </el-button>

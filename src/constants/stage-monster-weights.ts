@@ -28,9 +28,10 @@ export const SunkenGroveWeights: Record<string, number> = {
  */
 export const AncientRootsWeights: Record<string, number> = {
     ForestSprout: 20,
-    MushroomMan: 20,    // 結界的守衛
+    MushroomMan: 20,
     GreenRabbit: 15,
-    FierceWolf: 5
+    FierceWolf: 5,
+    SmallSpider: 5
 };
 
 /**

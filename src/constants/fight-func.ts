@@ -3,7 +3,7 @@ import {BattleOutcome, DamageResult, MonsterType, UnitType} from "@/types";
 import {useFloatingMessage} from "@/components/Shared/FloatingMessage/useFloatingMessage";
 import {useLogStore} from "@/store/log-store";
 import {usePlayerStore} from "@/store/player-store";
-import {create, getRandomItemByWeight} from "@/utils/create";
+import {getRandomItemByWeight} from "@/utils/create";
 import {Monster} from "@/constants/monsters/monster-info";
 
 const MAX_RATE = 100; // 命中率或暴擊率的最大值 (100%)

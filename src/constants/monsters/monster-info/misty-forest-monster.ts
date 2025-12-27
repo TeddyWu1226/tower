@@ -3,7 +3,6 @@ import {WorldDefault} from "@/assets/const";
 import {MATERIAL} from "@/constants/items/material-info";
 
 export const MistyForestMonster = {
-    // 1. 基本新手怪
     Slime: {
         icon: '🟢',
         name: '史萊姆',
@@ -186,6 +185,7 @@ export const MistyForestMonster = {
     Mandragora: {
         icon: '👺',
         name: '尖叫蔓陀羅',
+        class: 'elite',
         description: '初始之森的恐怖傳聞，其尖叫聲能震懾所有入侵者',
         ad: 15,
         critIncrease: 200,
@@ -200,5 +200,22 @@ export const MistyForestMonster = {
         drop: [
             {item: MATERIAL.MandrakeRoot, chance: 0.5}
         ]
-    } as MonsterType
+    } as MonsterType,
+    SmallSpider: {
+        icon: '🕷️',
+        name: '古蜘蛛的眷屬',
+        description: '古蜘蛛的眷屬,強大的狩獵能力,攻擊時有機率綑綁敵人',
+        class: 'elite',
+        ad: 15,
+        critIncrease: 200,
+        critRate: 5,
+        adDefend: 5,
+        dodge: 0,
+        hit: 70,
+        hp: 80,
+        hpLimit: 80,
+        level: 5,
+        dropGold: 250,
+        onAttack: 'smallSpiderOnAttack'
+    } as MonsterType,
 }
