@@ -10,11 +10,11 @@ import {getEnumColumn} from "@/utils/enum";
 import {StageEnum} from "@/enums/stage-enum";
 import {UserValueLayout} from "@/components/UserValueLayout";
 import {UserDetailInfo} from "@/components/DetailInfo";
-import {usePlayerStore} from "@/store/player-store";
-import {ElMessage, ElMessageBox, ElNotification} from "element-plus";
+import {ElMessageBox, ElNotification} from "element-plus";
 import {StageTransition} from "@/components/StageTransition";
 import DeadPage from "@/views/DeadPage.vue";
 import IntroPage from "@/views/IntroPage.vue";
+import AchievementDialog from "@/components/FloorInfoLayout/comps/AchievementDialog.vue";
 
 const gameStateStore = useGameStateStore()
 const isDead = ref(false)
@@ -26,8 +26,9 @@ const buttonConfig = ref({
 })
 
 /** 成就 **/
+const isShowAchievementDialog = ref(false)
 const showAchievement = () => {
-  ElMessage.warning('開發中,盡請期待')
+  isShowAchievementDialog.value = true
 }
 
 /** 說明 **/
@@ -119,10 +120,15 @@ watch(
         <el-header class="header">
           <span>𝄞神之筆記𝄞</span>
           <div>
-            <el-button type="warning" style="height: 2rem" size="small" @click="showAchievement" plain>成就</el-button>
-            <el-button type="primary" style="height: 2rem" size="small" @click="showIllustrate" plain>說明
+            <el-button type="warning" style="height: 2rem" size="small" @click="showAchievement" plain>
+              成就
             </el-button>
-            <el-button type="danger" style="height: 2rem" size="small" @click="resetGame" plain>放棄</el-button>
+            <el-button type="primary" style="height: 2rem" size="small" @click="showIllustrate" plain>
+              說明
+            </el-button>
+            <el-button type="danger" style="height: 2rem" size="small" @click="resetGame" plain>
+              放棄
+            </el-button>
           </div>
         </el-header>
         <el-main>
@@ -156,6 +162,7 @@ watch(
       <p>5. 道具,怪物基本都有相關提示,也許多看點對你有幫助</p>
       <p>6. 怪物會隨著時間變得更加強大,直到你通過該層層主</p>
     </el-dialog>
+    <AchievementDialog v-model="isShowAchievementDialog"/>
   </el-config-provider>
 </template>
 

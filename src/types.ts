@@ -226,3 +226,18 @@ export interface NoneMonsterItemSkillParams {
     callback: (result: boolean) => void
     targetElement?: HTMLElement
 }
+
+
+/**
+ * 成就
+ */
+export interface AchievementType {
+    name: string;
+    icon: string;
+    quality: number; // 顏色用
+    description: string;
+    reward?: { item: string; amount: number; exp?: number };
+    isUnlocked?: boolean; // 是否達成
+    isHide: boolean; // 是否為隱藏成就
+    hindHint?: string // 隱藏成就提示
+}

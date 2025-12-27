@@ -16,6 +16,11 @@ export const useTrackerStore = defineStore('tracker', () => {
      */
     function recordKill(monsterName: string, amount: number = 1) {
         // 紀錄特定怪物
+        if (monsterName.startsWith('【菁英】')) {
+            currentKills.value['ElITE'] = (currentKills.value['ElITE'] || 0) + amount
+            totalKills.value['ElITE'] = (totalKills.value['ElITE'] || 0) + amount
+        }
+        monsterName = monsterName.replace(/^【菁英】/, "")
         currentKills.value[monsterName] = (currentKills.value[monsterName] || 0) + amount
         currentKills.value['TOTAL'] = (currentKills.value['TOTAL'] || 0) + amount
         totalKills.value[monsterName] = (totalKills.value[monsterName] || 0) + amount
@@ -25,6 +30,8 @@ export const useTrackerStore = defineStore('tracker', () => {
 
     /**
      * 獲取特定目標的進度
+     * @param monsterName 全部 TOTAL,菁英 ElITE
+     * @param type  current:本階段; total: 整場遊戲
      */
     function getKillCount(monsterName: string = 'TOTAL', type: 'current' | 'total'): number {
         if (type === 'current') {

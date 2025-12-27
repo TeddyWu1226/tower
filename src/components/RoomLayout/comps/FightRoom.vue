@@ -139,7 +139,7 @@ const monsterMove = (selectedMonster: MonsterType) => {
 
 const whenMonsterDead = (selectedMonster: MonsterType) => {
   // 紀錄擊殺
-  trackStore.recordKill(selectedMonster.name.replace(/^【菁英】/, ""))
+  trackStore.recordKill(selectedMonster.name)
   // 掉落金幣
   const dropMoney = applyRandomFloatAndRound(selectedMonster.dropGold ?? 0)
   playerStore.addGold(dropMoney)
