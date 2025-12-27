@@ -135,7 +135,7 @@ export function triggerDamageEffect(damageOutCome: BattleOutcome, targetElement?
 
     // --- 1. 定義基礎變數 ---
     const isPlayer = !targetElement; // 判斷是否為玩家自身
-    const prefixText = isPlayer ? '你受到了' : '受到了';
+    const prefixText = '-'
 
     let messageText: string;
     let messageColor = '#E0E0E0'; // 預設顏色
@@ -143,23 +143,21 @@ export function triggerDamageEffect(damageOutCome: BattleOutcome, targetElement?
 
     if (damageOutCome.isKilled) {
         // 💀 死亡：顯示總傷害並加上死亡符號
-        messageText = `${prefixText} 💀${damageOutCome.totalDamage} 傷害`;
-
-    } else if (damageOutCome.totalDamage === 0 && damageOutCome.isHit === true) {
-        // 🛡️ 完全格檔或閃避：無傷害
-        messageText = '🛡️格檔🛡️';
-        messageColor = '#B0C4DE'; // 淺藍色，強調防禦
+        messageText = `${prefixText} 💀${damageOutCome.totalDamage}`;
 
     } else if (damageOutCome.isHit) {
         // 命中，且總傷害 > 0
-
-        if (damageOutCome.isCrit) {
-            // 💥 暴擊：使用金色和暴擊樣式
-            messageText = `${prefixText} 💥${damageOutCome.totalDamage} 傷害`;
+        if (damageOutCome.totalDamage < damageOutCome.baseDamage * 0.5) {
+            // 大幅減傷
+            messageText = `${prefixText} ⛊${damageOutCome.totalDamage}`;
+            messageColor = '#74747c'; // 灰色
+        } else if (damageOutCome.isCrit) {
+            // 爆擊
+            messageText = `${prefixText} 💥${damageOutCome.totalDamage}`;
             messageColor = '#ff0000'; // 金色
         } else {
             // 普通命中
-            messageText = `${prefixText} ${damageOutCome.totalDamage} 傷害`;
+            messageText = `${prefixText} ${damageOutCome.totalDamage}`;
         }
     } else {
         // 處理未命中 (例如：Miss) 或其他未捕捉到的狀態
@@ -265,7 +263,6 @@ export function canEscape(runner: UnitType, chasers: UnitType[]): boolean {
     // 判斷是否成功逃跑
     return roll <= finalChance;
 }
-
 
 
 /**

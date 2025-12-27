@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {ref, onMounted, computed} from "vue";
 import {useGameStateStore} from "@/store/game-state-store";
-import {EquipmentType, ItemType, PotionType, statLabels} from "@/types";
+import {EquipmentType, ItemType, UsableType, statLabels} from "@/types";
 import {getRandomItemsByQuality} from "@/utils/create";
 import {QualityEnum} from "@/enums/quality-enum";
 import {ElMessage} from "element-plus";
@@ -20,7 +20,7 @@ const gameStateStore = useGameStateStore();
 const playerStore = usePlayerStore();
 
 // 商店商品列表 (包含一個 'sold' 標記來處理售出狀態)
-const itemList = ref<((ItemType | PotionType | EquipmentType) & { sold?: boolean; price?: number })[]>([]);
+const itemList = ref<((ItemType | UsableType | EquipmentType) & { sold?: boolean; price?: number })[]>([]);
 const isRun = ref(false)
 /**
  * 根據品質計算價格的簡單公式
@@ -49,7 +49,7 @@ const getSellPrice = (item: any) => {
 /**
  * 定義堆疊物品的型別
  */
-type StackedItem = (ItemType | PotionType | EquipmentType) & {
+type StackedItem = (ItemType | UsableType | EquipmentType) & {
   count: number;
   originalIndices: number[]; // 紀錄在原陣列中的索引，方便刪除
   bagType: 'items' | 'equipments' | 'consumeItems';
@@ -143,8 +143,8 @@ const init = () => {
  * 點擊邏輯
  */
 const isShowDetail = ref(false);
-const selectedItem = ref<ItemType | PotionType | EquipmentType | undefined>()
-const onClickItem = (item: ItemType | PotionType | EquipmentType) => {
+const selectedItem = ref<ItemType | UsableType | EquipmentType | undefined>()
+const onClickItem = (item: ItemType | UsableType | EquipmentType) => {
   if (playerStore.info.gold < (item as any).price) {
     ElMessage.error("錢不夠啊，窮光蛋！");
     return;

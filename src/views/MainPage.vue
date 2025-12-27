@@ -30,7 +30,7 @@ const showAchievement = () => {
   ElMessage.warning('開發中,盡請期待')
 }
 
-/** 成就 **/
+/** 說明 **/
 const isShowIllustration = ref(false)
 const showIllustrate = () => {
   isShowIllustration.value = true
@@ -61,6 +61,9 @@ const OperationLayoutRef = ref()
 
 const onAttack = () => {
   RoomLayoutRef.value?.onAttack()
+}
+const onSkill = (prop) => {
+  RoomLayoutRef.value?.onSkill(prop)
 }
 const onRun = () => {
   RoomLayoutRef.value?.onRun()
@@ -139,7 +142,7 @@ watch(
               @cancel="onCancel"
           />
           <UserValueLayout/>
-          <UserLayout class="user-layout"/>
+          <UserLayout class="user-layout" @on-skill="onSkill"/>
         </el-main>
       </el-container>
       <UserDetailInfo v-if="!gameStateStore.stateIs(GameState.INITIAL)"/>

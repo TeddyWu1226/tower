@@ -2,14 +2,15 @@
 import './item.css'
 import {computed} from 'vue'
 import {usePlayerStore} from '@/store/player-store'
-import {PotionType} from "@/types"
+import {UsableType} from "@/types"
 import {getEnumColumn} from "@/utils/enum";
 import {QualityEnum} from "@/enums/quality-enum";
 
 const playerStore = usePlayerStore()
+const emit = defineEmits(['onSkill'])
 
 const aggregatedConsumables = computed(() => {
-  const map = new Map<string, { item: PotionType; count: number }>();
+  const map = new Map<string, { item: UsableType; count: number }>();
   playerStore.info.consumeItems?.forEach((item) => {
     const key = item.name;
     const entry = map.get(key) || {item: {...item}, count: 0};
@@ -19,13 +20,36 @@ const aggregatedConsumables = computed(() => {
   return Array.from(map.values()).sort((a, b) => (b.item.quality || 0) - (a.item.quality || 0));
 });
 
-const handleUse = (potion: PotionType) => {
+const handleUse = async (potion: UsableType, event: MouseEvent) => {
   if (!potion.usable) return;
+  // 取得當前點擊的 DOM 元素
+  const targetEl = event.currentTarget as HTMLElement;
+  // 如果有技能邏輯，需要等待父組件判斷
+  if (potion.skill) {
+    const canUse = await new Promise<boolean>((resolve) => {
+      // 傳送技能 key 和一個 resolve 函式
+      emit('onSkill', {
+        skillKey: potion.skill,
+        callback: (result: boolean) => resolve(result),
+        el: targetEl
+      });
+    });
+
+    // 如果判定不符合（例如：當前不是玩家回合、法力不足等），直接結束
+    if (!canUse) return;
+  }
+
+  // --- 判定通過或無技能，執行消耗邏輯 ---
+
+  // 1. 數值恢復
   if (potion.heal) playerStore.info.hp = Math.min(playerStore.finalStats.hpLimit, playerStore.info.hp + potion.heal);
   if (potion.magic) playerStore.info.sp = Math.min(playerStore.finalStats.spLimit, playerStore.info.sp + potion.magic);
 
+  // 2. 移除道具
   const index = playerStore.info.consumeItems.findIndex(i => i.name === potion.name);
-  if (index > -1) playerStore.info.consumeItems.splice(index, 1);
+  if (index > -1) {
+    playerStore.info.consumeItems.splice(index, 1);
+  }
 };
 </script>
 
@@ -33,7 +57,7 @@ const handleUse = (potion: PotionType) => {
   <el-scrollbar height="7rem">
     <div v-if="aggregatedConsumables.length > 0" class="potion-grid">
       <div v-for="entry in aggregatedConsumables" :key="entry.item.name" class="item-slot"
-           @dblclick="handleUse(entry.item)">
+           @dblclick="handleUse(entry.item,$event)">
         <el-tooltip placement="top" effect="light">
           <template #content>
             <div class="tooltip-content">

@@ -1,5 +1,5 @@
 import {reactive, Reactive} from "vue";
-import {EquipmentType, PotionType, RoomWeights} from "@/types";
+import {EquipmentType, UsableType, RoomWeights} from "@/types";
 
 /**
  * 建立物件
@@ -32,8 +32,8 @@ export const getRandomItemsByQuality = (
     count: number,
     quality: number,
     allowDuplicate: boolean = true,
-    ...dataSources: Record<string, EquipmentType | PotionType>[]
-): (EquipmentType | PotionType)[] => {
+    ...dataSources: Record<string, EquipmentType | UsableType>[]
+): (EquipmentType | UsableType)[] => {
     // 1. 合併並過濾出符合品質的道具池
     const pool = dataSources
         .flatMap(source => Object.values(source))
@@ -44,13 +44,13 @@ export const getRandomItemsByQuality = (
         return [];
     }
 
-    const results: (EquipmentType | PotionType)[] = [];
+    const results: (EquipmentType | UsableType)[] = [];
 
     if (allowDuplicate) {
         // --- 情況 A: 允許重複 ---
         for (let i = 0; i < count; i++) {
             const randomIndex = Math.floor(Math.random() * pool.length);
-            results.push(create(pool[randomIndex]) as EquipmentType | PotionType);
+            results.push(create(pool[randomIndex]) as EquipmentType | UsableType);
         }
     } else {
         // --- 情況 B: 不允許重複 ---
@@ -63,7 +63,7 @@ export const getRandomItemsByQuality = (
             const randomIndex = Math.floor(Math.random() * tempPool.length);
             // 使用 splice 移除已抽中的項
             const selectedItem = tempPool.splice(randomIndex, 1)[0];
-            results.push(create(selectedItem) as EquipmentType | PotionType);
+            results.push(create(selectedItem) as EquipmentType | UsableType);
         }
     }
 

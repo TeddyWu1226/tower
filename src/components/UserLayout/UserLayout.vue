@@ -4,7 +4,7 @@ import {usePlayerStore} from '@/store/player-store'
 import ConsumableTab from "@/components/UserLayout/comps/ConsumableTab.vue"
 import EquipmentTab from "@/components/UserLayout/comps/EquipmentTab.vue"
 import MaterialTab from "@/components/UserLayout/comps/MaterialTab.vue"
-
+const emit = defineEmits(['onSkill']); // 聲明要轉發的事件
 const playerStore = usePlayerStore()
 const activeName = ref('item')
 
@@ -17,21 +17,21 @@ const hasNew = ref({
 
 // 監聽背包變動
 // 監聽道具
-watch(() => playerStore.info.consumeItems.length, (newLen, oldLen) => {
+watch(() => playerStore.info.consumeItems?.length, (newLen, oldLen) => {
   if (newLen > oldLen && activeName.value !== 'item') {
     hasNew.value.item = true
   }
 })
 
 // 監聽裝備
-watch(() => playerStore.info.equipments.length, (newLen, oldLen) => {
+watch(() => playerStore.info.equipments?.length, (newLen, oldLen) => {
   if (newLen > oldLen && activeName.value !== 'equipment') {
     hasNew.value.equipment = true
   }
 })
 
 // 監聽其他素材
-watch(() => playerStore.info.items.length, (newLen, oldLen) => {
+watch(() => playerStore.info.items?.length, (newLen, oldLen) => {
   if (newLen > oldLen && activeName.value !== 'other') {
     hasNew.value.other = true
   }
@@ -49,9 +49,9 @@ watch(activeName, (val) => {
 
       <el-tab-pane name="item">
         <template #label>
-          <el-badge class="tab-badge" :hidden="!hasNew.item" is-dot :offset="[10, 5]">道具</el-badge>
+          <el-badge class="tab-badge" :hidden="!hasNew.item" is-dot :offset="[10, 5]">消耗</el-badge>
         </template>
-        <ConsumableTab/>
+        <ConsumableTab @on-skill="payload => emit('onSkill', payload)"/>
       </el-tab-pane>
 
       <el-tab-pane name="equipment">
