@@ -73,6 +73,15 @@ const PublicAchievement = {
  * 隱藏成就：解鎖前僅顯示暗示或完全保密
  */
 const HideAchievement = {
+    ThisGameHasJob: {
+        name: "這遊戲還有轉職?",
+        icon: "💼",
+        quality: 3,
+        description: "成功轉職任一職業",
+        isUnlocked: false,
+        isHide: true,
+        hindHint: "找到另一個出路..."
+    } as AchievementType,
     NewKillWolf: {
         name: "初生之犢不畏狼",
         icon: "🐺",

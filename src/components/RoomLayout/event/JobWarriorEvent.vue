@@ -4,7 +4,7 @@ import {useGameStateStore} from "@/store/game-state-store";
 import {usePlayerStore} from "@/store/player-store";
 import EventTemplate from "@/components/RoomLayout/event/EventTemplate.vue";
 import {ref} from "vue";
-import {GameState} from "@/enums/enums";
+import {GameState, SpecialEventEnum} from "@/enums/enums";
 import {ElMessage} from "element-plus";
 import {CharEnum} from "@/enums/char-enum";
 
@@ -42,6 +42,7 @@ const handleJobChange = () => {
     gameStateStore.eventAction = 3;
     isLearning.value = false
     gameStateStore.transitionToNextState();
+    gameStateStore.addEventProcess(SpecialEventEnum.JobWarrior)
   }, 1000);
 };
 

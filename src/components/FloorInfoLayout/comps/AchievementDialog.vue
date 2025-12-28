@@ -9,6 +9,7 @@ import {usePlayerStore} from "@/store/player-store";
 import {AchievementType} from "@/types";
 import {ElNotification} from "element-plus";
 import {useAchievementStore} from "@/store/achievement-store";
+import {CharEnum} from "@/enums/char-enum";
 
 const model = defineModel({type: Boolean, default: false});
 const achievementStore = useAchievementStore()
@@ -17,7 +18,6 @@ const gameStateStore = useGameStateStore();
 const playerStore = usePlayerStore();
 
 
-// 將成就物件轉為陣列，方便渲染，並將已解鎖的排在前面
 const sortedAchievements = computed(() => {
   // 將物件轉為陣列進行排序
   return Object.values(achievementStore.currentAchievement).sort((a, b) => {
@@ -115,6 +115,11 @@ watch(
         }
         if (key === 'GambleMaster' &&
             trackerStore.achievementsCount.gambleWin >= 3) {
+          isConditionMet = true;
+        }
+        if (key === 'ThisGameHasJob' &&
+            playerStore.info.char !== CharEnum.Beginner.value
+        ) {
           isConditionMet = true;
         }
 

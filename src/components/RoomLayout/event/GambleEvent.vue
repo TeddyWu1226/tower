@@ -110,12 +110,18 @@ const startGamble = (amount: number) => {
 
     <template #button v-if="gameStateStore.stateIs(GameState.EVENT_PHASE)">
       <template v-if="gameStateStore.eventAction === 0">
-        <el-button type="warning" @click="gameStateStore.eventAction = 1">好! 賭多少?</el-button>
+        <el-button
+            v-if="playerStore.info.gold >=50"
+            type="warning"
+            @click="gameStateStore.eventAction = 1">
+          好! 賭多少?
+        </el-button>
         <el-button type="info" @click="onCancel">不了</el-button>
       </template>
 
       <template v-else-if="gameStateStore.eventAction === 1">
-        <el-button type="warning" @click="startGamble(50)">
+        <el-button
+            type="warning" @click="startGamble(50)">
           50 G
         </el-button>
         <el-button type="warning" @click="startGamble(100)">

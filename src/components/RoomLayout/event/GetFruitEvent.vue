@@ -87,7 +87,7 @@ const onLeave = () => {
         <template v-if="gameStateStore.stateIs(GameState.SELECTION_PHASE) && gameStateStore.eventAction === 0">
           <div class="event-icon">🪾</div>
           <div class="dialog-box">
-            這裡只剩下一截普通的樹樁。
+            你快步遠離了這個邪惡氣息的東西...
           </div>
         </template>
 

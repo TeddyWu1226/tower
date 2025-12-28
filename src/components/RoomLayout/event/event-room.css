@@ -24,6 +24,7 @@
 .dialog-box {
     background: rgba(0, 0, 0, 0.2);
     padding: 0.5rem;
+    font-size: 1rem;
     border-radius: 8px;
     margin-bottom: 1rem;
 }
