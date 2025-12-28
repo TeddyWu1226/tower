@@ -5,9 +5,11 @@ import {eventComponentMap} from "@/components/RoomLayout/event/useEventRoom";
 import {SpecialEventEnum} from "@/enums/enums";
 import {usePlayerStore} from "@/store/player-store";
 import {CharEnum} from "@/enums/char-enum";
+import {useTrackerStore} from "@/store/track-store";
 
 const gameStateStore = useGameStateStore();
 const playerStore = usePlayerStore();
+const trackerStore = useTrackerStore();
 /**
  * 事件配置表：控制隨機權限
  */
@@ -17,12 +19,20 @@ const EVENT_CONFIG = [
     canAppear: () => true // 賭博總是能出現
   },
   {
-    type: SpecialEventEnum.GetFruit,
+    type: SpecialEventEnum.GetFruit, // 魔樹事件
     canAppear: () => !gameStateStore.isEventClose(SpecialEventEnum.GetFruit)
   },
   {
-    type: SpecialEventEnum.JobWarrior, // 假設這是你的劍士轉職事件
-    canAppear: () => playerStore.info.char === CharEnum.Beginner.value// 範例條件
+    type: SpecialEventEnum.JobWarrior, // 劍士轉職事件
+    canAppear: () => {
+      if (gameStateStore.currentStage < 1) {
+        return false
+      }
+      if (playerStore.info.char !== CharEnum.Beginner.value) {
+        return false;
+      }
+      return trackerStore.getKillCount("USE_SWORD", 'total') >= 5;
+    }
   }
 ];
 
@@ -42,7 +52,7 @@ const getAvailableEvents = () => {
  */
 const pickRandomEvent = () => {
   const pool = getAvailableEvents();
-
+  // console.log('pool', pool)
   // 設置防錯，如果沒有可用事件則給一個預設
   if (pool.length === 0) return SpecialEventEnum.Gamble;
 

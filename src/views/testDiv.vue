@@ -5,6 +5,7 @@ import {ref} from "vue";
 import {UnitStatus} from "@/constants/status/unit-status";
 import {Potions} from "@/constants/items/usalbe-item/potion-info";
 import {Accessories} from "@/constants/items/equipment/accessories-info";
+import {Usable} from "@/constants/items/usalbe-item/usable-info";
 
 const gameStateStore = useGameStateStore()
 const playerStore = usePlayerStore()
@@ -12,7 +13,8 @@ const isClose = ref(true);
 
 const onTest = () => {
   // playerStore.addStatus(UnitStatus.SlimeSlow)
-  // playerStore.gainItem(Accessories.SoulAnchor)
+  playerStore.gainItem(Potions.BurningPotion)
+  playerStore.gainItem(Accessories.SoulAnchor)
 }
 onTest()
 </script>

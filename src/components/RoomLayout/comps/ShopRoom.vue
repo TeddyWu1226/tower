@@ -39,8 +39,10 @@ const activeTab = ref<'buy' | 'sell'>('buy'); // 控制目前是買還是賣
 /**
  * 賣價計算：假設為買價的 40%
  */
-const getSellPrice = (item: any) => {
-  // 如果物品原本就有 price 屬性則用它計算，否則根據品質估算
+const getSellPrice = (item: ItemType) => {
+  if (item.usable) {
+    return 0
+  }
   const base = calculatePrice(item.quality || 0, false);
   return Math.floor(base * 0.25);
 };
@@ -110,6 +112,43 @@ const sellStackedItem = (stackedItem: StackedItem) => {
   }
 };
 
+
+/**
+ * 點擊邏輯
+ */
+const isShowDetail = ref(false);
+const selectedItem = ref<ItemType | UsableType | EquipmentType | undefined>()
+const onClickItem = (item: ItemType | UsableType | EquipmentType) => {
+  if (playerStore.info.gold < (item as any).price) {
+    ElMessage.error("錢不夠啊，窮光蛋！");
+    return;
+  }
+  isShowDetail.value = true;
+  selectedItem.value = item
+}
+/**
+ * 購買邏輯
+ */
+const buyItem = () => {
+  // 注意：這裡直接拿選中的 selectedItem 來操作
+  const item = selectedItem.value as any;
+  if (!item || item.sold) return;
+
+  if (playerStore.info.gold < item.price) {
+    ElMessage.error("錢不夠啊，窮光蛋！");
+    return;
+  }
+
+  // 執行購買邏輯
+  playerStore.addGold(-item.price);
+  item.sold = true; // 因為 selectedItem 是對 itemList 元素的引用，這會同步更新列表
+
+  // 關閉彈窗
+  isShowDetail.value = false;
+  ElMessage.success(`成功購買 ${item.name}!`);
+  const {sold, price, ...cleanItem} = item;
+  playerStore.gainItem(cleanItem);
+};
 const init = () => {
   itemList.value = []
   // 隨機裝備
@@ -154,43 +193,6 @@ const init = () => {
           }))
       )
 };
-/**
- * 點擊邏輯
- */
-const isShowDetail = ref(false);
-const selectedItem = ref<ItemType | UsableType | EquipmentType | undefined>()
-const onClickItem = (item: ItemType | UsableType | EquipmentType) => {
-  if (playerStore.info.gold < (item as any).price) {
-    ElMessage.error("錢不夠啊，窮光蛋！");
-    return;
-  }
-  isShowDetail.value = true;
-  selectedItem.value = item
-}
-/**
- * 購買邏輯
- */
-const buyItem = () => {
-  // 注意：這裡直接拿選中的 selectedItem 來操作
-  const item = selectedItem.value as any;
-  if (!item || item.sold) return;
-
-  if (playerStore.info.gold < item.price) {
-    ElMessage.error("錢不夠啊，窮光蛋！");
-    return;
-  }
-
-  // 執行購買邏輯
-  playerStore.addGold(-item.price);
-  item.sold = true; // 因為 selectedItem 是對 itemList 元素的引用，這會同步更新列表
-
-  // 關閉彈窗
-  isShowDetail.value = false;
-  ElMessage.success(`成功購買 ${item.name}!`);
-  const {sold, price, ...cleanItem} = item;
-  playerStore.gainItem(cleanItem);
-};
-
 // 進入房間時初始化
 onMounted(() => {
   init();
@@ -238,9 +240,9 @@ onMounted(() => {
       <div v-else class="sell-container">
         <p class="gold-hint">我的金幣: 💰 {{ playerStore.info.gold }}</p>
 
-        <div v-for="bagType in (['items', 'equipments', 'consumeItems'] as const)" :key="bagType" class="bag-section">
+        <div v-for="bagType in (['items', 'equipments'] as const)" :key="bagType" class="bag-section">
           <h4 v-if="stackedBags[bagType].length">
-            {{ bagType === 'consumeItems' ? '消耗品' : bagType === 'equipments' ? '裝備' : '一般道具' }}
+            {{ bagType === 'equipments' ? '裝備' : '一般道具' }}
           </h4>
 
           <div class="shop-container">
@@ -251,7 +253,6 @@ onMounted(() => {
                 @dblclick="sellStackedItem(item)"
             >
               <div class="item-badge" v-if="item.count > 1">x{{ item.count }}</div>
-
               <div class="item-icon">{{ item.icon }}</div>
               <div class="item-name">{{ item.name }}</div>
               <div class="sell-price-tag">回收價: {{ getSellPrice(item) }} G</div>
@@ -512,7 +513,7 @@ onMounted(() => {
   color: #ffca28;
   font-weight: bold;
   font-size: 1.2rem;
-  margin-bottom: 1rem;
+  margin: 0;
 }
 
 .empty-bag {

@@ -23,10 +23,10 @@ const handleChoice = (type: 'herb' | 'juice' | 'destroy' | 'sacrifice_hp' | 'sac
   gameStateStore.eventAction = 1;
   switch (type) {
     case 'herb':
-      playerStore.removeItem(Potions.heal0.name);
+      playerStore.removeItem(Potions.Heal0.name);
       break;
     case 'juice':
-      playerStore.removeItem(Potions.magic0.name);
+      playerStore.removeItem(Potions.Magic0.name);
       break;
   }
   setTimeout(() => {
@@ -126,16 +126,16 @@ const onLeave = () => {
       <template v-if="gameStateStore.eventAction === 0">
         <template v-if="!isAdvanced">
           <el-button
-              :disabled="!playerStore.hasItem(Potions.heal0.name)[0]"
+              :disabled="!playerStore.hasItem(Potions.Heal0.name)[0]"
               type="success"
               @click="handleChoice('herb')">
-            提供 [{{ Potions.heal0.name }}]
+            提供 [{{ Potions.Heal0.name }}]
           </el-button>
           <el-button
-              :disabled="!playerStore.hasItem(Potions.magic0.name)[0]"
+              :disabled="!playerStore.hasItem(Potions.Magic0.name)[0]"
               type="warning"
               @click="handleChoice('juice')">
-            提供 [{{ Potions.magic0.name }}]
+            提供 [{{ Potions.Magic0.name }}]
           </el-button>
           <el-button
               type="danger"

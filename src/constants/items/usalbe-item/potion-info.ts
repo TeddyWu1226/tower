@@ -1,7 +1,7 @@
 import {UsableType} from "@/types";
 
 const Heal = {
-    heal0: {
+    Heal0: {
         name: '粗製藥水',
         description: '聞起來像雜草，效果微乎其微。',
         icon: '🧪',
@@ -10,7 +10,7 @@ const Heal = {
         usable: true
     } as UsableType,
 
-    heal1: {
+    Heal1: {
         name: '初級生命藥水',
         description: '冒險者的基本必備品。',
         icon: '🧪',
@@ -19,7 +19,7 @@ const Heal = {
         usable: true
     } as UsableType,
 
-    heal2: {
+    Heal2: {
         name: '中級生命萃取液',
         description: '口感苦澀但恢復效果顯著。',
         icon: '',
@@ -31,7 +31,7 @@ const Heal = {
 
 
 const Magic = {
-    magic0: {
+    Magic0: {
         name: '混濁果汁',
         description: '感覺放了很久，只能稍微提神。',
         icon: '🍷',
@@ -39,7 +39,7 @@ const Magic = {
         magic: 10,
         usable: true
     } as UsableType,
-    magic1: {
+    Magic1: {
         name: '初級法力藥水',
         description: '淡淡的藍色液體。',
         icon: '🍷',
@@ -47,7 +47,7 @@ const Magic = {
         magic: 20,
         usable: true
     } as UsableType,
-    magic2: {
+    Magic2: {
         name: '清澈法力藥水',
         description: '精煉過的魔力液體，恢復感極強。',
         icon: '🍷',
@@ -56,5 +56,15 @@ const Magic = {
     } as UsableType,
 };
 
+const Special = {
+    BurningPotion: {
+        name: '燃燒藥水',
+        description: '可以使目標燃燒或燒掉某些東西',
+        icon: '🔥',
+        quality: 1,
+        usable: true,
+        skill: 'useBurningPotion'
+    } as UsableType,
+}
 
-export const Potions = {...Heal, ...Magic}
+export const Potions = {...Heal, ...Magic, ...Special}

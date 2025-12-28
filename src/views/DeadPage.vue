@@ -3,9 +3,11 @@ import {useGameStateStore} from "@/store/game-state-store";
 
 import {getEnumColumn} from "@/utils/enum";
 import {StageEnum} from "@/enums/stage-enum";
+import {useTrackerStore} from "@/store/track-store";
 
 const emit = defineEmits(['restart']);
 const gameStateStore = useGameStateStore()
+const trackerStore = useTrackerStore()
 
 const restartGame = async () => {
   gameStateStore.init()
@@ -23,10 +25,15 @@ const restartGame = async () => {
       🪦YOU DIED🪦
     </h1>
     <h1 style="color:var(--el-color-danger);text-align: center">
-      你倒在了第 {{ gameStateStore.currentStage }} 階段 - {{
+      你在無盡之塔中存活了 {{ gameStateStore.days }} 天
+      <br/>
+      倒在了第 {{ gameStateStore.currentStage }} 階段 - {{
         getEnumColumn(StageEnum, gameStateStore.currentStage)
       }} 的旅途上
     </h1>
+<!--    <div>-->
+<!--      <el-button type="primary" class="other-btn">顯示其他數據</el-button>-->
+<!--    </div>-->
     <el-button type="danger" style="width: 100%;height: 5rem" @click="restartGame">
       重新開始
     </el-button>
@@ -39,5 +46,10 @@ const restartGame = async () => {
 .dead {
   height: 82vh;
   padding-bottom: 15vh;
+}
+
+.other-btn {
+  height: 2rem;
+  margin: 1rem;
 }
 </style>

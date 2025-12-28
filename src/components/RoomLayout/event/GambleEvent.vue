@@ -121,13 +121,13 @@ const startGamble = (amount: number) => {
 
       <template v-else-if="gameStateStore.eventAction === 1">
         <el-button
-            type="warning" @click="startGamble(50)">
+            type="warning" @click="startGamble(50)" :disabled="isRolling">
           50 G
         </el-button>
-        <el-button type="warning" @click="startGamble(100)">
+        <el-button type="warning" @click="startGamble(100)" :disabled="isRolling">
           100 G
         </el-button>
-        <el-button type="info" @click="gameStateStore.eventAction = 0">
+        <el-button type="info" @click="gameStateStore.eventAction = 0" :disabled="isRolling">
           再想想
         </el-button>
       </template>

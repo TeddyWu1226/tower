@@ -38,7 +38,7 @@ const onRun = () => {
   FightRoomRef.value?.onRun()
 }
 
-const onSkill = ({skillKey, callback, el}) => {
+const onItemSkill = ({skillKey, callback, el}) => {
   const specifySkill = ['campfire', 'smokeBomb']
   if (specifySkill.includes(skillKey)) {
     ItemSkill[skillKey](
@@ -49,6 +49,8 @@ const onSkill = ({skillKey, callback, el}) => {
           targetElement: el
         }
     )
+  }  else {
+    FightRoomRef.value?.onItemSkill({skillKey, callback, el})
   }
 }
 
@@ -74,7 +76,7 @@ defineExpose({
   onRun,
   onRest,
   onCancel,
-  onSkill
+  onItemSkill
 })
 
 /** 初始化刷新 **/

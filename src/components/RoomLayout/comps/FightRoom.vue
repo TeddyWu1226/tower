@@ -28,6 +28,7 @@ import {MonsterOnAttacked} from "@/constants/monsters/monster-action/on-attacked
 import {useFloatingMessage} from "@/components/Shared/FloatingMessage/useFloatingMessage";
 import {stageMonsterWeightsMap} from "@/constants/stage-weights";
 import {useTrackerStore} from "@/store/track-store";
+import {ItemSkill} from "@/constants/skill/item-skill";
 
 const emit = defineEmits(['playerDead', 'runFailed'])
 const gameStateStore = useGameStateStore()
@@ -198,7 +199,7 @@ const onPlayerTurnEnd = () => {
 }
 // 攻擊
 const onAttack = () => {
-
+  // 指定怪物
   if (!selectedMonsterIndex.value) {
     selectedMonsterIndex.value = 0
   }
@@ -237,7 +238,24 @@ const onAttack = () => {
   }
   checkAllMonsterDead()
 }
-
+const onItemSkill = ({skillKey, callback, el}) => {
+  // 指定怪物
+  if (!selectedMonsterIndex.value) {
+    selectedMonsterIndex.value = 0
+  }
+  const selectedMonster = monsters.value[selectedMonsterIndex.value];
+  ItemSkill[skillKey](
+      {
+        monster: selectedMonster,
+        monsterIndex: selectedMonsterIndex.value,
+        playerStore: playerStore,
+        gameStateStore: gameStateStore,
+        callback: callback,
+        targetElement: el
+      }
+  )
+}
+// 逃跑
 const isEscape = ref(false)
 const onRun = () => {
   if (!canEscape(playerStore.finalStats, monsters.value)) {
@@ -268,7 +286,8 @@ const onRun = () => {
 
 defineExpose({
   onAttack,
-  onRun
+  onRun,
+  onItemSkill
 })
 
 // --- 初始化邏輯 (讀檔機制) ---

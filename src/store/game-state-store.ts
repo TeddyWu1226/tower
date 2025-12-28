@@ -89,7 +89,9 @@ export const useGameStateStore = defineStore('game-state', () => {
         currentEnemy.value = [];
         currentEventType.value = null;
         eventAction.value = 0
-        eventProcess.value = {} as Record<SpecialEventEnum, number>;
+        if (stageNum === 1) {
+            eventProcess.value = {} as Record<SpecialEventEnum, number>;
+        }
         console.log('遊戲狀態已重置');
     }
 

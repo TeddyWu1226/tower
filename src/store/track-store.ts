@@ -1,6 +1,9 @@
 import {defineStore} from 'pinia'
 import {ref} from 'vue'
+import {usePlayerStore} from "@/store/player-store";
+import {Sword} from "@/constants/items/equipment/weapon-info";
 
+const likeSwords = Object.values(Sword).map((sword) => sword.name)
 export const useTrackerStore = defineStore('tracker', () => {
     // --- State ---
     // 當階段數據紀錄
@@ -21,18 +24,27 @@ export const useTrackerStore = defineStore('tracker', () => {
      * @param amount 增加數量 (預設 1)
      */
     function recordKill(monsterName: string, amount: number = 1) {
-        // 紀錄特定怪物
-        if (monsterName.startsWith('【菁英】')) {
-            currentKills.value['ElITE'] = (currentKills.value['ElITE'] || 0) + amount
-            totalKills.value['ElITE'] = (totalKills.value['ElITE'] || 0) + amount
-        }
+        // 紀錄擊殺
         monsterName = monsterName.replace(/^【菁英】/, "")
         currentKills.value[monsterName] = (currentKills.value[monsterName] || 0) + amount
         currentKills.value['TOTAL'] = (currentKills.value['TOTAL'] || 0) + amount
         totalKills.value[monsterName] = (totalKills.value[monsterName] || 0) + amount
         totalKills.value['TOTAL'] = (totalKills.value['TOTAL'] || 0) + amount
-        //和平重新計算
+        if (monsterName.startsWith('【菁英】')) {
+            currentKills.value['ElITE'] = (currentKills.value['ElITE'] || 0) + amount
+            totalKills.value['ElITE'] = (totalKills.value['ElITE'] || 0) + amount
+        }
+        // 和平重新計算
         achievementsCount.value.peaceDay = 0
+        // 武器分類計算
+        const playerStore = usePlayerStore();
+        if (playerStore.info.equips?.weapon) {
+            const use = playerStore.info.equips.weapon
+            if (likeSwords.includes(use.name)) {
+                currentKills.value['USE_SWORD'] = (currentKills.value['USE_SWORD'] || 0) + amount
+                totalKills.value['USE_SWORD'] = (totalKills.value['USE_SWORD'] || 0) + amount
+            }
+        }
     }
 
 

@@ -7,7 +7,7 @@ import {getEnumColumn} from "@/utils/enum";
 import {QualityEnum} from "@/enums/quality-enum";
 
 const playerStore = usePlayerStore()
-const emit = defineEmits(['onSkill'])
+const emit = defineEmits(['onItemSkill'])
 
 const aggregatedConsumables = computed(() => {
   const map = new Map<string, { item: UsableType; count: number }>();
@@ -28,7 +28,7 @@ const handleUse = async (potion: UsableType, event: MouseEvent) => {
   if (potion.skill) {
     const canUse = await new Promise<boolean>((resolve) => {
       // 傳送技能 key 和一個 resolve 函式
-      emit('onSkill', {
+      emit('onItemSkill', {
         skillKey: potion.skill,
         callback: (result: boolean) => resolve(result),
         el: targetEl

@@ -43,7 +43,7 @@ const strengthen = (): void => {
 const BlessBtnRef = ref()
 const bless = (): void => {
   taken.value = true
-  const b: UsableType[] = [Usable.smokeBomb, Usable.campfire]
+  const b: UsableType[] = [Usable.SmokeBomb, Usable.Campfire]
   const time = 3
   const items = getRandomElements(b, time, true)
   items.forEach(item => {

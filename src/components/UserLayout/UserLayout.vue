@@ -5,7 +5,7 @@ import ConsumableTab from "@/components/UserLayout/comps/ConsumableTab.vue"
 import EquipmentTab from "@/components/UserLayout/comps/EquipmentTab.vue"
 import MaterialTab from "@/components/UserLayout/comps/MaterialTab.vue"
 
-const emit = defineEmits(['onSkill']); // 聲明要轉發的事件
+const emit = defineEmits(['onItemSkill']); // 聲明要轉發的事件
 const playerStore = usePlayerStore()
 const activeName = ref('item')
 
@@ -52,7 +52,7 @@ watch(activeName, (val) => {
         <template #label>
           <el-badge class="tab-badge" :hidden="!hasNew.item" is-dot :offset="[10, 5]">消耗</el-badge>
         </template>
-        <ConsumableTab @on-skill="payload => emit('onSkill', payload)"/>
+        <ConsumableTab @on-item-skill="payload => emit('onItemSkill', payload)"/>
       </el-tab-pane>
 
       <el-tab-pane name="equipment">

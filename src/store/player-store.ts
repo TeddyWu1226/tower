@@ -223,6 +223,17 @@ export const usePlayerStore = defineStore('player-info', () => {
         }
         return itemToUnequip;
     };
+    /**
+     * 檢查是否裝備了指定名稱的裝備
+     * @param equipName 裝備名稱
+     */
+    const hasEquip = (equipName: string): boolean => {
+        if (!info.value.equips) return false;
+        // 檢查身上 6 個部位是否有任何一個裝備名稱相符
+        return Object.values(info.value.equips).some(
+            (item) => item && item.name === equipName
+        );
+    };
 
 
     /**
@@ -255,6 +266,30 @@ export const usePlayerStore = defineStore('player-info', () => {
         } else {
             // 2. 存入新狀態時進行深拷貝 (避免引用污染)
             statusEffects.value.push(create(effect));
+        }
+    };
+    /**
+     * 檢查當前是否有指定的狀態效果 (Buff/Debuff)
+     * @param statusName 狀態名稱
+     */
+    const hasStatus = (statusName: string): boolean => {
+        return statusEffects.value.some(
+            (effect) => effect.name === statusName
+        );
+    };
+    /**
+     * 移除指定的狀態 (Buff 或 Debuff)
+     * @param statusName 狀態名稱
+     */
+    const removeStatus = (statusName: string) => {
+        const index = statusEffects.value.findIndex(e => e.name === statusName);
+        if (index !== -1) {
+            const removedEffect = statusEffects.value[index];
+            statusEffects.value.splice(index, 1);
+
+            // 可選：在日誌中記錄
+            const logStore = useLogStore();
+            logStore.logger.add(`[${removedEffect.name}] 效果被清除了。`);
         }
     };
 
@@ -318,11 +353,14 @@ export const usePlayerStore = defineStore('player-info', () => {
         finalStats,
         statusEffects,
         equipItem,
+        hasEquip,
         gainItem,
         hasItem,
         removeItem,
         addGold,
         addStatus,
+        hasStatus,
+        removeStatus,
         nextTurnStatus,
         healFull,
         init

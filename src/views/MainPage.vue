@@ -63,8 +63,8 @@ const OperationLayoutRef = ref()
 const onAttack = () => {
   RoomLayoutRef.value?.onAttack()
 }
-const onSkill = (prop) => {
-  RoomLayoutRef.value?.onSkill(prop)
+const onItemSkill = (prop) => {
+  RoomLayoutRef.value?.onItemSkill(prop)
 }
 const onRun = () => {
   RoomLayoutRef.value?.onRun()
@@ -87,7 +87,7 @@ const onRunFailed = () => {
 
 const showLoadingSuccess = () => {
   if (!gameStateStore.stateIs(GameState.INITIAL)) {
-    ElNotification.success('已讀取緩存數據成功!')
+    ElNotification.success('已讀取緩存數據')
   }
 }
 onMounted(() => {
@@ -148,7 +148,7 @@ watch(
               @cancel="onCancel"
           />
           <UserValueLayout/>
-          <UserLayout class="user-layout" @on-skill="onSkill"/>
+          <UserLayout class="user-layout" @on-item-skill="onItemSkill"/>
         </el-main>
       </el-container>
       <UserDetailInfo v-if="!gameStateStore.stateIs(GameState.INITIAL)"/>

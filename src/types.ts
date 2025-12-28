@@ -219,8 +219,16 @@ export interface MonsterOnAttackParams {
 }
 
 
-//
+// 物品使用觸發
 export interface NoneMonsterItemSkillParams {
+    playerStore?: PlayerStore;
+    gameStateStore?: GameStateStore
+    callback: (result: boolean) => void
+    targetElement?: HTMLElement
+}
+export interface SpecifyMonsterItemSkillParams {
+    monster?: MonsterType;
+    monsterIndex?: number;
     playerStore?: PlayerStore;
     gameStateStore?: GameStateStore
     callback: (result: boolean) => void
