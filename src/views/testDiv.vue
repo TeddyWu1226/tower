@@ -6,6 +6,7 @@ import {UnitStatus} from "@/constants/status/unit-status";
 import {Potions} from "@/constants/items/usalbe-item/potion-info";
 import {Accessories} from "@/constants/items/equipment/accessories-info";
 import {Usable} from "@/constants/items/usalbe-item/usable-info";
+import {Skills} from "@/constants/skill/skill";
 
 const gameStateStore = useGameStateStore()
 const playerStore = usePlayerStore()
@@ -15,6 +16,7 @@ const onTest = () => {
   // playerStore.addStatus(UnitStatus.SlimeSlow)
   // playerStore.gainItem(Potions.BurningPotion)
   // playerStore.gainItem(Accessories.SoulAnchor)
+  playerStore.addSkill(Skills.DoubleHit.id)
 }
 onTest()
 </script>

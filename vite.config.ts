@@ -1,22 +1,34 @@
-import {fileURLToPath, URL} from 'node:url'
-
-import {defineConfig} from 'vite'
+import { fileURLToPath, URL } from 'node:url'
+import { defineConfig, type UserConfig, type PluginOption } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueDevTools from 'vite-plugin-vue-devtools'
 
-export default defineConfig({
-    plugins: [
-        vue(),
-        vueDevTools(),
-    ],
-    server: {
-        host: true, // 或者填入 '0.0.0.0'
-        port: 5173, // 你原本的 port
-    },
-    resolve: {
-        alias: {
-            '@': fileURLToPath(new URL('./src', import.meta.url))
+export default defineConfig(({ mode }): UserConfig => {
+    const isProduction = mode === 'production'
+
+    return {
+        base: '/god-note/',
+        plugins: [
+            vue(),
+            // 🚩 只有在非生產模式下才加入 DevTools
+            !isProduction && (vueDevTools() as any),
+        ].filter(Boolean) as PluginOption[],
+
+        resolve: {
+            alias: {
+                '@': fileURLToPath(new URL('./src', import.meta.url))
+            },
         },
-    },
-    base: '/god-note/', // 例如 '/my-vite-site/'，記得前後都要有斜線
+
+        // 🚩 Vite 7 移除 Console 的標準寫法
+        esbuild: {
+            drop: isProduction ? ['console', 'debugger'] : [],
+        },
+
+        build: {
+            // 生產環境開啟壓縮，測試環境更精準
+            minify: 'esbuild',
+            sourcemap: !isProduction, // 生產模式關閉 sourcemap 以保護原始碼
+        }
+    }
 })

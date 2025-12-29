@@ -12,7 +12,10 @@
     ],
     "moduleResolution": "bundler",
     // 通常如果使用 Vite，module 也會被設定為 ESNext
-    "module": "ESNext"
+    "module": "ESNext",
+    "types": [
+      "vite/client"
+    ]
   },
   "exclude": [
     "node_modules",
