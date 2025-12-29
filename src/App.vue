@@ -6,6 +6,5 @@ const isDev = import.meta.env.DEV;
 
 <template>
   <TestDiv v-if="isDev"/>
-  {{ import.meta.env}}
   <MainPage/>
 </template>
