@@ -18,7 +18,8 @@ const onTest = () => {
   gameStateStore.addEventProcess(SpecialEventEnum.GetFruit)
 }
 const addEquipment = () => {
-  playerStore.gainItem(Accessory1.SoulAnchor)
+  // playerStore.gainItem(Accessory1.SoulAnchor)
+  playerStore.gainItem(Usable.GodLuckLeaf)
 }
 const heal = () => {
   playerStore.healFull()

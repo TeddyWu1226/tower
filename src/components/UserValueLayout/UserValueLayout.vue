@@ -4,6 +4,8 @@ import {HpProgress, ValueProgress} from "@/components/Shared/Progress";
 import {useFloatingMessage} from "@/components/Shared/FloatingMessage/useFloatingMessage";
 import {ElCard} from "element-plus";
 import {usePlayerStore} from "@/store/player-store";
+import {Usable} from "@/constants/items/usalbe-item/usable-info";
+import {showEffect} from "@/components/Shared/FloatingEffect/EffectManager";
 
 const playerStore = usePlayerStore();
 const emit = defineEmits(['playerDead'])
@@ -95,6 +97,12 @@ watch(
       );
       // 如果生命值歸零
       if (playerStore.info.hp <= 0) {
+        if (playerStore.hasItem(Usable.GodLuckLeaf.name)[0]) {
+          playerStore.healFull()
+          playerStore.removeItem(Usable.GodLuckLeaf.name)
+          showEffect(cardRef.value.$el, "🪽女神光輝的壟罩🪽", "fullscreen")
+          return;
+        }
         emit('playerDead', true)
       }
     },

@@ -10,15 +10,15 @@ export const QualityEnum = {
     Unique: {value: 5, label: '獨特的', color: '#E91E63'}, // 玫紅色
     // 以下用抽的
     Mythic: {value: 6, label: '傳說的', color: '#FF9800'}, // 橙色
-    Relic: {value: 7, label: '遠古的', color: '#FFEB3B'}, // 亮金色
-    Divine: {value: 8, label: '史詩的', color: '#00BCD4'}, // 天藍色
-    Supreme: {value: 9, label: '創世的', color: '#FF1100'}, // 亮紅色
-    Celestial: {value: 10, label: '神的', color: '#00FFC3'}, // 螢光青 (極高亮度)
+    Relic: {value: 7, label: '遠古的', color: '#00BCD4'}, // 天藍色
+    Divine: {value: 8, label: '史詩的', color: '#FFEB3B'}, //  亮金色
+    Supreme: {value: 9, label: '創世的', color: '#ff2716'}, // 亮紅色
+    Celestial: {value: 10, label: '神的', color: '#00FFC3'}, // 螢光青
 
     // --- 詛咒的 (LV 11) ---
     Cursed: {
         value: 11,
         label: '詛咒的',
-        color: '#9e0101', // 紫色的
+        color: '#9e0101',
     }
 };

@@ -106,7 +106,7 @@ const handleChoice = (type: 'herb' | 'juice' | 'destroy' | 'sacrifice_hp' | 'sac
       case 'sacrifice_all':
         // 第五階段：獻祭全部生命
         playerStore.info.hp = 0;
-        finalText.value = "你獻祭所有生命...魔樹發出了滿足的震動，將龐大的生命能量灌注回你殘破的軀殼中。你的潛能徹底爆發了！";
+        finalText.value = "你獻祭所有生命...魔樹發出了滿足的震動，邪氣從樹中爆發,伴隨龐大的魔力瀰漫後消失在空氣之中,而你在剩下空殼的樹洞中發現了一個強大的項鍊";
         playerStore.gainItem(Accessory2.EvilWoodenHeart)
         break;
     }

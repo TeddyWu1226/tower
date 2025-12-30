@@ -17,4 +17,18 @@ export const Usable = {
         usable: true,
         skill: 'useSmokeBomb'
     } as UsableType,
+    GodLuckLeaf: {
+        name: '女神之葉',
+        quality: 8,
+        description: '若受到致死攻擊後可以滿血復活',
+        icon: '🍀',
+        usable: false,
+    } as UsableType,
+    GodNotePage: {
+        name: '神祗筆記殘頁',
+        quality: 10,
+        description: '神用來記錄人們愚蠢行徑的筆記殘頁,使用後可以記錄當下,當你死亡後可以有一次回檔機會',
+        icon: '📜',
+        usable: true,
+    } as UsableType,
 };

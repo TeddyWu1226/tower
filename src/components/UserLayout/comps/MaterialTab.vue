@@ -1,15 +1,15 @@
 <script setup lang="ts">
 import './item.css'
-import { computed } from 'vue'
-import { usePlayerStore } from '@/store/player-store'
-import { getEnumColumn } from "@/utils/enum"
-import { QualityEnum } from "@/enums/quality-enum"
+import {computed} from 'vue'
+import {usePlayerStore} from '@/store/player-store'
+import {getEnumColumn} from "@/utils/enum"
+import {QualityEnum} from "@/enums/quality-enum"
 
 const playerStore = usePlayerStore()
 const aggregatedOthers = computed(() => {
   const map = new Map<string, { item: any; count: number }>();
   playerStore.info.items?.forEach(item => {
-    const entry = map.get(item.name) || { item: { ...item }, count: 0 };
+    const entry = map.get(item.name) || {item: {...item}, count: 0};
     entry.count++;
     map.set(item.name, entry);
   });
@@ -28,7 +28,7 @@ const aggregatedOthers = computed(() => {
               <p class="desc">{{ entry.item.description }}</p>
             </div>
           </template>
-          <div class="icon-wrapper" :class="`quality-${entry.item.quality}`">
+          <div class="icon-wrapper" :style="{borderColor:getEnumColumn(QualityEnum,entry.item.quality,'color')}">
             <span class="icon">{{ entry.item.icon }}</span>
             <div class="item-count">{{ entry.count }}</div>
           </div>

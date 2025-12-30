@@ -21,16 +21,16 @@ const aggregatedConsumables = computed(() => {
   return Array.from(map.values()).sort((a, b) => (b.item.quality || 0) - (a.item.quality || 0));
 });
 
-const handleUse = async (potion: UsableType, event?: MouseEvent) => {
-  if (!potion.usable) return;
+const handleUse = async (item: UsableType, event?: MouseEvent) => {
+  if (!item.usable) return;
   // 取得當前點擊的 DOM 元素
   const targetEl = event.currentTarget as HTMLElement;
   // 如果有技能邏輯，需要等待父組件判斷
-  if (potion.skill) {
+  if (item.skill) {
     const canUse = await new Promise<boolean>((resolve) => {
       // 傳送技能 key 和一個 resolve 函式
       emit('onItemSkill', {
-        skillKey: potion.skill,
+        skillKey: item.skill,
         callback: (result: boolean) => resolve(result),
         el: targetEl
       });
@@ -42,12 +42,12 @@ const handleUse = async (potion: UsableType, event?: MouseEvent) => {
 
   // --- 判定通過或無技能，執行消耗邏輯 ---
 
-  // 1. 數值恢復
-  if (potion.heal) playerStore.info.hp = Math.min(playerStore.finalStats.hpLimit, playerStore.info.hp + potion.heal);
-  if (potion.magic) playerStore.info.sp = Math.min(playerStore.finalStats.spLimit, playerStore.info.sp + potion.magic);
+  // 數值恢復
+  if (item.heal) playerStore.info.hp = Math.min(playerStore.finalStats.hpLimit, playerStore.info.hp + item.heal);
+  if (item.magic) playerStore.info.sp = Math.min(playerStore.finalStats.spLimit, playerStore.info.sp + item.magic);
 
   // 2. 移除道具
-  const index = playerStore.info.consumeItems.findIndex(i => i.name === potion.name);
+  const index = playerStore.info.consumeItems.findIndex(i => i.name === item.name);
   if (index > -1) {
     playerStore.info.consumeItems.splice(index, 1);
   }
@@ -79,7 +79,7 @@ const onTouchHandleUse = createDoubleTapHandler((potion: UsableType, event?: any
               <span v-if="entry.item.heal" class="effect-text">❤️ 回復生命: {{ entry.item.heal }}</span>
             </div>
           </template>
-          <div class="icon-wrapper" :class="`quality-${entry.item.quality}`">
+          <div class="icon-wrapper" :style="{borderColor:getEnumColumn(QualityEnum,entry.item.quality,'color')}">
             <span class="icon">{{ entry.item.icon }}</span>
             <div class="item-count">{{ entry.count }}</div>
           </div>
