@@ -3,6 +3,8 @@ import {UnitStatus} from "@/constants/status/unit-status";
 import {MonsterOnAttackParams} from "@/types";
 import {checkProbability} from "@/utils/math";
 import {showEffect} from "@/components/Shared/FloatingEffect/EffectManager";
+import {MistyForestMonster} from "@/constants/monsters/monster-info/misty-forest-monster";
+import {create} from "@/utils/create";
 
 
 export const MonsterOnAttack: Record<string, (params: MonsterOnAttackParams) => void> = {
@@ -35,5 +37,5 @@ export const MonsterOnAttack: Record<string, (params: MonsterOnAttackParams) => 
         if (playerStore.statusEffects?.find(e => e.name === '綑綁')) {
             gameStateStore.addEffectToMonster(monsterIndex, UnitStatus.SpiderHunter)
         }
-    },
+    }
 };

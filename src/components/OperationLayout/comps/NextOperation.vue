@@ -51,20 +51,6 @@ onMounted(() => {
 <template>
   <div class="flex">
     <el-button
-        v-for="room in gameStateStore.nextRooms"
-        :color="getEnumColumn(RoomEnum, room,'color')"
-        :disabled="props.disabled"
-        @click="selectRoom(room)"
-    >
-      <el-row>
-        <el-col :xl="10">選擇:</el-col>
-        <el-col :xl="14">
-          {{ getEnumColumn(RoomEnum, room, 'icon') }}
-          {{ getEnumColumn(RoomEnum, room) }}
-        </el-col>
-      </el-row>
-    </el-button>
-    <el-button
         v-if="gameStateStore.isBattleWon && gameStateStore.roomIs(RoomEnum.Boss.value)"
         color="var(--el-color-success)"
         :disabled="props.disabled"
@@ -72,6 +58,22 @@ onMounted(() => {
     >
       前往下一區域🚪
     </el-button>
+    <template v-else>
+      <el-button
+          v-for="room in gameStateStore.nextRooms"
+          :color="getEnumColumn(RoomEnum, room,'color')"
+          :disabled="props.disabled"
+          @click="selectRoom(room)"
+      >
+        <el-row>
+          <el-col :xl="10">選擇:</el-col>
+          <el-col :xl="14">
+            {{ getEnumColumn(RoomEnum, room, 'icon') }}
+            {{ getEnumColumn(RoomEnum, room) }}
+          </el-col>
+        </el-row>
+      </el-button>
+    </template>
   </div>
 </template>
 

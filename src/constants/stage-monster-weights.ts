@@ -32,11 +32,13 @@ export const AncientRootsWeights: Record<string, number> = {
 
 /**
  * 區域 1-4: 妖精結界 (FairyBarrier)
- * 特色：魔力濃厚，出現高階偽裝者與精英怪。
  */
 export const FairyBarrierWeights: Record<string, number> = {
+    StingerBee: 10,
     ForestOwl: 20,
-    MushroomMan: 10,
+    GreenRabbit: 30,
+    FairyGuard:20,
+    FierceWolf: 5,
 
 };
 
@@ -45,9 +47,11 @@ export const FairyBarrierWeights: Record<string, number> = {
  * 特色：Boss 戰前的最後屏障，充滿強敵。
  */
 export const GuardiansDenWeights: Record<string, number> = {
-    WoodViper: 20,
-    MushroomMan: 30,
-    Mandragora: 10      // 稀有的曼陀羅守護著深處
+    StingerBee: 10,
+    GreenRabbit: 20,
+    FairyGuard:30,
+    MushroomMan: 20,
+    Mandragora: 10
 };
 
 /**

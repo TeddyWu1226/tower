@@ -22,25 +22,6 @@ export const MistyForestMonster = {
         ],
         onAttack: 'slimeOnAttack'
     } as MonsterType,
-    WoodTick: {
-        icon: '🐜',
-        name: '木兵蟻',
-        description: '體型細小但甲殼堅硬，容易躲開笨重的攻擊',
-        ad: 4,
-        critIncrease: WorldDefault.critIncrease,
-        critRate: WorldDefault.critRate,
-        adDefend: 3,
-        dodge: 12,
-        hit: 5,
-        hp: 15,
-        hpLimit: 15,
-        level: 1,
-        dropGold: 5,
-        drop: [
-            {item: MATERIAL.AntShell, chance: 0.5}
-        ]
-    } as MonsterType,
-
     ForestSprout: {
         icon: '🌱',
         name: '小樹人',
@@ -59,48 +40,24 @@ export const MistyForestMonster = {
             {item: MATERIAL.ForestWood, chance: 0.5}
         ]
     } as MonsterType,
-
-    // 4. 鳥類 - 敏捷型
-    ForestOwl: {
-        icon: '🦉',
-        name: '夜行梟',
-        description: '在樹蔭間穿梭的獵食者，眼神銳利',
-        ad: 7,
+    WoodTick: {
+        icon: '🐜',
+        name: '木兵蟻',
+        description: '體型細小但甲殼堅硬，容易躲開笨重的攻擊',
+        ad: 4,
         critIncrease: WorldDefault.critIncrease,
         critRate: WorldDefault.critRate,
-        adDefend: 0,
-        dodge: 20,
-        hit: 3,
+        adDefend: 3,
+        dodge: 12,
+        hit: 5,
         hp: 20,
         hpLimit: 20,
-        level: 1,
-        dropGold: 10,
-        drop: [
-            {item: MATERIAL.OwlFeather, chance: 0.5}
-        ]
-    } as MonsterType,
-
-    // 5. 獸類 - 均衡型
-    GreenRabbit: {
-        icon: '🐇',
-        name: '綠兔',
-        description: '額頭長有小角的兔子，衝撞力驚人',
-        ad: 10,
-        critIncrease: WorldDefault.critIncrease,
-        critRate: WorldDefault.critRate,
-        adDefend: 5,
-        dodge: 10,
-        hit: 4,
-        hp: 30,
-        hpLimit: 30,
         level: 2,
-        dropGold: 12,
+        dropGold: 5,
         drop: [
-            {item: MATERIAL.RabbitHorn, chance: 0.3}
+            {item: MATERIAL.AntShell, chance: 0.5}
         ]
     } as MonsterType,
-
-    // 6. 昆蟲類 - 毒素/暴擊型
     StingerBee: {
         icon: '🐝',
         name: '森林虎頭蜂',
@@ -120,12 +77,64 @@ export const MistyForestMonster = {
         ],
         onAttack: 'beeOnAttack'
     } as MonsterType,
+    GreenRabbit: {
+        icon: '🐇',
+        name: '綠兔',
+        description: '額頭長有小角的兔子，衝撞力驚人',
+        ad: 10,
+        critIncrease: WorldDefault.critIncrease,
+        critRate: WorldDefault.critRate,
+        adDefend: 5,
+        dodge: 10,
+        hit: 4,
+        hp: 30,
+        hpLimit: 30,
+        level: 3,
+        dropGold: 12,
+        drop: [
+            {item: MATERIAL.RabbitHorn, chance: 0.3}
+        ]
+    } as MonsterType,
+    ForestOwl: {
+        icon: '🦉',
+        name: '夜行梟',
+        description: '在樹蔭間穿梭的獵食者，眼神銳利',
+        ad: 13,
+        critIncrease: WorldDefault.critIncrease,
+        critRate: WorldDefault.critRate,
+        adDefend: 0,
+        dodge: 30,
+        hit: 10,
+        hp: 25,
+        hpLimit: 25,
+        level: 2,
+        dropGold: 12,
+        drop: [
+            {item: MATERIAL.OwlFeather, chance: 0.5}
+        ]
+    } as MonsterType,
+    FairyGuard: {
+        icon: '🧚',
+        name: '妖精守衛',
+        description: '守衛著迷霧森林核心區域的靈體，動作輕盈且攻擊精準，手中的靈光長矛不容小覷',
+        ad: 15,
+        critIncrease: 150,
+        critRate: 10,
+        adDefend: 3,
+        dodge: 15,
+        hit: 20,
+        hp: 50,
+        hpLimit: 50,
+        level: 4,
+        dropGold: 25,
+        onStart: 'fairyGuardOnStart'
+    } as MonsterType,
+
     MushroomMan: {
         icon: '🍄',
         name: '毒粉蕈人',
-        class: 'elite',
         description: '行走緩慢的蕈類，厚實的菌蓋提供了極佳防護,而且攻擊他都會飄逸神秘粉末',
-        ad: 5,
+        ad: 10,
         critIncrease: 0,
         critRate: 0,
         adDefend: 10,
@@ -137,26 +146,6 @@ export const MistyForestMonster = {
         dropGold: 50,
         onAttacked: 'mushroomManOnAttacked'
     } as MonsterType,
-
-    WoodViper: {
-        icon: '🐍',
-        name: '枯葉蛇',
-        description: '完美偽裝在落葉中的毒蛇，發動攻擊時迅猛無比',
-        ad: 18,
-        critIncrease: WorldDefault.critIncrease,
-        critRate: 20,
-        adDefend: 1,
-        dodge: 8,
-        hit: 15,
-        hp: 70,
-        hpLimit: 70,
-        level: 5,
-        dropGold: 100,
-        drop: [
-            {item: MATERIAL.ViperScale, chance: 0.2}
-        ]
-    } as MonsterType,
-
     FierceWolf: {
         icon: '🐺',
         name: '森林之狼',
@@ -171,7 +160,7 @@ export const MistyForestMonster = {
         hp: 85,
         hpLimit: 85,
         level: 5,
-        dropGold: 75,
+        dropGold: 30,
         drop: [
             {
                 item: MATERIAL.WolfSkin,

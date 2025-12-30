@@ -23,7 +23,7 @@ export const UnitStatus = {
 	SlimePoison: {
 		name: '中毒',
 		icon: '🤢',
-		duration: 2,
+		duration: 4,
 		description: '每回合失去 5 點生命值',
 		type: 'damage',
 		value: 5

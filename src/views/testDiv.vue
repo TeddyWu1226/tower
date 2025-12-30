@@ -15,11 +15,11 @@ const playerStore = usePlayerStore()
 const isClose = ref(true);
 
 const onTest = () => {
-  gameStateStore.addEventProcess(SpecialEventEnum.GetFruit)
+  gameStateStore.currentStage = 4
 }
 const addEquipment = () => {
-  // playerStore.gainItem(Accessory1.SoulAnchor)
-  playerStore.gainItem(Usable.GodLuckLeaf)
+  playerStore.gainItem(Accessory1.SoulAnchor)
+  // playerStore.gainItem(Usable.GodLuckLeaf)
 }
 const heal = () => {
   playerStore.healFull()

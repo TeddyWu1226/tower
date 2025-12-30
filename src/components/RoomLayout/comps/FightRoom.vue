@@ -40,7 +40,7 @@ const currentRoomValue = computed(() => {
     }
 )
 const monsterCardRefs = ref<MonsterCardExposed[]>([]);
-const monsters = ref<MonsterType[]>([])
+const monsters = computed<MonsterType[]>(() => gameStateStore.currentEnemy)
 const monsterDropGold = ref(0)
 const monsterDropItems = ref<ItemType[]>([])
 
@@ -49,7 +49,6 @@ const monsterDropItems = ref<ItemType[]>([])
 const genMonsters = (count: number, weight: Record<string, number>, eliteBoost = false) => {
   const strengthening = 1 + gameStateStore.days * 0.01
   const newMonsters = spawnMonsters(count, weight, strengthening, eliteBoost);
-  monsters.value = newMonsters;
   // 同步到 Store 做持久化緩存
   gameStateStore.setCurrentEnemy(newMonsters);
 }
@@ -91,7 +90,6 @@ const createBoss = () => {
   const currentStageKey = getStageKeyByValue(gameStateStore.currentStage)
   const boss = Boss[currentStageKey] ?? Boss.Error
   newMonsters = [create(boss)]
-  monsters.value = newMonsters;
   // 同步到 Store 做持久化緩存
   gameStateStore.setCurrentEnemy(newMonsters);
 }
@@ -291,8 +289,6 @@ const onSkill = async (skillKey: string) => {
       playerStore.info.hp = Math.max(0, newHP)
     }
   }
-
-
   //檢查每個怪物血量是否死亡
   monsters.value.forEach((monster) => {
     if (monster.hp <= 0) {
@@ -320,7 +316,6 @@ const onRun = () => {
   } else {
     isEscape.value = true
     gameStateStore.setBattleWon(true)
-    monsters.value = []
   }
   // 回合結束判定
   onPlayerTurnEnd()
@@ -342,14 +337,12 @@ const init = () => {
 
   // 讀檔檢查：如果 Store 裡面已經有怪物資料，直接讀取
   if (gameStateStore.currentEnemy && gameStateStore.currentEnemy.length > 0) {
-    monsters.value = gameStateStore.currentEnemy;
     return;
   }
 
   // 檢查是否有突襲怪物
   if (gameStateStore.switchEnemy && gameStateStore.switchEnemy.length > 0) {
-    monsters.value = gameStateStore.takeSwitchEnemy()
-    gameStateStore.setCurrentEnemy(monsters.value);
+    gameStateStore.setCurrentEnemy(gameStateStore.takeSwitchEnemy());
   }
 
   // 若無緩存，則根據房間類型生成
@@ -372,6 +365,7 @@ const init = () => {
         MonsterOnStart[monster.onStart]({
           monster: monster,
           playerStore: playerStore,
+          gameStateStore: gameStateStore,
           logStore: logStore,
           targetElement: monsterCardRefs.value[index].$el,
         });

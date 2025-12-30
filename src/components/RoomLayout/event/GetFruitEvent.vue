@@ -129,6 +129,7 @@ const onLeave = () => {
     boss.ad += playerStore.finalStats.ad
     boss.adDefend += playerStore.finalStats.adDefend
     gameStateStore.switchToFightRoom(RoomEnum.SpecialBoss.value, [boss])
+    gameStateStore.addEventProcess(SpecialEventEnum.GetFruit, true)
   } else {
     gameStateStore.transitionToNextState();
   }
