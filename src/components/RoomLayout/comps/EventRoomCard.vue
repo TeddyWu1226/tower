@@ -23,6 +23,10 @@ const EVENT_CONFIG = [
     canAppear: () => true // 賭博總是能出現
   },
   {
+    type: SpecialEventEnum.Potion,
+    canAppear: () => true // 賭博總是能出現
+  },
+  {
     type: SpecialEventEnum.GetFruit, // 魔樹事件
     canAppear: () => !gameStateStore.thisStageAlreadyAppear(SpecialEventEnum.GetFruit) &&
         !gameStateStore.isEventClose(SpecialEventEnum.GetFruit)

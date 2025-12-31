@@ -42,14 +42,12 @@ const openChest = () => {
     const baseGold = 30 + (gameStateStore.currentStage * 25);
     const goldFound = Math.floor(baseGold * (Math.random() * (1.2 - 0.8) + 0.8));
 
-    if (rnd < 10) {
+    if (rnd < 100) {
       // 10% 機率：獲得裝備 (Equip)
       resultType.value = 'equip';
-
       const equip = getRandomItemsByQuality(1, getWeightedQuality(), false, Armor, Head, Offhand, Weapon, Accessory1, Accessory2)[0];
       playerStore.gainItem(equip)
-
-      resultMsg.value = `你在裡頭找到了<span style="color: ${getEnumColumn(QualityEnum, equip.quality, 'color')}; font-weight: bold;">${equip.name}</span>}!`;
+      resultMsg.value = `你在裡頭找到了 <span style="color: ${getEnumColumn(QualityEnum, equip.quality, 'color')}; font-weight: bold;">${equip.name}</span>!`;
 
     } else if (rnd < 40) {
       // 30% 機率：陷阱 (Trap)

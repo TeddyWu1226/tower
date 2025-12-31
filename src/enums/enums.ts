@@ -34,6 +34,7 @@ export enum SpecialEventEnum {
 	// 長駐事件
 	Gamble = 'Gamble',    // 賭博
 	Chest = 'Chest',    // 寶箱事件
+	Potion = 'Potion', // 藥水事件
 
 	// 單次完成事件
 	None = 'None', // 幽靈事件
