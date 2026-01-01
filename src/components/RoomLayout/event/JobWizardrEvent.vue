@@ -19,7 +19,7 @@ const playerStore = usePlayerStore();
 
 const isLearning = ref(false);
 
-const COST = 150;
+const COST = 100;
 
 const handleJobChange = () => {
   // 1. 檢查金幣是否足夠

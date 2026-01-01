@@ -11,6 +11,7 @@ const MAX_RATE = 100; // 命中率或暴擊率的最大值 (100%)
 export function calculateDamage(attacker: UnitType, defender: UnitType): DamageResult {
     const result: DamageResult = {
         totalDamage: 0,
+        type: 'ad',
         isHit: false,
         isCrit: false,
         baseDamage: 0,
@@ -146,6 +147,7 @@ export function applySkillDamage(
         totalDamage: 0,
         baseDamage: 0,
         healAmount: 0,
+        type: type,
         isHit: false,
         isCrit: false,
         isKilled: false,
@@ -251,6 +253,7 @@ export function triggerDamageEffect(damageOutCome: BattleOutcome, targetElement?
 
     let messageText: string;
     let messageColor = '#E0E0E0'; // 預設顏色
+
     // --- 2. 根據結果決定訊息和樣式 ---
 
     if (damageOutCome.isKilled) {
@@ -270,6 +273,9 @@ export function triggerDamageEffect(damageOutCome: BattleOutcome, targetElement?
         } else {
             // 普通命中
             messageText = `${prefixText} ${damageOutCome.totalDamage}`;
+        }
+        if (damageOutCome.type === 'ap') {
+            messageColor = '#9370DB';
         }
     } else {
         // 處理未命中 (例如：Miss) 或其他未捕捉到的狀態

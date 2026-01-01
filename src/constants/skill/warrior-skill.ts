@@ -8,8 +8,8 @@ export const WarriorSkill = {
         id: 'DoubleHit',
         name: "二連擊",
         icon: "⚔️",
-        description: (prop) => {
-            const atk = Math.floor(prop.playerStore?.finalStats.ad)
+        description: ({playerStore}) => {
+            const atk = Math.floor(playerStore?.finalStats.ad * (1 + playerStore.getSkillProficiency('DoubleHit') * 0.01))
             return `快速斬出兩擊，各別造成 ${ColorText.ad(atk)}。`;
         },
         costSp: 15,

@@ -45,8 +45,8 @@ const openChest = () => {
     const baseGold = 30 + (stage * 25);
     const goldFound = Math.floor(baseGold * (Math.random() * (1.2 - 0.8) + 0.8));
 
-    if (rnd < 15) {
-      // 15% 機率：獲得裝備 (Equip)
+    if (rnd < 30) {
+      // 30% 機率：獲得裝備 (Equip)
       resultType.value = 'equip';
       const equip = getRandomItemsByQuality(
         1,
@@ -60,7 +60,7 @@ const openChest = () => {
       resultMsg.value = `你在裡頭找到了 <span style="color: ${color}; font-weight: bold;">[${equip.name}]</span>!`;
 
     } else if (rnd < 50) {
-      // 35% 機率：陷阱 (Trap)
+      // 20% 機率：陷阱 (Trap)
       resultType.value = 'trap';
       const dmg = 10 + (stage * 10);
       resultMsg.value = `咔噠！你觸發了箭矢陷阱！受到 <span style="color: #f56c6c; font-weight: bold;">${dmg}</span> 點傷害`;

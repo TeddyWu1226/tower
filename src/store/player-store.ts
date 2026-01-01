@@ -11,6 +11,7 @@ export const usePlayerStore = defineStore('player-info', () => {
     const info = ref<UserType>(JSON.parse(JSON.stringify(DEFAULT_USER_INFO)));
     const stopValueChangeAnimation = ref<boolean>(false);
     const statusEffects = ref<StatusEffect[]>([]);
+    const skillProficiency = ref<{ [key: string]: number }>({})
 
     // --- Getters ---
     const totalBonus = computed(() => {
@@ -375,6 +376,21 @@ export const usePlayerStore = defineStore('player-info', () => {
     const hasSkill = (skillKey: string): boolean => {
         return info.value.skills.includes(skillKey);
     }
+
+    /**
+     * 技能熟練度
+     * 技能熟練度最高 100
+     */
+
+    const getSkillProficiency = (skillKey: string) => {
+        return skillProficiency.value[skillKey] || 0;
+    }
+    const addSkillProficiency = (skillKey: string, value = 1) => {
+        if ((skillProficiency.value[skillKey] || 0) >= 100) {
+            return
+        }
+        skillProficiency.value[skillKey] = (skillProficiency.value[skillKey] || 0) + value;
+    }
     return {
         info,
         stopValueChangeAnimation,
@@ -386,7 +402,8 @@ export const usePlayerStore = defineStore('player-info', () => {
         addGold,
         addStatus, hasStatus, removeStatus,
         addSkill, removeSkill, replaceSkill, hasSkill,
-        nextTurnStatus, init, healFull
+        nextTurnStatus, init, healFull,
+        addSkillProficiency, getSkillProficiency
     };
 }, {
     persist: {

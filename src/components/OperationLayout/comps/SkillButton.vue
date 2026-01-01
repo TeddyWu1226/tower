@@ -12,8 +12,10 @@ const props = defineProps({
 const playerStore = usePlayerStore();
 const skill = computed<SkillType>(() => Skills[props.skillKey]);
 
+const proficiency = computed(() => playerStore.getSkillProficiency(skill.value.id));
 // 判斷是否可用
 const canAfford = computed(() => playerStore.info.sp >= (skill.value?.costSp || 0));
+
 </script>
 
 <template>
@@ -43,6 +45,7 @@ const canAfford = computed(() => playerStore.info.sp >= (skill.value?.costSp || 
         <div class="info-trigger">i</div>
       </template>
       <div class="skill-desc">
+        <div>熟練度: {{ proficiency === 100 ? 'MAX' : proficiency}}</div>
         <div v-html="skill.description({playerStore})"/>
       </div>
     </el-popover>

@@ -7,14 +7,14 @@ export const WizardSkill = {
         id: 'FireBall',
         name: "火球術",
         icon: "⚔️",
-        description: (prop) => {
-            const dmg = 10
+        description: ({playerStore}) => {
+            const dmg = 10 + playerStore.getSkillProficiency('FireBall') * 0.2
             return `對目標丟出一顆火球,造成 ${ColorText.ap(dmg)},有機率造成「燃燒」效果。`;
         },
-        costSp: 20,
+        costSp: 10,
         use: async ({monster, playerStore}) => {
             if (!monster) return false
-            const dmg = 10
+            const dmg = 10 + playerStore.getSkillProficiency('FireBall') * 0.2
             monster.lastDamageResult = applySkillDamage(playerStore.finalStats, monster, dmg, 'ap', '火球術')
             return true
         }
