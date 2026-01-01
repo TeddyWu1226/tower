@@ -63,9 +63,9 @@ export const Boss = {
         icon: '🧝',
         name: '妖精長老',
         description: '此地妖精結界的管理者,時常有護衛在身邊',
-        ad: 10,
+        ad: 8,
         critIncrease: 150,
-        critRate: 20,
+        critRate: 25,
         adDefend: 10,
         dodge: 15,
         hit: 30,
@@ -75,7 +75,7 @@ export const Boss = {
         dropGold: 400,
         onStart: 'fairyKingOnstart',
     } as MonsterType,
-    GuardiansDen: {
+    Twilight: {
         icon: '🐾',
         name: '森林守護者·賽納留斯',
         description: '森林的最終防線，能操縱植物與野獸。',

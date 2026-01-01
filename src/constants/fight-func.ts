@@ -409,12 +409,18 @@ export const spawnMonsters = (
             // 菁英強化
             m.name = `【菁英】${m.name}`;
             m.class = 'elite';
-            m.hpLimit = Math.round(m.hpLimit * 2);
+            m.hpLimit = Math.round(m.hpLimit * 1.5);
             m.hp = m.hpLimit;
-            m.ad = Math.round(m.ad * 2);
-            m.adDefend = Math.round(m.adDefend * 2);
+            m.ad = Math.round(m.ad * 1.5);
+            m.adDefend = Math.round(m.adDefend * 1.5);
             m.dropGold = Math.round((m.dropGold || 10) * 3);
             m.level += 2;
+            // 掉落必掉
+            if (m.drop) {
+                m.drop.forEach((item) => {
+                    item.chance = 1
+                })
+            }
         }
         newMonsters.push(m);
     }

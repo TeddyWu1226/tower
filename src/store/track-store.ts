@@ -25,15 +25,15 @@ export const useTrackerStore = defineStore('tracker', () => {
      */
     function recordKill(monsterName: string, amount: number = 1) {
         // 紀錄擊殺
-        monsterName = monsterName.replace(/^【菁英】/, "")
-        currentKills.value[monsterName] = (currentKills.value[monsterName] || 0) + amount
-        currentKills.value['TOTAL'] = (currentKills.value['TOTAL'] || 0) + amount
-        totalKills.value[monsterName] = (totalKills.value[monsterName] || 0) + amount
-        totalKills.value['TOTAL'] = (totalKills.value['TOTAL'] || 0) + amount
         if (monsterName.startsWith('【菁英】')) {
             currentKills.value['ElITE'] = (currentKills.value['ElITE'] || 0) + amount
             totalKills.value['ElITE'] = (totalKills.value['ElITE'] || 0) + amount
         }
+        const name = monsterName.replace(/^【菁英】/, "")
+        currentKills.value[name] = (currentKills.value[name] || 0) + amount
+        currentKills.value['TOTAL'] = (currentKills.value['TOTAL'] || 0) + amount
+        totalKills.value[name] = (totalKills.value[name] || 0) + amount
+        totalKills.value['TOTAL'] = (totalKills.value['TOTAL'] || 0) + amount
         // 和平重新計算
         achievementsCount.value.peaceDay = 0
         // 武器分類計算

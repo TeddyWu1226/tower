@@ -43,10 +43,10 @@ export const FairyBarrierWeights: Record<string, number> = {
 };
 
 /**
- * 區域 1-5: 守護者巢穴 (GuardiansDen)
+ * 區域 1-5: 暮光之林(Twilight)
  * 特色：Boss 戰前的最後屏障，充滿強敵。
  */
-export const GuardiansDenWeights: Record<string, number> = {
+export const TwilightWeights: Record<string, number> = {
     StingerBee: 10,
     GreenRabbit: 20,
     FairyGuard:30,

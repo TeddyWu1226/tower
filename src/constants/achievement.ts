@@ -60,11 +60,39 @@ const PublicAchievement = {
         description: "有超過 9999 G的金幣在身上",
         isHide: false,
     } as AchievementType,
+    Restart0: {
+        name: "歸來",
+        icon: "🔙",
+        quality: 0,
+        description: "「踏上征途」累計5次",
+        isHide: false,
+    } as AchievementType,
+    Restart1: {
+        description: "「踏上征途」累計20次",
+        icon: "🤔",
+        isHide: false,
+        name: "不死心",
+        quality: 1,
+    } as AchievementType,
+    Restart2: {
+        name: "東巴",
+        icon: "🫃",
+        quality: 3,
+        description: "「踏上征途」累計100次",
+        isHide: false,
+    } as AchievementType,
     Boss0: {
         name: "開始遊戲",
         icon: "🐻",
         quality: 0,
         description: "擊敗「森林守護者」",
+        isHide: false,
+    } as AchievementType,
+    Boss1: {
+        name: "陽光再次照亮森林",
+        icon: "⛅",
+        quality: 2,
+        description: "通關暮光之林",
         isHide: false,
     } as AchievementType,
 }
@@ -85,7 +113,7 @@ const HideAchievement = {
     NewKillWolf: {
         name: "初生之犢不畏狼",
         icon: "🐺",
-        quality: 4,
+        quality: 5,
         description: "在[初始之森]擊敗森林之狼",
         isUnlocked: false,
         isHide: true,

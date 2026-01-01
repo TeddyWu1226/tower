@@ -14,7 +14,7 @@ import {ElMessageBox, ElNotification} from "element-plus";
 import {StageTransition} from "@/components/StageTransition";
 import DeadPage from "@/views/DeadPage.vue";
 import IntroPage from "@/views/IntroPage.vue";
-import AchievementDialog from "@/components/FloorInfoLayout/comps/AchievementDialog.vue";
+import AchievementDialog from "@/components/FloorInfoLayout/comps/AchievementDialog/AchievementDialog.vue";
 
 const gameStateStore = useGameStateStore()
 const isDead = ref(false)

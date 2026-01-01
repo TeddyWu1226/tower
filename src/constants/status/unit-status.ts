@@ -42,10 +42,10 @@ export const UnitStatus = {
 	BeePoison: {
 		name: '中毒',
 		icon: '🤢',
-		duration: 2,
-		description: '每回合失去 5 點生命值',
+		duration: 10,
+		description: '每回合失去 3 點生命值',
 		type: 'damage',
-		value: 5
+		value: 3
 	} as StatusEffect,
 	SpiderStuck: {
 		name: '綑綁',

@@ -9,17 +9,34 @@ import {Usable} from "@/constants/items/usalbe-item/usable-info";
 import {Skills} from "@/constants/skill/skill";
 import {SpecialEventEnum} from "@/enums/enums";
 import {RoomEnum} from "@/enums/room-enum";
+import {Weapon} from "@/constants/items/equipment/weapon-info";
+import {Head} from "@/constants/items/equipment/head-info";
+import {Armor} from "@/constants/items/equipment/armor-info";
+import {Offhand} from "@/constants/items/equipment/offhand-info";
 
 const gameStateStore = useGameStateStore()
 const playerStore = usePlayerStore()
 const isClose = ref(true);
 
 const onTest = () => {
+
+  playerStore.addGold(1000)
+  playerStore.gainItem(Potions.Heal1)
+  playerStore.gainItem(Potions.Heal1)
+  playerStore.gainItem(Potions.Heal1)
+  playerStore.gainItem(Potions.Heal1)
+  playerStore.gainItem(Potions.Heal1)
+
+
   gameStateStore.currentStage = 4
 }
 const addEquipment = () => {
   playerStore.gainItem(Accessory1.SoulAnchor)
   // playerStore.gainItem(Usable.GodLuckLeaf)
+  playerStore.gainItem(Weapon.Sword0)
+  playerStore.gainItem(Head.HpHead1)
+  playerStore.gainItem(Armor.Armor0)
+  playerStore.gainItem(Offhand.Shield0)
 }
 const heal = () => {
   playerStore.healFull()

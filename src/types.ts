@@ -5,6 +5,8 @@ import {MonsterOnAttacked} from "@/constants/monsters/monster-action/on-attacked
 import {useGameStateStore} from "@/store/game-state-store";
 import {usePlayerStore} from "@/store/player-store";
 import {useLogStore} from "@/store/log-store";
+import {useTrackerStore} from "@/store/track-store";
+import {useAchievementStore} from "@/store/achievement-store";
 
 /**
  * 物品相關
@@ -201,16 +203,17 @@ export interface StatusEffect {
     value?: number; // 每回合跳血/回血的數值
 }
 
-type GameStateStore = ReturnType<typeof useGameStateStore>;
-type PlayerStore = ReturnType<typeof usePlayerStore>;
-type logStore = ReturnType<typeof useLogStore>;
-
+export type GameStateStoreType = ReturnType<typeof useGameStateStore>;
+export type PlayerStoreType = ReturnType<typeof usePlayerStore>;
+export type logStoreType = ReturnType<typeof useLogStore>;
+export type TrackerStoreType = ReturnType<typeof useTrackerStore>;
+export type AchievementStoreType = ReturnType<typeof useAchievementStore>;
 //
 export interface MonsterActionParams {
     monster?: MonsterType;
-    playerStore?: PlayerStore;
-    gameStateStore?: GameStateStore
-    logStore?: logStore;
+    playerStore?: PlayerStoreType;
+    gameStateStore?: GameStateStoreType
+    logStore?: logStoreType;
     damage?: BattleOutcome; // onAttack 沒有傳這值
     targetElement?: HTMLElement
 }
@@ -218,9 +221,9 @@ export interface MonsterActionParams {
 export interface MonsterOnAttackParams {
     monster?: MonsterType;
     monsterIndex?: number;
-    playerStore?: PlayerStore;
-    gameStateStore?: GameStateStore
-    logStore?: logStore;
+    playerStore?: PlayerStoreType;
+    gameStateStore?: GameStateStoreType
+    logStore?: logStoreType;
     damage?: BattleOutcome; // onAttack 沒有傳這值
     targetElement?: HTMLElement
 }
@@ -228,8 +231,8 @@ export interface MonsterOnAttackParams {
 
 // 物品使用觸發
 export interface NoneMonsterItemSkillParams {
-    playerStore?: PlayerStore;
-    gameStateStore?: GameStateStore
+    playerStore?: PlayerStoreType;
+    gameStateStore?: GameStateStoreType
     callback: (result: boolean) => void
     targetElement?: HTMLElement
 }
@@ -237,8 +240,8 @@ export interface NoneMonsterItemSkillParams {
 export interface SpecifyMonsterItemSkillParams {
     monster?: MonsterType;
     monsterIndex?: number;
-    playerStore?: PlayerStore;
-    gameStateStore?: GameStateStore
+    playerStore?: PlayerStoreType;
+    gameStateStore?: GameStateStoreType
     callback: (result: boolean) => void
     targetElement?: HTMLElement
 }
@@ -266,12 +269,12 @@ export interface SkillParams {
     monster?: MonsterType;
     monsterIndex?: number;
     targetElement?: HTMLElement // 怪物的 html元素
-    playerStore?: PlayerStore;
-    gameStateStore?: GameStateStore
+    playerStore?: PlayerStoreType;
+    gameStateStore?: GameStateStoreType
 }
 
 export interface SkillDescriptionParams {
-    playerStore?: PlayerStore;
+    playerStore?: PlayerStoreType;
 }
 
 export interface SkillType {

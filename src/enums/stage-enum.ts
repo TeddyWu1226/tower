@@ -4,7 +4,7 @@ export const StageEnum = {
     SunkenGrove: {value: 2, label: '下沉樹叢區🍃'},
     AncientRoots: {value: 3, label: '古老樹根地🕸️'},
     FairyBarrier: {value: 4, label: '妖精結界🧚'},
-    GuardiansDen: {value: 5, label: '森林守護者巢穴🐾'},
+    Twilight: {value: 5, label: '暮光之林⛅'},
 
     // --- 區域 2: 灼熱沙漠 (Scorched Sands) ---
     ScorchingDunes: {value: 6, label: '炙熱沙丘🏜️'},
