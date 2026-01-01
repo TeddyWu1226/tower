@@ -3,7 +3,7 @@ import './event-room.css'
 import {useGameStateStore} from "@/store/game-state-store";
 import {usePlayerStore} from "@/store/player-store";
 import EventTemplate from "@/components/RoomLayout/event/EventTemplate.vue";
-import {ref} from "vue";
+import {computed, ref} from "vue";
 import {GameState} from "@/enums/enums";
 import {ElMessage} from "element-plus";
 import {useTrackerStore} from "@/store/track-store";
@@ -20,7 +20,22 @@ const betAmount = ref(0);
 const diceResult = ref(1);
 const isWin = ref(false);
 const isRolling = ref(false);
-
+const GambleValues = [2500, 2000, 1500, 1000, 500, 250, 150, 100, 50]
+const availablePrices = computed(() => {
+  let a = []
+  GambleValues.forEach((value) => {
+    if (a.length === 2) {
+      return
+    }
+    if (playerStore.info.gold > value) {
+      a.push(value)
+    }
+  })
+  if (a.length < 2) {
+    a = [100, 50]
+  }
+  return a
+})
 const onCancel = () => {
   gameStateStore.eventAction = 2;
   // 延遲一段時間後切換房間狀態，讓玩家看完對話
@@ -121,11 +136,11 @@ const startGamble = (amount: number) => {
 
       <template v-else-if="gameStateStore.eventAction === 1">
         <el-button
-            type="warning" @click="startGamble(50)" :disabled="isRolling">
-          50 G
+            type="warning" @click="startGamble(availablePrices[1])" :disabled="isRolling">
+          {{ availablePrices[1] }} G
         </el-button>
-        <el-button type="warning" @click="startGamble(100)" :disabled="isRolling">
-          100 G
+        <el-button type="warning" @click="startGamble(availablePrices[0])" :disabled="isRolling">
+          {{ availablePrices[0] }} G
         </el-button>
         <el-button type="info" @click="gameStateStore.eventAction = 0" :disabled="isRolling">
           再想想
