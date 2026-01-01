@@ -280,11 +280,11 @@ const onSkill = async (skillKey: string) => {
       isUsing.value = false
       return
     }
-    if (useSkill.costSp) {
+    if (useSkill?.costSp) {
       const newSP = playerStore.info.sp - useSkill.costSp;
       playerStore.info.sp = Math.max(0, newSP)
     }
-    if (useSkill.costHp) {
+    if (useSkill?.costHp) {
       const newHP = playerStore.info.hp - useSkill.costHp;
       playerStore.info.hp = Math.max(0, newHP)
     }

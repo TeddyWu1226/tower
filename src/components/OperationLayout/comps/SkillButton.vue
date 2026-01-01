@@ -20,7 +20,7 @@ const canAfford = computed(() => playerStore.info.sp >= (skill.value?.costSp || 
   <div class="skill-container">
     <el-button
         class="skill-btn"
-        :type="!canAfford ? 'info' : skill.costHp?'danger':'primary'"
+        :type="!canAfford ? 'info' : skill?.costHp?'danger':'primary'"
         :disabled="!canAfford"
         plain
         @click="emit('click')"
