@@ -317,7 +317,8 @@ export function applyRandomFloatAndRound(baseValue: number, minRate = 0.8, maxRa
 }
 
 
-export function escapePercent(runner: UnitType, chasers: UnitType[]): number {
+export function escapePercent(runner: UnitType, chasers: UnitType[], isInBoss = false): number {
+
 
     // 確保追擊方陣列非空
     if (!chasers || chasers.length === 0) {
@@ -344,8 +345,10 @@ export function escapePercent(runner: UnitType, chasers: UnitType[]): number {
     const levelModifier = levelDifference * LEVEL_WEIGHT;
 
     // 閃避值加強
-
-    const dodgeIncrease = (runner.dodge + (runner.runIncrease || 0)) * 0.2;
+    let dodgeIncrease = (runner.dodge + (runner.runIncrease || 0)) * 0.2;
+    if (isInBoss) {
+        dodgeIncrease -= 200
+    }
 
     // 最終計算的理論成功率
     let finalChance = BASE_CHANCE + levelModifier + dodgeIncrease;
@@ -362,16 +365,17 @@ export function escapePercent(runner: UnitType, chasers: UnitType[]): number {
  * 追擊方為 UnitType 陣列，取平均等級作為追擊難度。
  * @param runner 逃跑方 (嘗試逃離的單位)
  * @param chasers 追擊方陣列 (嘗試阻止逃跑的單位，敵人陣列)
+ * @param isInBoss
  * @returns boolean - true 表示逃跑成功
  */
-export function canEscape(runner: UnitType, chasers: UnitType[]): boolean {
+export function canEscape(runner: UnitType, chasers: UnitType[], isInBoss = false): boolean {
     // 確保追擊方陣列非空
     if (!chasers || chasers.length === 0) {
         console.warn("追擊方陣列為空，逃跑自動成功。");
         return true;
     }
     // 計算成功率
-    const finalChance = escapePercent(runner, chasers)
+    const finalChance = escapePercent(runner, chasers, isInBoss)
     // --- 隨機判定 ---
 
     // 生成一個 0 到 100 之間的隨機數
@@ -409,9 +413,9 @@ export const spawnMonsters = (
             // 菁英強化
             m.name = `【菁英】${m.name}`;
             m.class = 'elite';
-            m.hpLimit = Math.round(m.hpLimit * 1.5);
+            m.hpLimit = Math.round(m.hpLimit * 2);
             m.hp = m.hpLimit;
-            m.ad = Math.round(m.ad * 1.5);
+            m.ad = Math.round(m.ad * 2);
             m.adDefend = Math.round(m.adDefend * 1.5);
             m.dropGold = Math.round((m.dropGold || 10) * 3);
             m.level += 2;

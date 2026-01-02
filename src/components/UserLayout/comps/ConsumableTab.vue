@@ -11,14 +11,23 @@ const playerStore = usePlayerStore()
 const emit = defineEmits(['onItemSkill'])
 
 const aggregatedConsumables = computed(() => {
+  const consumeItems = playerStore.info.consumeItems || [];
   const map = new Map<string, { item: UsableType; count: number }>();
-  playerStore.info.consumeItems?.forEach((item) => {
+
+  consumeItems.forEach((item) => {
     const key = item.name;
-    const entry = map.get(key) || {item: {...item}, count: 0};
+    const entry = map.get(key) || {item, count: 0}; // 這裡直接引用 item 即可，減少解構開銷
     entry.count++;
     map.set(key, entry);
   });
-  return Array.from(map.values()).sort((a, b) => (b.item.quality || 0) - (a.item.quality || 0));
+
+  return Array.from(map.values()).sort((a, b) => {
+    // 1. 第一優先：品質 (由高到低)
+    const qualityDiff = (b.item.quality || 0) - (a.item.quality || 0);
+
+    // 2. 第二優先：名稱 (由小到大，字典序)
+    return qualityDiff || a.item.name.localeCompare(b.item.name, 'zh-Hans-CN');
+  });
 });
 
 const handleUse = async (item: UsableType, event?: MouseEvent) => {
@@ -77,6 +86,7 @@ const onTouchHandleUse = createDoubleTapHandler((potion: UsableType, event?: any
               </b>
               <p class="desc">{{ entry.item.description }}</p>
               <span v-if="entry.item.heal" class="effect-text">❤️ 回復生命: {{ entry.item.heal }}</span>
+              <span v-if="entry.item.magic" class="effect-text">✨ 回復法力: {{ entry.item.magic }}</span>
             </div>
           </template>
           <div class="icon-wrapper" :style="{borderColor:getEnumColumn(QualityEnum,entry.item.quality,'color')}">

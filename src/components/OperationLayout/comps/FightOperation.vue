@@ -6,6 +6,7 @@ import {escapePercent} from "@/constants/fight-func";
 import {useGameStateStore} from "@/store/game-state-store";
 import {usePlayerStore} from "@/store/player-store";
 import SkillButton from "@/components/OperationLayout/comps/SkillButton.vue";
+import {RoomEnum} from "@/enums/room-enum";
 
 const gameStateStore = useGameStateStore()
 const playerStore = usePlayerStore()
@@ -18,7 +19,7 @@ const changeStatus = (value: operationStatusEnum = operationStatusEnum.Default):
   Operation.value.current = value
 }
 /**逃跑機率**/
-const escapeRate = computed((): number => escapePercent(playerStore.finalStats, gameStateStore.currentEnemy))
+const escapeRate = computed((): number => escapePercent(playerStore.finalStats, gameStateStore.currentEnemy, gameStateStore.roomIs(RoomEnum.Boss.value)))
 
 watch(
     () => gameStateStore.days,

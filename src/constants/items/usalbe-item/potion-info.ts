@@ -36,7 +36,7 @@ const Magic = {
         description: '感覺放了很久，只能稍微提神。',
         icon: '🍷',
         quality: 0,
-        magic: 10,
+        magic: 15,
         usable: true
     } as UsableType,
     Magic1: {
@@ -44,7 +44,7 @@ const Magic = {
         description: '淡淡的藍色液體。',
         icon: '🍷',
         quality: 1,
-        magic: 20,
+        magic: 30,
         usable: true
     } as UsableType,
     Magic2: {
@@ -52,7 +52,7 @@ const Magic = {
         description: '精煉過的魔力液體，恢復感極強。',
         icon: '🍷',
         quality: 2,
-        magic: 50
+        magic: 60
     } as UsableType,
 };
 

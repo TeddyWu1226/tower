@@ -8,6 +8,7 @@ import {getRandomLabelByWeight} from "@/utils/create";
 import {DEFAULT_ROOM_WEIGHTS, EAST_ROOM_WEIGHTS, NORMAL_ROOM_WEIGHTS} from "@/constants/default-const";
 import {useTrackerStore} from "@/store/track-store";
 import {DifficultyEnum} from "@/enums/difficulty-enum";
+import {SpecialItem} from "@/constants/items/special-item-info";
 
 const props = defineProps({
   disabled: Boolean,
@@ -37,6 +38,7 @@ const selectRoom = (roomValue: number) => {
 };
 
 const goNextStage = () => {
+  playerStore.info.items = playerStore.info.items.filter(item => item.name !== SpecialItem.PauseToken.name)
   playerStore.healFull()
   trackerStore.init(false)
   gameStateStore.init(gameStateStore.currentStage + 1)

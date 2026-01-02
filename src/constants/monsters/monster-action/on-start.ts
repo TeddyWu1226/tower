@@ -86,6 +86,6 @@ export const MonsterOnStart: Record<string, (params: MonsterActionParams) => voi
 		gameStateStore.currentEnemy.push(create(MistyForestMonster.FairyGuard))
 	},
 	twilightOnStart: ({playerStore, gameStateStore, targetElement}) => {
-		useEpicSubtitle("「餘暉已候多時，只為繼續沈溺在這曲不停的舞。而你,蟲子，太吵了。」", 4000);
+		useEpicSubtitle("「餘暉已候多時，只為繼續沈溺在這曲無盡的舞。而你－－蟲子，太吵了。」", 4000);
 	}
 };

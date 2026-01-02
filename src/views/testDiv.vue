@@ -14,9 +14,11 @@ import {Head} from "@/constants/items/equipment/head-info";
 import {Armor} from "@/constants/items/equipment/armor-info";
 import {Offhand} from "@/constants/items/equipment/offhand-info";
 import {SpecialItem} from "@/constants/items/special-item-info";
+import {useSaveStore} from "@/store/save-store";
 
 const gameStateStore = useGameStateStore()
 const playerStore = usePlayerStore()
+const saveStore = useSaveStore()
 const isClose = ref(true);
 
 const onTest = () => {
@@ -47,6 +49,9 @@ const setRoom = () => {
   gameStateStore.nextRooms = [RoomEnum.Fight.value, RoomEnum.EliteFight.value,
     RoomEnum.Shop.value, RoomEnum.Rest.value, RoomEnum.Event.value]
 }
+const onSave = ()=>{
+  saveStore.saveAll()
+}
 </script>
 
 <template>
@@ -57,6 +62,7 @@ const setRoom = () => {
       <el-button @click="heal">回滿血</el-button>
       <el-button @click="onTest">測試</el-button>
       <el-button @click="setRoom">房間設定</el-button>
+      <el-button @click="onSave">存檔</el-button>
       <el-collapse>
         <el-collapse-item title="回合環境參數">
           <p v-for="key in Object.keys(gameStateStore.$state)">

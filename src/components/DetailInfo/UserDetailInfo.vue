@@ -60,57 +60,61 @@ const onTouchUnequip = createDoubleTapHandler((slotKey: keyof Equipment) => {
       @mousedown.stop="handleStart"
       @touchstart.stop="handleStart"
   >
-    <div class="icon-inner">{{ playerStore.info.icon }}</div>
-
-    <el-dialog
-        v-model="isShowStats"
-        :title="`角色狀態 (${getEnumColumn(CharEnum,playerStore.info.char)})`"
-        class="user-detail"
-        append-to-body
-    >
-      <div class="stats-container">
-        <div class="stats-grid">
-          <div v-for="stat in StatEnum" :key="stat.value" class="stat-item">
-            {{ stat.icon }} {{ stat.label }}:
-            {{ playerStore.finalStats[stat.value] }}
-            <template v-if="(stat as any)?.maxKey">
-              / {{ playerStore.finalStats[(stat as any)?.maxKey] }}
-            </template>
-            {{ stat.unit }}
-          </div>
-        </div>
-
-        <el-divider>當前裝備</el-divider>
-
-        <div class="equipment-slots">
-          <div
-              v-for="pos in EquipmentEnum"
-              class="equip-slot"
-              :style="{ borderColor: getBackgroundColor(pos.value) }"
-              @dblclick="handleUnequip(pos.value)"
-              @touchend="onTouchUnequip(pos.value)"
-          >
-            <el-tooltip
-                v-if="playerStore.info.equips?.[pos.value as keyof typeof playerStore.info.equips]"
-                effect="light"
-                :disabled="isDragging"
-            >
-              <template #content>
-                <ItemInfo :item="playerStore.info.equips[pos.value as keyof typeof playerStore.info.equips]"/>
-                <div style="font-size: 0.8rem; color: #999; text-align: center; margin-top: 5px;min-width: 10rem">
-                  ( 雙擊卸下裝備 )
-                </div>
-              </template>
-              <span class="equip-item-icon">
-                {{ playerStore.info.equips[pos.value as keyof typeof playerStore.info.equips]?.icon }}
-              </span>
-            </el-tooltip>
-            <span v-else class="equip-placeholder-icon">{{ pos.icon }}</span>
-          </div>
+    <el-progress type="circle" :percentage="playerStore.info.currentExp">
+      <template #default>
+        <span style="font-size: 0.6rem;font-weight: bold">Lv.</span>
+        <span style="font-size: 1rem;font-weight: bold">{{ playerStore.info.level}}</span>
+      </template>
+    </el-progress>
+  </div>
+  <el-dialog
+      v-model="isShowStats"
+      :title="`角色狀態 (${getEnumColumn(CharEnum,playerStore.info.char)})`"
+      class="user-detail"
+      append-to-body
+  >
+    <div class="stats-container">
+      <div class="stats-grid">
+        <div v-for="stat in StatEnum" :key="stat.value" class="stat-item">
+          {{ stat.icon }} {{ stat.label }}:
+          {{ playerStore.finalStats[stat.value] }}
+          <template v-if="(stat as any)?.maxKey">
+            / {{ playerStore.finalStats[(stat as any)?.maxKey] }}
+          </template>
+          {{ stat.unit }}
         </div>
       </div>
-    </el-dialog>
-  </div>
+
+      <el-divider>當前裝備</el-divider>
+
+      <div class="equipment-slots">
+        <div
+            v-for="pos in EquipmentEnum"
+            class="equip-slot"
+            :style="{ borderColor: getBackgroundColor(pos.value) }"
+            @dblclick="handleUnequip(pos.value)"
+            @touchend="onTouchUnequip(pos.value)"
+        >
+          <el-tooltip
+              v-if="playerStore.info.equips?.[pos.value as keyof typeof playerStore.info.equips]"
+              effect="light"
+              :disabled="isDragging"
+          >
+            <template #content>
+              <ItemInfo :item="playerStore.info.equips[pos.value as keyof typeof playerStore.info.equips]"/>
+              <div style="font-size: 0.8rem; color: #999; text-align: center; margin-top: 5px;min-width: 10rem">
+                ( 雙擊卸下裝備 )
+              </div>
+            </template>
+            <span class="equip-item-icon">
+                {{ playerStore.info.equips[pos.value as keyof typeof playerStore.info.equips]?.icon }}
+              </span>
+          </el-tooltip>
+          <span v-else class="equip-placeholder-icon">{{ pos.icon }}</span>
+        </div>
+      </div>
+    </div>
+  </el-dialog>
 </template>
 
 <style scoped>
@@ -119,7 +123,6 @@ const onTouchUnequip = createDoubleTapHandler((slotKey: keyof Equipment) => {
   width: 54px;
   height: 54px;
   background: #2c3e50;
-  border: 2px solid #e6a23c;
   border-radius: 50%;
   display: flex;
   justify-content: center;
@@ -131,6 +134,11 @@ const onTouchUnequip = createDoubleTapHandler((slotKey: keyof Equipment) => {
   touch-action: none;
   transition: none;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+:deep(.el-progress-circle) {
+  height: 55px !important;
+  width: 55px !important;
 }
 
 /* 只有在貼邊狀態時才啟用平滑動畫 */

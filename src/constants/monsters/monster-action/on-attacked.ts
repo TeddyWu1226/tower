@@ -23,7 +23,7 @@ export const MonsterOnAttacked: Record<string, (params: MonsterActionParams) => 
 		}
 	},
 	twilightOnAttacked: ({monster, playerStore, targetElement, logStore}) => {
-		const chance = 0.3 + (((monster.ad - 10) / 2) * 0.1)
+		const chance = 0.2 + (((monster.ad - 14) / 2) * 0.1)
 		if (checkProbability(chance)) {
 			// 使攻擊者中毒
 			playerStore.gainItem(SpecialItem.PauseToken)

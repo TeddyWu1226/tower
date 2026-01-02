@@ -61,6 +61,7 @@ watch(
     () => [
       trackerStore.currentKills,
       trackerStore.totalKills,
+      trackerStore.achievementsCount,
       playerStore.info,
       gameStateStore.isBattleWon,
       achievementStore.tryTime
@@ -73,7 +74,7 @@ watch(
             trackerStore: trackerStore,
             playerStore: playerStore,
             gameStateStore: gameStateStore,
-            achievementStore:achievementStore
+            achievementStore: achievementStore
           }
       );
 

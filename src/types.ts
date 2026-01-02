@@ -125,6 +125,7 @@ export interface UserType extends UnitType {
     equipments?: EquipmentType[] // 裝備
     consumeItems?: (ItemType | UsableType)[] // 消耗品
     skills: string[] // 技能ID列
+    currentExp?: number
 }
 
 

@@ -8,8 +8,8 @@ import {MATERIAL} from "@/constants/items/material-info";
 export const EndLessMonster = {
     AngelGuard: {
         icon: '👼',
-        name: '座天使守衛',
-        description: '守護神域邊境的戰士，金屬羽翼能切開一切凡間武裝',
+        name: '[無盡的]天使',
+        description: '存在於虛無夾縫的天使，金屬羽翼能切開一切凡間武裝',
         ad: 45,
         critIncrease: 100,
         critRate: 15,
@@ -24,8 +24,8 @@ export const EndLessMonster = {
 
     HighPriest: {
         icon: '🧙‍♂️',
-        name: '墮落神官',
-        description: '曾侍奉神靈，如今卻在廢墟中低語著禁忌的咒文',
+        name: '[無盡的]墮落神官',
+        description: '曾侍奉神靈的神職者，如今卻在無盡的虛空中低語著禁忌的咒文',
         ad: 35,
         critIncrease: 150,
         critRate: 10,
@@ -41,7 +41,7 @@ export const EndLessMonster = {
     // 2. 深淵系 - 高爆發 / 詛咒 / 剝奪
     DemonInquisitor: {
         icon: '⚖️',
-        name: '惡魔審判者',
+        name: '[無盡的]惡魔審判者',
         description: '手中的天平只衡量靈魂的重量，判定為「罪人」者將被業火焚燒',
         ad: 65, // 極高攻擊
         critIncrease: 250,
@@ -58,8 +58,8 @@ export const EndLessMonster = {
     // 3. 魔王級別 - 全方位壓制
     Monday: {
         icon: '🦋🦋🦋',
-        name: '七日之一：曼蝶',
-        description: '上帝最強大的手下-七日之一',
+        name: '七日：曼蝶',
+        description: '神最強大的手下之一',
         ad: 120,
         critIncrease: 300,
         critRate: 35,

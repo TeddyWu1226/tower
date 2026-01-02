@@ -63,10 +63,12 @@ const startGamble = (amount: number) => {
       playerStore.addGold(betAmount.value); // 贏了獲得一倍
       finalText.value = `大成功！贏得了 ${betAmount.value} 金幣!`
       trackerStore.achievementsCount.gambleWin += 1
+      trackerStore.achievementsCount.gambleLose = 0
     } else {
       playerStore.addGold(-betAmount.value); // 輸了扣除金額
       finalText.value = `運氣不太好... 輸掉了 ${betAmount.value} 金幣...`
       trackerStore.achievementsCount.gambleWin = 0
+      trackerStore.achievementsCount.gambleLose += 1
     }
     isRolling.value = false
     gameStateStore.eventAction = 3; // 顯示結果對話

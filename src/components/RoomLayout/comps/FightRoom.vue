@@ -138,6 +138,8 @@ const monsterMove = () => {
 const whenMonsterDead = (selectedMonster: MonsterType) => {
   // 紀錄擊殺
   trackStore.recordKill(selectedMonster.name)
+  // 經驗取得
+  playerStore.gainExp({monsterLevel: selectedMonster.level})
   // 掉落金幣
   const dropMoney = applyRandomFloatAndRound(selectedMonster.dropGold ?? 0)
   playerStore.addGold(dropMoney)
@@ -151,7 +153,7 @@ const whenMonsterDead = (selectedMonster: MonsterType) => {
   });
   // 特殊掉落道具
   if (gameStateStore.currentStage === 5 && !playerStore.hasItem(SpecialItem.TwilightKey.name)[0] && gameStateStore.currentRoomValue !== RoomEnum.Boss.value) {
-    const percent = 0.1 + (gameStateStore.days * 0.01)
+    const percent = 0.05 + (gameStateStore.days * 0.01)
     if (checkProbability(percent)) {
       playerStore.gainItem(SpecialItem.TwilightKey);
       monsterDropItems.value.push(SpecialItem.TwilightKey)
@@ -307,7 +309,7 @@ const onSkill = async (skillKey: string) => {
 // 逃跑
 const isEscape = ref(false)
 const onRun = () => {
-  if (isPlayerStuck() || !canEscape(playerStore.finalStats, gameStateStore.currentEnemy)) {
+  if (isPlayerStuck() || !canEscape(playerStore.finalStats, gameStateStore.currentEnemy, gameStateStore.roomIs(RoomEnum.Boss.value))) {
     emit('runFailed', true)
     monsterMove()
     gameStateStore.tickAllMonsters()

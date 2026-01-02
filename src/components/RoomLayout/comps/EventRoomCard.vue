@@ -34,9 +34,6 @@ const EVENT_CONFIG = [
   {
     type: SpecialEventEnum.JobWarrior, // 劍士轉職事件
     canAppear: () => {
-      if (gameStateStore.currentStage < 1) {
-        return false
-      }
       if (playerStore.info.char !== CharEnum.Beginner.value) {
         return false;
       }
@@ -49,7 +46,7 @@ const EVENT_CONFIG = [
       if (playerStore.info.char !== CharEnum.Beginner.value) {
         return false;
       }
-      return playerStore.finalStats.apIncrease > 0
+      return playerStore.finalStats.apIncrease > 10
     }
   }
 ];

@@ -36,7 +36,7 @@ watch(
         if (playerStore.hasItem(Usable.GodStar.name)[0]) {
           playerStore.healFull()
           playerStore.removeItem(Usable.GodStar.name)
-          showEffect(cardRef.value.$el, "🪽女神光輝的壟罩🪽", "fullscreen")
+          showEffect(cardRef.value.$el, "🪽神聖光芒的庇護🪽", "fullscreen")
           return;
         }
         emit('playerDead', true)

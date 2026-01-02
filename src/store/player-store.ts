@@ -9,6 +9,7 @@ const MAX_SKILLS = 5
 export const usePlayerStore = defineStore('player-info', () => {
     // --- State ---
     const info = ref<UserType>(JSON.parse(JSON.stringify(DEFAULT_USER_INFO)));
+    const pendingLevelUpRewards = ref(0); // 升級獎勵次數
     const stopValueChangeAnimation = ref<boolean>(false);
     const statusEffects = ref<StatusEffect[]>([]);
     const skillProficiency = ref<{ [key: string]: number }>({})
@@ -252,6 +253,7 @@ export const usePlayerStore = defineStore('player-info', () => {
      */
     const init = () => {
         info.value = JSON.parse(JSON.stringify(DEFAULT_USER_INFO));
+        pendingLevelUpRewards.value = 0; // 增加待領取次數
         statusEffects.value = []
     };
 
@@ -381,7 +383,6 @@ export const usePlayerStore = defineStore('player-info', () => {
      * 技能熟練度
      * 技能熟練度最高 100
      */
-
     const getSkillProficiency = (skillKey: string) => {
         return skillProficiency.value[skillKey] || 0;
     }
@@ -391,8 +392,40 @@ export const usePlayerStore = defineStore('player-info', () => {
         }
         skillProficiency.value[skillKey] = (skillProficiency.value[skillKey] || 0) + value;
     }
+    /**
+     * 等級提升(每階100點)
+     * 等差>=1 : 10, >=2 以上 每等額外+10
+     */
+    const gainExp = (source: { monsterLevel?: number; amount?: number }) => {
+        if (source.monsterLevel) {
+            const levelDiff = source.monsterLevel - info.value.level;
+            // 1. 基礎判斷：如果等級低於自身，不獲得經驗
+            if (levelDiff < -1) {
+                return;
+            }
+            let earnedExp: number
+            if (levelDiff === -1) {
+                earnedExp = 2;
+            } else {
+                earnedExp = 10 + (levelDiff * 10);
+            }
+            // 3. 增加經驗
+            info.value.currentExp += earnedExp;
+        } else {
+            info.value.currentExp += (source.amount || 0);
+        }
+
+
+        // 4. 固定 100 經驗升等，使用 while 處理可能跨級的情況
+        while (info.value.currentExp >= 100) {
+            info.value.currentExp -= 100;
+            info.value.level += 1;
+            pendingLevelUpRewards.value += 1
+        }
+    };
     return {
         info,
+        pendingLevelUpRewards,
         stopValueChangeAnimation,
         totalBonus,
         finalStats,
@@ -403,7 +436,8 @@ export const usePlayerStore = defineStore('player-info', () => {
         addStatus, hasStatus, removeStatus,
         addSkill, removeSkill, replaceSkill, hasSkill,
         nextTurnStatus, init, healFull,
-        addSkillProficiency, getSkillProficiency
+        addSkillProficiency, getSkillProficiency,
+        gainExp
     };
 }, {
     persist: {

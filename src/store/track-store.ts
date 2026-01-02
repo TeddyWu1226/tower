@@ -14,6 +14,8 @@ export const useTrackerStore = defineStore('tracker', () => {
         // 和平計算
         peaceDay: 0,
         gambleWin: 0,
+        gambleLose: 0,
+        withOutBless:0
     })
 
     // --- Actions ---

@@ -15,6 +15,7 @@ import {StageTransition} from "@/components/StageTransition";
 import DeadPage from "@/views/DeadPage.vue";
 import IntroPage from "@/views/IntroPage.vue";
 import AchievementDialog from "@/components/FloorInfoLayout/comps/AchievementDialog/AchievementDialog.vue";
+import {LevelUpReward} from "@/components/LevelUpReward";
 
 const gameStateStore = useGameStateStore()
 const isDead = ref(false)
@@ -165,6 +166,7 @@ watch(
       <p>6. 怪物會隨著時間變得更加強大,直到你通過該層層主</p>
     </el-dialog>
     <AchievementDialog v-model="isShowAchievementDialog"/>
+    <LevelUpReward/>
   </el-config-provider>
 </template>
 
@@ -193,7 +195,6 @@ watch(
   font-weight: bold;
   height: 5vh;
 }
-
 
 
 .user-layout {

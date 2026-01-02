@@ -76,11 +76,13 @@ export const ItemSkill: Record<string, (params: NoneMonsterItemSkillParams | Spe
 	usePauseToken: (params: SpecifyMonsterItemSkillParams) => {
 		const {monster, monsterIndex, playerStore, gameStateStore, callback, targetElement} = params;
 		if (monster && monster.name == Boss.Twilight.name) {
-			monster.adDefend += 4
-			if (monster.ad > 0) {
+
+			if (monster.ad > 10) {
 				monster.ad -= 4
+				monster.adDefend -= 4
 			} else {
-				monster.ad = 0
+				monster.ad = 10
+				monster.adDefend = 10
 			}
 
 			showEffect(targetElement, "攻擊節奏減緩了!", "fullscreen")
