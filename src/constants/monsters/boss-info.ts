@@ -21,7 +21,7 @@ export const Boss = {
 		hpLimit: 120,
 		level: 10,
 		dropGold: 100,
-		onStart: 'bearOnstart'
+		onStart: 'bearOnStart'
 	} as MonsterType,
 	SunkenGrove: {
 		icon: '🟣',
@@ -38,7 +38,7 @@ export const Boss = {
 		hpLimit: 200,
 		level: 10,
 		dropGold: 150,
-		onStart: 'poisonSlimeOnstart',
+		onStart: 'poisonSlimeOnStart',
 		onAttack: 'poisonSlimeOnAttack',
 		onAttacked: 'poisonSlimeOnAttacked',
 	} as MonsterType,
@@ -57,7 +57,7 @@ export const Boss = {
 		hpLimit: 300,
 		level: 10,
 		dropGold: 250,
-		onStart: 'spiderOnstart',
+		onStart: 'spiderOnStart',
 		onAttack: 'spiderOnAttack'
 	} as MonsterType,
 	FairyBarrier: {
@@ -74,7 +74,7 @@ export const Boss = {
 		hpLimit: 200,
 		level: 10,
 		dropGold: 300,
-		onStart: 'fairyKingOnstart',
+		onStart: 'fairyKingOnStart',
 	} as MonsterType,
 	Twilight: {
 		icon: '🕺🏼',
@@ -84,15 +84,17 @@ export const Boss = {
 		ad: 10,
 		critIncrease: 100,
 		critRate: 0,
-		adDefend: 15,
+		adDefend: 10,
 		dodge: 10,
 		hit: 30,
-		hp: 300,
-		hpLimit: 300,
+		hp: 400,
+		hpLimit: 400,
 		level: 10,
 		dropGold: 500,
-		onStart: 'twilightOnstart',
-		onAttack: 'twilightOnAttack'
+		onStart: 'twilightOnStart',
+		onDead: 'twilightOnDead',
+		onAttack: 'twilightOnAttack',
+		onAttacked: 'twilightOnAttacked'
 	} as MonsterType,
 	// ==========================================
 	// --- 區域 2: 灼熱沙漠 (Scorched Sands) ---

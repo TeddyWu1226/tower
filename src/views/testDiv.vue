@@ -13,6 +13,7 @@ import {Weapon} from "@/constants/items/equipment/weapon-info";
 import {Head} from "@/constants/items/equipment/head-info";
 import {Armor} from "@/constants/items/equipment/armor-info";
 import {Offhand} from "@/constants/items/equipment/offhand-info";
+import {SpecialItem} from "@/constants/items/special-item-info";
 
 const gameStateStore = useGameStateStore()
 const playerStore = usePlayerStore()
@@ -26,16 +27,16 @@ const onTest = () => {
   playerStore.gainItem(Potions.Heal1)
   playerStore.gainItem(Potions.Heal1)
   playerStore.gainItem(Potions.Heal1)
-
+  playerStore.gainItem(SpecialItem.TwilightKey)
 
   gameStateStore.currentStage = 5
 }
 const addEquipment = () => {
   playerStore.gainItem(Accessory1.SoulAnchor)
   // playerStore.gainItem(Usable.GodLuckLeaf)
-  playerStore.gainItem(Weapon.Sword0)
-  playerStore.gainItem(Head.HpHead1)
-  playerStore.gainItem(Armor.Armor1)
+  playerStore.gainItem(Weapon.Sword1)
+  playerStore.gainItem(Head.HpHead0)
+  playerStore.gainItem(Armor.Armor0)
   playerStore.gainItem(Offhand.Shield1)
 }
 const heal = () => {

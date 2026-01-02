@@ -24,7 +24,7 @@ export const MonsterOnStart: Record<string, (params: MonsterActionParams) => voi
 			}
 		);
 	},
-	evilWoodManOnstart: ({playerStore, targetElement}) => {
+	evilWoodManOnStart: ({playerStore, targetElement}) => {
 		//效果
 		playerStore.addStatus(UnitStatus.EvilWoodManCurse)
 		// 額外動畫演示
@@ -37,7 +37,7 @@ export const MonsterOnStart: Record<string, (params: MonsterActionParams) => voi
 			}
 		);
 	},
-	bearOnstart: ({targetElement}) => {
+	bearOnStart: ({targetElement}) => {
 		// 額外動畫演示
 		useFloatingMessage(
 			'這裡不是你該闖入的地方!',
@@ -48,7 +48,7 @@ export const MonsterOnStart: Record<string, (params: MonsterActionParams) => voi
 			}
 		);
 	},
-	poisonSlimeOnstart: ({playerStore, targetElement}) => {
+	poisonSlimeOnStart: ({playerStore, targetElement}) => {
 		// 額外動畫演示
 		useFloatingMessage(
 			'(有毒的冒泡聲)',
@@ -59,7 +59,7 @@ export const MonsterOnStart: Record<string, (params: MonsterActionParams) => voi
 			}
 		);
 	},
-	spiderOnstart: ({playerStore, targetElement}) => {
+	spiderOnStart: ({playerStore, targetElement}) => {
 		// 額外動畫演示
 		useFloatingMessage(
 			'絲絲絲!',
@@ -72,7 +72,7 @@ export const MonsterOnStart: Record<string, (params: MonsterActionParams) => voi
 		//效果
 		playerStore.addStatus(UnitStatus.SpiderStuck)
 	},
-	fairyKingOnstart: ({playerStore, gameStateStore, targetElement}) => {
+	fairyKingOnStart: ({playerStore, gameStateStore, targetElement}) => {
 		// 額外動畫演示
 		useFloatingMessage(
 			'無理的傢伙!用死謝罪吧!',
@@ -85,7 +85,7 @@ export const MonsterOnStart: Record<string, (params: MonsterActionParams) => voi
 		gameStateStore.currentEnemy.unshift(create(MistyForestMonster.FairyGuard))
 		gameStateStore.currentEnemy.push(create(MistyForestMonster.FairyGuard))
 	},
-	twilightOnstart: ({playerStore, gameStateStore, targetElement}) => {
-		useEpicSubtitle("「餘暉已候多時，只為繼續沈溺在一場不歸的夢。而你，太吵了。」", 4000);
+	twilightOnStart: ({playerStore, gameStateStore, targetElement}) => {
+		useEpicSubtitle("「餘暉已候多時，只為繼續沈溺在這曲不停的舞。而你,蟲子，太吵了。」", 4000);
 	}
 };

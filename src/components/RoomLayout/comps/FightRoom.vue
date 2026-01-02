@@ -23,7 +23,6 @@ import {Boss} from "@/constants/monsters/boss-info";
 import {MonsterOnAttack} from "@/constants/monsters/monster-action/on-attack";
 import {useLogStore} from "@/store/log-store";
 import {MonsterOnStart} from "@/constants/monsters/monster-action/on-start";
-import {MonsterOnAttacked} from "@/constants/monsters/monster-action/on-attacked";
 import {useFloatingMessage} from "@/components/Shared/FloatingMessage/useFloatingMessage";
 import {stageMonsterWeightsMap} from "@/constants/stage-weights";
 import {useTrackerStore} from "@/store/track-store";
@@ -151,7 +150,7 @@ const whenMonsterDead = (selectedMonster: MonsterType) => {
     monsterDropItems.value.push(item)
   });
   // 特殊掉落道具
-  if (gameStateStore.currentStage === 5 && !playerStore.hasItem(SpecialItem.TwilightKey.name)[0]) {
+  if (gameStateStore.currentStage === 5 && !playerStore.hasItem(SpecialItem.TwilightKey.name)[0] && gameStateStore.currentRoomValue !== RoomEnum.Boss.value) {
     const percent = 0.1 + (gameStateStore.days * 0.01)
     if (checkProbability(percent)) {
       playerStore.gainItem(SpecialItem.TwilightKey);
@@ -230,19 +229,6 @@ const onAttack = () => {
     const damageOutput = applyAttackDamage(playerStore.finalStats, selectedMonster);
     const targetElement = monsterCardRefs.value[selectedMonsterIndex.value];
     selectedMonster.lastDamageResult = damageOutput
-    if (damageOutput.isHit) {
-      // 若怪物受到傷害觸發
-      if (selectedMonster.onAttacked && MonsterOnAttacked[selectedMonster.onAttacked]) {
-        MonsterOnAttacked[selectedMonster.onAttacked]({
-          monster: selectedMonster,
-          gameStateStore: gameStateStore,
-          playerStore: playerStore,
-          targetElement: targetElement.$el,
-          logStore: logStore,
-          damage: damageOutput,
-        });
-      }
-    }
   }
 
   // 檢查怪物是否死亡

@@ -20,7 +20,7 @@ export const SpecialBoss = {
         hpLimit: 50,
         level: 10,
         dropGold: 0,
-        onStart: 'evilWoodManOnstart',
+        onStart: 'evilWoodManOnStart',
         drop: [
             {item: Accessory1.CursedWoodenRing, chance: 1}
         ],
