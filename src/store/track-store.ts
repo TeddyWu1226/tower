@@ -28,8 +28,8 @@ export const useTrackerStore = defineStore('tracker', () => {
     function recordKill(monsterName: string, amount: number = 1) {
         // 紀錄擊殺
         if (monsterName.startsWith('【菁英】')) {
-            currentKills.value['ElITE'] = (currentKills.value['ElITE'] || 0) + amount
-            totalKills.value['ElITE'] = (totalKills.value['ElITE'] || 0) + amount
+            currentKills.value['ELITE'] = (currentKills.value['ELITE'] || 0) + amount
+            totalKills.value['ELITE'] = (totalKills.value['ELITE'] || 0) + amount
         }
         const name = monsterName.replace(/^【菁英】/, "")
         currentKills.value[name] = (currentKills.value[name] || 0) + amount

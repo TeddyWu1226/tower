@@ -95,30 +95,41 @@ export const usePlayerStore = defineStore('player-info', () => {
         return [count >= amount, count]
     };
     /**
-     * 移除指定名稱的道具 (每次只移除 1 個)
+     * 移除指定名稱的道具
      * @param itemName 道具名稱
-     * @param amount 要移除的個數
+     * @param amount 要移除的個數，傳入 -1 則移除所有同名道具
      */
     const removeItem = (itemName: string, amount: number = 1): boolean => {
-        if (!hasItem(itemName, amount)[0]) return false;
+        // 如果不是全刪 (-1)，則先檢查數量是否足夠
+        if (amount !== -1 && !hasItem(itemName, amount)[0]) {
+            return false;
+        }
 
+        const isRemoveAll = amount === -1;
         let removedCount = 0;
-        // 定義搜尋順序
         const bagKeys: ('consumeItems' | 'items' | 'equipments')[] = ['consumeItems', 'items', 'equipments'];
 
         for (const key of bagKeys) {
             const bag = info.value[key];
             if (!bag) continue;
-            // 從後往前搜尋，方便刪除
+
+            // 從後往前搜尋，避免 splice 導致的索引偏移問題
             for (let i = bag.length - 1; i >= 0; i--) {
                 if (bag[i] && bag[i].name === itemName) {
-                    bag.splice(i, 1); // 找到一個，刪除一個
+                    bag.splice(i, 1);
                     removedCount++;
-                    if (removedCount >= amount) return true; // 達到目標數量，提前結束
+
+                    // 如果不是全刪模式，且達到目標數量，則完成任務
+                    if (!isRemoveAll && removedCount >= amount) {
+                        return true;
+                    }
                 }
             }
         }
-        return removedCount >= amount;
+
+        // 全刪模式下，只要有刪除到東西（或是名稱不存在）就回傳 true
+        // 非全刪模式下，檢查最後刪除總數是否達標
+        return isRemoveAll ? true : removedCount >= amount;
     };
     /**
      * 獲得物品 (存入 items 背包)
@@ -351,7 +362,7 @@ export const usePlayerStore = defineStore('player-info', () => {
         if (info.value.sp < finalStats.value.spLimit) {
             info.value.sp = finalStats.value.spLimit
         }
-        statusEffects.value = statusEffects.value.filter(effect => effect.isBuff)
+        statusEffects.value = statusEffects.value.filter(effect => effect.isBuff || effect.duration === -1)
     }
 
     const addSkill = (skillKey: string) => {
@@ -425,7 +436,7 @@ export const usePlayerStore = defineStore('player-info', () => {
         }
     };
     return {
-        info,
+        info, skillProficiency,
         pendingLevelUpRewards, remainingLevelUpRewards,
         stopValueChangeAnimation,
         totalBonus,

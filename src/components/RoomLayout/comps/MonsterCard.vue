@@ -126,20 +126,24 @@ watch(() => props.info.lastDamageResult, (newResult) => {
           <span>死亡</span>
         </el-col>
       </el-row>
-      <el-row v-else style="width: 100%" justify="center">
+      <el-row v-else style="width: 100%" justify="space-between">
         <el-col style="text-align: center;font-size: 2rem" :span="24">
           <span class="monster-icon">{{ props.info.icon }}</span>
         </el-col>
         <el-col style="text-align: center;" :span="24">
           <span class="monster-name">{{ props.info.name }}</span>
         </el-col>
-        <el-col :span="12" :class="valueClass('ad')">
+        <el-col :span="8" :class="valueClass('ad')">
           <span>⚔️</span>
           <span>{{ finalStats.ad }}</span>
         </el-col>
-        <el-col :span="12" :class="valueClass('adDefend')">
+        <el-col :span="8" :class="valueClass('adDefend')">
           <span>🛡️</span>
           <span>{{ finalStats.adDefend }}</span>
+        </el-col>
+        <el-col v-if="finalStats.apDefend" :span="8" :class="valueClass('apDefend')">
+          <span>🌐</span>
+          <span>{{ finalStats.apDefend }}</span>
         </el-col>
         <el-col :span="24">
           <HpProgress :current-value="props.info.hp" :total-value="finalStats.hpLimit"/>

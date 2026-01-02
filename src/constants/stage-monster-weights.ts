@@ -37,7 +37,7 @@ export const FairyBarrierWeights: Record<string, number> = {
     StingerBee: 10,
     ForestOwl: 20,
     GreenRabbit: 30,
-    FairyGuard:20,
+    FairyGuard: 20,
     FierceWolf: 5,
 
 };
@@ -49,10 +49,22 @@ export const FairyBarrierWeights: Record<string, number> = {
 export const TwilightWeights: Record<string, number> = {
     StingerBee: 20,
     GreenRabbit: 20,
-    FairyGuard:20,
+    FairyGuard: 20,
     MushroomMan: 20,
     Mandragora: 10
 };
+
+/**
+ * 區域 2-1: 暮光之林(Twilight)
+ * 特色：Boss 戰前的最後屏障，充滿強敵。
+ */
+export const ScorchingDunesWeights: Record<string, number> = {
+    SandRabbit: 40,
+    CactusSpirit: 25,
+    QuicksandWorm: 10,
+    DuneBeast: 5
+};
+
 
 /**
  * 無盡區域

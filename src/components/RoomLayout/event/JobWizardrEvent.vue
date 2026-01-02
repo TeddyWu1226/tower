@@ -70,7 +70,7 @@ const onLeave = () => {
         </template>
 
         <div v-else-if="isLearning" class="processing">
-          <div class="event-icon rotating">🔮</div>
+          <div class="event-icon">🔮</div>
           <p>正在與元素進行共鳴中...</p>
         </div>
 
@@ -134,16 +134,4 @@ const onLeave = () => {
   align-items: center;
 }
 
-.rotating {
-  animation: rotate-center 1.5s linear infinite;
-}
-
-@keyframes rotate-center {
-  from {
-    transform: rotate(0);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
 </style>

@@ -187,6 +187,8 @@ export function applySkillDamage(
     if (type === 'ad') {
         // 物理：扣除固定防禦
         finalDamage = Math.max(1, finalDamage - (defender.adDefend || 0));
+    } else if(type === 'ap') {
+        finalDamage = Math.max(1, finalDamage - (defender.apDefend || 0));
     }
     // true 類型直接跳過固定防禦
 

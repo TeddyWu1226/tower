@@ -12,6 +12,7 @@ import ShopRoom from "@/components/RoomLayout/comps/ShopRoom/ShopRoom.vue";
 import BlessRoom from "@/components/RoomLayout/comps/BlessRoom.vue";
 import {ItemSkill} from "@/constants/skill/item-skill";
 import {usePlayerStore} from "@/store/player-store";
+import {Usable} from "@/constants/items/usalbe-item/usable-info";
 
 const emit = defineEmits(['runFailed'])
 const gameStateStore = useGameStateStore()
@@ -40,7 +41,7 @@ const onRun = () => {
 }
 
 const onItemSkill = ({skillKey, callback, el}) => {
-  const specifySkill = ['useCampfire']
+  const specifySkill = [Usable.Campfire.skill, Usable.GodNotePage.skill]
   if (specifySkill.includes(skillKey)) {
     ItemSkill[skillKey](
         {

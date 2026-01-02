@@ -4,10 +4,10 @@ import {usePlayerStore} from "@/store/player-store";
 
 const playerStore = usePlayerStore();
 const isShow = ref(false);
-
+const canClick = ref(false); // 新增：控制是否允許點擊
 // 品質配置
 const QUALITY_CONFIG: any = {
-  NORMAL: {label: '普通', color: '#b2bec3', weight: 60, multiplier: 1.0},
+  NORMAL: {label: '普通', color: '#b2bec3', weight: 60, multiplier: 1},
   RARE: {label: '稀有', color: '#0984e3', weight: 25, multiplier: 1.5},
   LUCKY: {label: '幸運', color: '#fdcb6e', weight: 10, multiplier: 2},
   GODLY: {label: '歐皇', color: '#d63031', weight: 5, multiplier: 3},
@@ -15,12 +15,12 @@ const QUALITY_CONFIG: any = {
 
 // 屬性設定
 const STAT_OPTIONS = [
-  {key: 'ad', label: '攻擊力', icon: '⚔️', min: 5, max: 15, unit: '%', type: 'percent'},
-  {key: 'hpLimit', label: '生命上限', icon: '❤️', min: 5, max: 10, unit: '', type: 'value'},
-  {key: 'critRate', label: '爆擊率', icon: '💥', min: 1, max: 4, unit: '%', type: 'value'},
-  {key: 'critIncrease', label: '爆擊傷害', icon: '💢', min: 1, max: 4, unit: '%', type: 'value'},
-  {key: 'apIncrease', label: '法術增傷', icon: '💫', min: 1, max: 4, unit: '%', type: 'value'},
-  {key: 'hit', label: '命中率', icon: '🎯', min: 1, max: 4, unit: '', type: 'value'}
+  {key: 'ad', label: '攻擊力', icon: '⚔️', min: 6, max: 9, unit: '%', type: 'percent'},
+  {key: 'hpLimit', label: '生命上限', icon: '❤️', min: 6, max: 9, unit: '', type: 'value'},
+  {key: 'critRate', label: '爆擊率', icon: '💥', min: 2, max: 3, unit: '%', type: 'value'},
+  {key: 'critIncrease', label: '爆擊傷害', icon: '💢', min: 1, max: 3, unit: '%', type: 'value'},
+  {key: 'apIncrease', label: '法術增傷', icon: '💫', min: 2, max: 3, unit: '%', type: 'value'},
+  {key: 'hit', label: '命中率', icon: '🎯', min: 2, max: 3, unit: '', type: 'value'}
 ];
 const getRandomQuality = () => {
   const rand = Math.random() * 100;
@@ -58,6 +58,14 @@ const generateOptions = () => {
 const startRewardSequence = () => {
   generateOptions();
   isShow.value = true;
+
+  // 開始鎖定點擊
+  canClick.value = false;
+
+  // 1 秒後解除鎖定
+  setTimeout(() => {
+    canClick.value = true;
+  }, 1000);
 };
 // 監聽待領取獎勵次數
 watch(
@@ -77,6 +85,9 @@ watch(
 
 
 const handleSelect = (reward: any) => {
+  // 如果還在冷卻時間，直接攔截
+  if (!canClick.value) return;
+
   const {key, finalValue, type} = reward;
 
   // 1. 執行屬性提升邏輯
@@ -115,7 +126,7 @@ const handleSelect = (reward: any) => {
               v-for="(opt, i) in playerStore.remainingLevelUpRewards"
               :key="i"
               class="reward-card"
-              :class="opt.quality.label"
+              :class="[opt.quality.label, { 'is-locked': !canClick }]"
               :style="{ '--q-color': opt.quality.color }"
               @click="handleSelect(opt)"
           >
@@ -329,5 +340,21 @@ const handleSelect = (reward: any) => {
   .level-title {
     font-size: 2.5rem;
   }
+}
+
+/* 鎖定時的樣式 */
+.reward-card.is-locked {
+  cursor: not-allowed;
+  opacity: 0.7;
+  filter: grayscale(0.5); /* 稍微灰階一點點 */
+  transform: none !important; /* 禁止 hover 放大動畫 */
+  box-shadow: none !important;
+}
+
+/* 只有在非鎖定狀態下才有 hover 效果 */
+.reward-card:not(.is-locked):hover {
+  transform: translateY(-1.5rem) scale(1.05);
+  box-shadow: 0 0 3rem var(--q-color);
+  background: #222;
 }
 </style>

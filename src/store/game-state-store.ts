@@ -16,6 +16,7 @@ export const getEffectiveStats = (monster: MonsterType): MonsterType => {
         hp: monster.hp,
         ad: monster.ad || 0,
         adDefend: monster.adDefend || 0,
+        apDefend: monster.apDefend || 0,
         hpLimit: monster.hpLimit || 0,
         dodge: monster.dodge || 0,
         hit: monster.hit || 0,

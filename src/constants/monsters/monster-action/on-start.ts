@@ -1,9 +1,7 @@
 // 定義所有怪物的特殊行為
 import {UnitStatus} from "@/constants/status/unit-status";
 import {MonsterActionParams} from "@/types";
-import {checkProbability} from "@/utils/math";
 import {useFloatingMessage} from "@/components/Shared/FloatingMessage/useFloatingMessage";
-import {showEffect} from "@/components/Shared/FloatingEffect/EffectManager";
 import {MistyForestMonster} from "@/constants/monsters/monster-info/misty-forest-monster";
 import {create} from "@/utils/create";
 import {useEpicSubtitle} from "@/components/Shared/EpicSubtitle/useEpicSubtitle";
@@ -82,6 +80,12 @@ export const MonsterOnStart: Record<string, (params: MonsterActionParams) => voi
 				color: 'red'
 			}
 		);
+		let m = MistyForestMonster.FairyGuard
+		const strengthening = 1 + gameStateStore.days * 0.01
+		// 基本階段強化
+		m.hpLimit = Math.round(m.hpLimit * strengthening);
+		m.hp = m.hpLimit;
+		m.ad = Math.round(m.ad * strengthening);
 		gameStateStore.currentEnemy.unshift(create(MistyForestMonster.FairyGuard))
 		gameStateStore.currentEnemy.push(create(MistyForestMonster.FairyGuard))
 	},

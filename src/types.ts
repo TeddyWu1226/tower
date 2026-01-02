@@ -85,6 +85,7 @@ export interface UnitType {
     critRate: number // 爆擊率(%)
     // 有關防禦
     adDefend: number // 物理防禦值
+    apDefend: number // 魔法防禦值
     // 有關是否命中
     dodge: number // 閃避值
     hit: number // 命中值

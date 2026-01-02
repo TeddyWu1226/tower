@@ -16,6 +16,6 @@ export const MonsterOnDead: Record<string, (params: MonsterActionParams) => void
 	twilightOnDead: ({playerStore, gameStateStore, targetElement}) => {
 		useEpicSubtitle("「希望...與汝再...舞一曲...」", 3000);
 		// 清掉休止符
-		playerStore.info.items = playerStore.info.items.filter(item => item.name !== SpecialItem.PauseToken.name)
+		playerStore.removeItem(SpecialItem.PauseToken.name, -1)
 	}
 };

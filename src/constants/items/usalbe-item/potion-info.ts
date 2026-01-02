@@ -22,7 +22,7 @@ const Heal = {
     Heal2: {
         name: '中級生命萃取液',
         description: '口感苦澀但恢復效果顯著。',
-        icon: '',
+        icon: '🧪',
         quality: 2,
         heal: 100,
         usable: true

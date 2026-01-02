@@ -83,3 +83,14 @@ export const getRandomElements = <T>(
   return result;
 };
 
+
+
+/**
+ * 格式化數值精度
+ * @param val 原始數值
+ * @param precision 小數點位數 (預設 3)
+ */
+export const formatPrecision = (val: number, precision: number = 3): number => {
+  const multiplier = Math.pow(10, precision);
+  return Math.round(val * multiplier) / multiplier;
+};

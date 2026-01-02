@@ -27,7 +27,7 @@ defineExpose({ playTransition });
   <Transition name="fade-overlay">
     <div v-if="isVisible" class="stage-mask">
       <div class="text-container">
-        <h1 class="stage-title">〔 {{ stageName }} 〕</h1>
+        <h1 class="stage-title">{{ stageName }}</h1>
         <div class="stage-decoration"></div>
       </div>
     </div>

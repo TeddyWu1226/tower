@@ -125,8 +125,8 @@ const bossFightHint = computed(() => stageProgress.value.text);
 <template>
   <el-card body-class="flex justify-between items-center">
     <span style="font-size: 16px">
-      第 {{ gameStateStore.days }} 天
-      [{{ getEnumColumn(StageEnum, gameStateStore.currentStage, 'label', '塔之後⏳') }}]
+      第 {{ gameStateStore.days }} 天 -
+      {{ getEnumColumn(StageEnum, gameStateStore.currentStage, 'label', '塔之後⏳') }}
     </span>
     <div class="flex items-center">
       <span class="gold">{{ playerStore.info.gold }}💰</span>

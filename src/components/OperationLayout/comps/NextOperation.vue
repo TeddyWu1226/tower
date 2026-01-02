@@ -38,7 +38,6 @@ const selectRoom = (roomValue: number) => {
 };
 
 const goNextStage = () => {
-  playerStore.info.items = playerStore.info.items.filter(item => item.name !== SpecialItem.PauseToken.name)
   playerStore.healFull()
   trackerStore.init(false)
   gameStateStore.init(gameStateStore.currentStage + 1)
