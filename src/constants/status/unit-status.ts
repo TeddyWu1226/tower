@@ -36,8 +36,6 @@ export const UnitStatus = {
         bonus: {
             hit: -50
         },
-        type: 'damage',
-        value: 3
     } as StatusEffect,
     BeePoison: {
         name: '中毒',

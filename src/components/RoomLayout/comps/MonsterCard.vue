@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import './boss-animation.css'
+import './god-animation.css'
 import {computed, PropType, ref, watch} from 'vue';
 import {BattleOutcome, MonsterType} from "@/types";
 import {HpProgress} from "@/components/Shared/Progress";
@@ -25,22 +26,20 @@ const finalStats = computed(() => getEffectiveStats(props.info));
 
 // 新增狀態：用於控制抖動動畫
 const isShaking = ref(false);
-// 設置動畫持續時間 (需與 CSS @keyframes shake 的時間匹配)
-const SHAKE_DURATION = 500;
 
 const isDead = computed(() => props.info?.hp === 0)
 
 /**
  * 外部調用：啟動卡片抖動動畫
  */
-const shake = () => {
+const shake = (time = 500) => {
   // 1. 啟動抖動狀態
   isShaking.value = true;
 
   // 2. 在動畫結束後移除抖動類別
   setTimeout(() => {
     isShaking.value = false;
-  }, SHAKE_DURATION);
+  }, time);
 };
 
 defineExpose({
@@ -121,7 +120,7 @@ watch(() => props.info.lastDamageResult, (newResult) => {
           <span>🪦</span>
         </el-col>
         <el-col style="text-align: center;" :span="24">
-          <span>{{ props.info.name }}</span>
+          <span class="monster-name">{{ props.info.name }}</span>
         </el-col>
         <el-col style="text-align: center;font-size: 20px;color:var(--el-color-danger)" :span="24">
           <span>死亡</span>
@@ -129,10 +128,10 @@ watch(() => props.info.lastDamageResult, (newResult) => {
       </el-row>
       <el-row v-else style="width: 100%" justify="center">
         <el-col style="text-align: center;font-size: 2rem" :span="24">
-          <span>{{ props.info.icon }}</span>
+          <span class="monster-icon">{{ props.info.icon }}</span>
         </el-col>
         <el-col style="text-align: center;" :span="24">
-          <span>{{ props.info.name }}</span>
+          <span class="monster-name">{{ props.info.name }}</span>
         </el-col>
         <el-col :span="12" :class="valueClass('ad')">
           <span>⚔️</span>
@@ -165,6 +164,7 @@ watch(() => props.info.lastDamageResult, (newResult) => {
     max-width: 13rem;
   }
 }
+
 .el-col {
   margin-top: 0.1rem;
   margin-bottom: 0.1rem;

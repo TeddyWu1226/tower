@@ -36,6 +36,10 @@ const onClick = () => {
         switch (gameStateStore.currentStage) {
           case 1:
             playerStore.removeItem(MATERIAL.ForestWood.name, 3)
+            break;
+          case 5:
+            playerStore.removeItem(SpecialItem.TwilightKey.name, 1)
+            break;
         }
       })
       .catch(() => {
