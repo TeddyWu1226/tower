@@ -19,6 +19,15 @@ export const ItemSkill: Record<string, (params: NoneMonsterItemSkillParams | Spe
         playerStore.healFull()
         callback(true)
     },
+    useShabbyTent: ({playerStore, gameStateStore, callback, targetElement}) => {
+        if (!gameStateStore.stateIs(GameState.SELECTION_PHASE)) {
+            showEffect(targetElement, "現在無法使用!", "debuff")
+            callback(false);
+            return
+        }
+        playerStore.info.hp = Math.min(playerStore.finalStats.hpLimit, playerStore.info.hp + Math.round(playerStore.finalStats.hpLimit / 2))
+        callback(true)
+    },
     useGodNotePage: ({playerStore, gameStateStore, callback, targetElement}) => {
         if (!gameStateStore.stateIs(GameState.SELECTION_PHASE)) {
             showEffect(targetElement, "現在無法使用!", "debuff")
@@ -38,7 +47,18 @@ export const ItemSkill: Record<string, (params: NoneMonsterItemSkillParams | Spe
         const isFightRoom = gameStateStore.roomIs([RoomEnum.Fight.value, RoomEnum.EliteFight.value])
         if (isFightRoom && gameStateStore.stateIs(GameState.EVENT_PHASE)) {
             playerStore.addStatus(UserStatus.SmokeBomb)
-            showEffect(targetElement, "💨", "fullscreen")
+            showEffect(targetElement, "😶‍🌫️😶‍🌫️😶‍🌫️", "fullscreen")
+            callback(true)
+            return
+        }
+        showEffect(targetElement, "現在無法使用!", "debuff")
+        callback(false);
+    },
+    useCamouflageGrass: ({playerStore, gameStateStore, callback, targetElement}) => {
+        const isFightRoom = gameStateStore.roomIs([RoomEnum.Fight.value, RoomEnum.EliteFight.value])
+        if (isFightRoom && gameStateStore.stateIs(GameState.EVENT_PHASE)) {
+            playerStore.addStatus(UserStatus.CamouflageGrass)
+            showEffect(targetElement, "🫣🫣🫣", "fullscreen")
             callback(true)
             return
         }

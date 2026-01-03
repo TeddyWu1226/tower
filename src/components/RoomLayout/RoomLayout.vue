@@ -41,7 +41,7 @@ const onRun = () => {
 }
 
 const onItemSkill = ({skillKey, callback, el}) => {
-  const specifySkill = [Usable.Campfire.skill, Usable.GodNotePage.skill]
+  const specifySkill = [Usable.Campfire.skill, Usable.GodNotePage.skill, Usable.ShabbyTent.skill]
   if (specifySkill.includes(skillKey)) {
     ItemSkill[skillKey](
         {

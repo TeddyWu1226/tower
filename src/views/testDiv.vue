@@ -15,29 +15,35 @@ import {Armor} from "@/constants/items/equipment/armor-info";
 import {Offhand} from "@/constants/items/equipment/offhand-info";
 import {SpecialItem} from "@/constants/items/special-item-info";
 import {useSaveStore} from "@/store/save-store";
+import {useTrackerStore} from "@/store/track-store";
 
 const gameStateStore = useGameStateStore()
 const playerStore = usePlayerStore()
+const trackerStore = useTrackerStore()
 const saveStore = useSaveStore()
 const isClose = ref(true);
 
 const onTest = () => {
 
   playerStore.addGold(1000)
-  playerStore.gainItem(Potions.Heal1)
-  playerStore.gainItem(Potions.Heal1)
-  playerStore.gainItem(Potions.Heal1)
-  playerStore.gainItem(Potions.Heal1)
-  playerStore.gainItem(Potions.Heal1)
-  playerStore.gainItem(Accessory1.SoulAnchor)
-  playerStore.gainItem(Weapon.Sword1)
-  playerStore.gainItem(Head.HpHead1)
-  playerStore.gainItem(Armor.Armor1)
-  playerStore.gainItem(Offhand.Shield1)
+  // playerStore.gainItem(Potions.Heal1)
+  // playerStore.gainItem(Potions.Heal1)
+  // playerStore.gainItem(Potions.Heal1)
+  // playerStore.gainItem(Potions.Heal1)
+  // playerStore.gainItem(Potions.Heal1)
+  // playerStore.gainItem(Accessory1.SoulAnchor)
+  // playerStore.gainItem(Weapon.Sword1)
+  // playerStore.gainItem(Head.HpHead1)
+  // playerStore.gainItem(Armor.Armor1)
+  // playerStore.gainItem(Offhand.Shield1)
   gameStateStore.currentStage = 6
 }
-const addEquipment = () => {
-  playerStore.gainItem(Usable.SmokeBomb)
+const give = () => {
+  playerStore.gainItem(Usable.ShabbyTent)
+  playerStore.gainItem(Usable.ShabbyTent)
+  playerStore.gainItem(Usable.CamouflageGrass)
+  playerStore.gainItem(Usable.CamouflageGrass)
+
 }
 const heal = () => {
   playerStore.healFull()
@@ -56,9 +62,9 @@ const onSave = ()=>{
   <el-card class="test">
     <el-button @click="isClose = !isClose" style="width: 100% ">縮放</el-button>
     <div style="padding-top: 5px" v-if="!isClose">
-      <el-button @click="addEquipment">逃脫</el-button>
-      <el-button @click="heal">回滿血</el-button>
-      <el-button @click="setRoom">房間設定</el-button>
+      <el-button @click="give">給道具</el-button>
+      <el-button @click="heal">回血</el-button>
+      <el-button @click="setRoom">房間</el-button>
       <el-button @click="onTest">測試</el-button>
       <el-button @click="onSave">存檔</el-button>
       <el-collapse>
@@ -74,6 +80,21 @@ const onSave = ()=>{
           <p>
             status: {{ playerStore.statusEffects }}
           </p>
+        </el-collapse-item>
+        <el-collapse-item title="統計追蹤">
+          <h3>當前階段</h3>
+          <div>
+            {{trackerStore.currentKills}}
+          </div>
+          <h3>本場遊戲</h3>
+          <div>
+            {{trackerStore.totalKills}}
+          </div>
+          <h3>其他</h3>
+          <p v-for="key in Object.keys(trackerStore.achievementsCount)">-->
+            {{ key }}: {{ trackerStore.achievementsCount[key] }}
+          </p>
+
         </el-collapse-item>
         <el-collapse-item title="裝備+狀態的加成效果">
           <p v-for="key in Object.keys(playerStore.totalBonus)">

@@ -125,7 +125,7 @@ watch(() => props.info.lastDamageResult, (newResult) => {
         </el-col>
       </el-row>
       <el-row v-else style="width: 100%" justify="space-between">
-        <el-col style="text-align: center;font-size: 2rem" :span="24">
+        <el-col style="text-align: center" :span="24">
           <span class="monster-icon">{{ props.info.icon }}</span>
         </el-col>
         <el-col style="text-align: center;" :span="24">
@@ -153,6 +153,9 @@ watch(() => props.info.lastDamageResult, (newResult) => {
 </template>
 
 <style scoped>
+.monster-icon{
+  font-size: 1.8rem;
+}
 .monster-card {
   display: flex;
   align-items: center;
@@ -167,16 +170,7 @@ watch(() => props.info.lastDamageResult, (newResult) => {
   }
 }
 
-.el-col {
-  margin-top: 0.1rem;
-  margin-bottom: 0.1rem;
-}
-
-p {
-  line-height: 0.5;
-}
-
-/* ⭐️ 關鍵修改點 3: 高亮特效樣式 */
+/* 高亮特效樣式 */
 .monster-card.is-selected {
   /* 改變邊框顏色或陰影來強調選中狀態 */
   border: 2px solid #00f3ff; /* 青藍色邊框 */
@@ -191,6 +185,17 @@ p {
 .monster-card:hover:not(.is-selected) {
   box-shadow: 0 0 8px rgba(120, 255, 255, 0.4);
 }
+
+.el-col {
+  margin-top: 0.1rem;
+  margin-bottom: 0.1rem;
+}
+
+p {
+  line-height: 1;
+}
+
+
 
 /* ------------------- 抖動特效 (@keyframes) ------------------- */
 

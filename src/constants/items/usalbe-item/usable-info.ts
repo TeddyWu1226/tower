@@ -1,6 +1,22 @@
 import {UsableType} from "@/types";
 
 export const Usable = {
+	ShabbyTent: {
+		name: '破舊帳篷',
+		quality: 2,
+		description: '讓你可以在「選擇路徑階段」復原當前50%生命',
+		icon: '⛺',
+		usable: true,
+		skill: 'useShabbyTent'
+	} as UsableType,
+    CamouflageGrass: {
+		name: '偽裝草叢',
+		quality: 2,
+		description: '讓你可以在「戰鬥階段」使用,使用後可以提高1回合逃跑的機率(無法在BOSS房間使用)',
+		icon: '🥬',
+		usable: true,
+		skill: 'useCamouflageGrass'
+	} as UsableType,
 	Campfire: {
 		name: '簡易營火包',
 		quality: 3,

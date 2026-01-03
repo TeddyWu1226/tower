@@ -160,11 +160,10 @@ export function useShopLogic(currentStage: number) {
         if (usable) {
             _usable = {
                 ...usable,
-                price: 500,
+                price: usable.quality * usable.quality * 100,
                 sold: false
             }
         }
-        console.log('potions', potions)
         const _potions = potions.map(item => ({
             ...item,
             price: calculatePrice(item.quality ?? 0, POTION_BASE_PRICE, true),

@@ -3,12 +3,22 @@ import {StatusEffect} from "@/types";
 export const UserStatus = {
     SmokeBomb: {
         name: '煙霧迷漫',
-        icon: '💨',
+        icon: '😶‍🌫️',
         duration: 1,
         isBuff: true,
-        description: '煙霧迷漫狀態下, 獲得容易逃跑效果',
+        description: '煙霧迷漫狀態下, 獲得必定逃跑效果',
         bonus: {
             dodge: 1000
+        }
+    } as StatusEffect,
+    CamouflageGrass: {
+        name: '草叢掩蔽',
+        icon: '🥬',
+        duration: 1,
+        isBuff: true,
+        description: '草叢掩蔽的狀態下, 獲得容易逃跑效果',
+        bonus: {
+            runIncrease: 100
         }
     } as StatusEffect,
     OnBurn: {

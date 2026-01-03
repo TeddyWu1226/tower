@@ -1,4 +1,3 @@
-import {reactive, Reactive} from "vue";
 import {EquipmentType, UsableType, RoomWeights} from "@/types";
 
 /**
