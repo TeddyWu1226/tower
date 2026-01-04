@@ -21,10 +21,13 @@ export const WizardSkill = {
             const proficiency = playerStore.getSkillProficiency('FireBall')
             const dmg = Math.floor((5 + proficiency * 0.15) * (1 + playerStore.finalStats.apIncrease / 100))
             monster.lastDamageResult = applySkillDamage(playerStore.finalStats, monster, dmg, 'ap', '火球術')
-            const percent = formatPrecision(0.1 + proficiency * 0.007, 3)
-            if (checkProbability(percent)) {
-                gameStateStore.addEffectToMonster(monsterIndex, UserStatus.OnBurn)
+            if (monster.lastDamageResult.isHit) {
+                const percent = formatPrecision(0.1 + proficiency * 0.007, 3)
+                if (checkProbability(percent)) {
+                    gameStateStore.addEffectToMonster(monsterIndex, UserStatus.OnBurn)
+                }
             }
+
             return true
         }
     } as SkillType

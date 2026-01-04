@@ -114,13 +114,14 @@ export const Boss = {
         critIncrease: 150,
         critRate: 20,
         adDefend: 8,
-        apDefend: 10,
+        apDefend: 12,
         dodge: 20,
         hit: 10,
         hp: 300,
         hpLimit: 300,
         level: 12,
         dropGold: 600,
+        chaseIncrease: 200,
         onStart: 'scorchingDunesOnStart',
         onAttack: 'scorchingDunesOnAttack',
     } as MonsterType,
@@ -184,7 +185,6 @@ export const Boss = {
         level: 20,
         dropGold: 1200
     } as MonsterType,
-
     // ==========================================
     // --- 區域 3: 冰雪高地 (Icy Plateau) ---
     // ==========================================

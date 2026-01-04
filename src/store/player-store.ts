@@ -403,7 +403,7 @@ export const usePlayerStore = defineStore('player-info', () => {
         if ((skillProficiency.value[skillKey] || 0) >= 100) {
             return
         }
-        skillProficiency.value[skillKey] = (skillProficiency.value[skillKey] || 0) + value;
+        skillProficiency.value[skillKey] = Math.min((skillProficiency.value[skillKey] || 0) + value, 100)
     }
     /**
      * 等級提升(每階100點)

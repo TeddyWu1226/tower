@@ -68,7 +68,8 @@ const Magic = {
         description: '精煉過的魔力液體，恢復感極強。',
         icon: '🍷',
         quality: 2,
-        magic: 60
+        magic: 60,
+        usable: true
     } as UsableType,
     Magic3: {
         name: '高純度法力藥水',

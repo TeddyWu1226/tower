@@ -16,7 +16,7 @@ const trackerStore = useTrackerStore();
 const EVENT_CONFIG = [
   {
     type: SpecialEventEnum.Gamble,
-    canAppear: () => true
+    canAppear: () => playerStore.info.gold >= 50
   },
   {
     type: SpecialEventEnum.Chest,

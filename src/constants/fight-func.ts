@@ -163,6 +163,9 @@ export function applySkillDamage(
         return outcome;
     }
     outcome.isHit = true;
+    if(!outcome.isHit){
+        return outcome;
+    }
 
     // --- 2. 基礎傷害與傷害增幅 ---
     let damage = baseValue;

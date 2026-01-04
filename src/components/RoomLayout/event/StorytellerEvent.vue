@@ -28,10 +28,11 @@ const bossHints: Record<number, string> = {
   2: "「在腐敗的叢林中惡化的魔物，唯有適時收手才能突破~」",
   3: "「外來的獵手凶狠無比，畏懼火光的他選擇在此棲息~」",
   4: "「排外的種族依舊堅守，精準的目光以及充裕的補品才是你的保命符~」",
-  5: "「祂仍在跳著那支未完的舞，攻勢隨節奏而凌厲，但如何打斷節奏呢?」",
+  5: "「祂仍在跳著那支未完的舞，攻勢隨節奏而凌厲。打斷他的節奏吧!順便打斷他的夢~」",
+  6: "「潛藏在沙漠隘口的毒獸，他的毒若不在及時解除，你將葬身於沙海之中~」",
 };
 
-const resultMsg = ref("");
+const resultMsg = ref("聽完歌曲你隨之一振,繼續征途吧!");
 
 const onLeave = () => {
   gameStateStore.eventAction = 2;
@@ -59,7 +60,7 @@ const listenToStory = () => {
 
   resultMsg.value = `
     <p>詩人撥弄了一下琴弦，你感到精神一振！</p>
-    <p style="margin: 0.5rem 0; color: #f1c40f; font-weight: bold;">${hint}</p>
+    <p style="margin: 0.5rem 0; color: #f1c40f; font-weight: bold;text-align: center">${hint}</p>
     <p style="font-size: 0.875rem; color: #2ecc71;">✨ 獲得狀態：${rewardStatus.name} (${rewardStatus.description})</p>
   `;
 

@@ -17,7 +17,7 @@ export const Head = {
         icon: '🪖',
         position: EquipmentPosition.HEAD,
         quality: 1,
-        hpLimit: 120
+        hpLimit: 100
     } as EquipmentType,
     HpHead2: {
         name: '強化鐵盔',
@@ -25,46 +25,30 @@ export const Head = {
         icon: '🪖',
         position: EquipmentPosition.HEAD,
         quality: 2,
-        hpLimit: 280
+        hpLimit: 150
     } as EquipmentType,
     HpHead3: {
         name: '守衛重盔',
-        description: '精銳士兵標配，顯著提升生存能力。',
+        description: '守衛標配的裝備，顯著提升生命力。',
         icon: '🪖',
         position: EquipmentPosition.HEAD,
         quality: 3,
-        hpLimit: 550
+        hpLimit: 200
     } as EquipmentType,
     HpHead4: {
+        name: '騎士之盔',
+        description: '精銳騎士的標準配備，提供不錯的生命力。',
+        icon: '🪖',
+        position: EquipmentPosition.HEAD,
+        quality: 4,
+        hpLimit: 250
+    } as EquipmentType,
+    HpHead5: {
         name: '巨像戰盔',
         description: '模仿遠古巨像打造，賦予頑強的生命力。',
         icon: '🪖',
         position: EquipmentPosition.HEAD,
-        quality: 4,
-        hpLimit: 1000
-    } as EquipmentType,
-    HpHead5: {
-        name: '古王金冕',
-        description: '古老君王留下的頭飾，殘留著生命之火。',
-        icon: '🪖',
-        position: EquipmentPosition.HEAD,
         quality: 5,
-        hpLimit: 1800
-    } as EquipmentType,
-    HpHead6: {
-        name: '龍息戰冠',
-        description: '沐浴過龍血的頭盔，肉體將變得強悍。',
-        icon: '🪖',
-        position: EquipmentPosition.HEAD,
-        quality: 6,
-        hpLimit: 3200
-    } as EquipmentType,
-    HpHead7: {
-        name: '世界樹之冠',
-        description: '由世界樹幼枝編織，源源不絕提供生命精華。',
-        icon: '🪖',
-        position: EquipmentPosition.HEAD,
-        quality: 7,
-        hpLimit: 6000
+        hpLimit: 300
     } as EquipmentType
 };
