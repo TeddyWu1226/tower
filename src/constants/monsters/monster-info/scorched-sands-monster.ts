@@ -34,7 +34,7 @@ export const ScorchedSandsMonster = {
         critIncrease: 150,
         chaseIncrease: -10,
         dropGold: 20,
-        onAttacked:'cactusSpiritOnAttacked'
+        onAttacked: 'cactusSpiritOnAttacked'
     } as MonsterType,
 
     QuicksandWorm: {
@@ -52,6 +52,42 @@ export const ScorchedSandsMonster = {
         critRate: 0,
         critIncrease: 100,
         dropGold: 20,
+    } as MonsterType,
+
+    DesertScorpion: {
+        icon: '🦂',
+        name: '荒漠小蠍',
+        description: '毒蠍的幼體，尾部的毒針閃爍著致命的冷光。',
+        level: 8,
+        hp: 50,
+        hpLimit: 50,
+        ad: 20,
+        adDefend: 15,
+        apDefend: 15,
+        hit: 18,
+        dodge: 5,
+        critRate: 10,
+        critIncrease: 200,
+        dropGold: 20,
+        onAttack: 'scorpionPoison' // 假設你有中毒處理邏輯
+    } as MonsterType,
+
+    ArmoredVulture: {
+        icon: '🦅',
+        name: '鐵羽禿鷹',
+        description: '在沙暴中穿梭的掠食者，雙翼硬如鋼鐵，衝鋒威力驚人。',
+        level: 9,
+        hp: 80,
+        hpLimit: 80,
+        ad: 26,
+        adDefend: 0,
+        apDefend: 0,
+        hit: 25,
+        dodge: 20,
+        critRate: 20,
+        critIncrease: 160,
+        dropGold: 90,
+        chaseIncrease: 30
     } as MonsterType,
 
     DuneBeast: {

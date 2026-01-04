@@ -44,11 +44,13 @@ const give = () => {
   playerStore.gainItem(Potions.Magic1)
   playerStore.gainItem(Potions.UnPoisonPotion)
   playerStore.gainItem(Potions.UnPoisonPotion)
+
   playerStore.gainItem(Weapon.MagicStick1)
   playerStore.gainItem(Weapon.Sword1)
   playerStore.gainItem(Head.HpHead1)
   playerStore.gainItem(Armor.Armor1)
   playerStore.gainItem(Offhand.Shield1)
+  playerStore.gainItem(Offhand.Book1)
   playerStore.info.hpLimit = 130
 
 }

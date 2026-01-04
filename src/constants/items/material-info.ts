@@ -44,12 +44,6 @@ export const MATERIAL = {
         description: '蕈人散發出的粉末，吸入過多會產生幻覺',
         quality: 2,
     } as ItemType,
-    ViperScale: {
-        name: '枯葉蛇鱗',
-        icon: '🍂',
-        description: '與落葉顏色一致，具有極佳的隱蔽性',
-        quality: 2,
-    } as ItemType,
     WolfSkin: {
         name: '狼皮',
         icon: '🐺',
@@ -60,6 +54,6 @@ export const MATERIAL = {
         name: '蔓陀羅根',
         icon: '🍠',
         description: '長得像人臉的怪異根部，極為珍貴的鍊金素材',
-        quality: 3,
+        quality: 2,
     } as ItemType,
 }
