@@ -88,4 +88,12 @@ export const UnitStatus = {
             apIncrease: -50
         }
     } as StatusEffect,
+    ScorpionPoison: {
+        name: '劇毒',
+        icon: '☣︎',
+        duration: 10,
+        description: '每回合失去 5 點生命值,如果連續中毒,傷害會疊加並刷新效果',
+        type: 'damage',
+        value: 5
+    } as StatusEffect,
 }

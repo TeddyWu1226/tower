@@ -44,4 +44,17 @@ export const MonsterOnAttack: Record<string, (params: MonsterOnAttackParams) => 
         showEffect(targetElement, "節奏加速了 ⚔️⬆️ 🛡️⬆️", "buff");
         logStore.logger.add('半神的攻擊更凌厲了,防禦也更加堅固!')
     },
+    scorchingDunesOnAttack: ({monster, playerStore, targetElement, logStore}) => {
+        if (playerStore.hasStatus(UnitStatus.ScorpionPoison.name)) {
+            const currentStatus = playerStore.statusEffects.find((status) => status.name === UnitStatus.ScorpionPoison.name);
+            // 更新效果
+            currentStatus.value += 5
+            currentStatus.duration = 10
+            currentStatus.description = currentStatus.description.replace(/\d+/, currentStatus.value.toString())
+        } else {
+            playerStore.addStatus(UnitStatus.ScorpionPoison)
+        }
+
+        logStore.logger.add(`你中劇毒了。`);
+    },
 };

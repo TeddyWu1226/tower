@@ -91,5 +91,16 @@ export const MonsterOnStart: Record<string, (params: MonsterActionParams) => voi
     },
     twilightOnStart: ({playerStore, gameStateStore, targetElement}) => {
         useEpicSubtitle("「餘暉已候多時，只為繼續沈溺在這曲無盡的舞。而你－－蟲子，太吵了。」", 4000);
-    }
+    },
+    scorchingDunesOnStart: ({playerStore, targetElement}) => {
+        // 額外動畫演示
+        useFloatingMessage(
+            '刷、刷——沙——',
+            targetElement,
+            {
+                duration: 2000, // 動畫時間保持不變
+                color: 'red'
+            }
+        );
+    },
 };

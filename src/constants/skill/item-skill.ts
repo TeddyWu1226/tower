@@ -85,8 +85,9 @@ export const ItemSkill: Record<string, (params: NoneMonsterItemSkillParams | Spe
     },
     useUnPoisonPotion: (params: SpecifyMonsterItemSkillParams) => {
         const {playerStore, callback, targetElement} = params;
-        if (playerStore.hasStatus('中毒')) {
+        if (playerStore.hasStatus('中毒') || playerStore.hasStatus('劇毒')) {
             playerStore.removeStatus('中毒');
+            playerStore.removeStatus('劇毒');
             showEffect(targetElement, "中毒狀態已消除", 'buff')
             callback(true)
             return;
