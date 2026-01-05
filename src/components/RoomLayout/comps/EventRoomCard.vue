@@ -48,6 +48,13 @@ const EVENT_CONFIG = [
       }
       return playerStore.finalStats.apIncrease > 10
     }
+  },
+  {
+    type: SpecialEventEnum.Fusion, // 合成功能解鎖
+    canAppear: () => {
+      if (gameStateStore.isEventClose(SpecialEventEnum.Fusion)) return false
+      return gameStateStore.currentStage >= 2
+    }
   }
 ];
 

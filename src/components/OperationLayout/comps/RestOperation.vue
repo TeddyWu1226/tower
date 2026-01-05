@@ -1,6 +1,11 @@
 <script setup lang="ts">
 
+import {useGameStateStore} from "@/store/game-state-store";
+import {SpecialEventEnum} from "@/enums/enums";
+import {ref} from "vue";
+import {RoomEnum} from "@/enums/room-enum";
 
+const gameStateStore = useGameStateStore();
 const emit = defineEmits(['rest', 'cancel']);
 const props = defineProps({
   disabled: Boolean,
@@ -9,6 +14,12 @@ const props = defineProps({
 const rest = (): void => {
   emit('rest');
 }
+
+const fusion = (): void => {
+  gameStateStore.setRoom(RoomEnum.Fusion.value)
+  gameStateStore.transitionToNextState()
+}
+
 
 const cancel = (): void => {
   emit('cancel');
@@ -20,6 +31,14 @@ const cancel = (): void => {
     <el-button type="success" :disabled="props.disabled" @click="rest">
       休息一下
     </el-button>
+    <template v-if="gameStateStore.isEventClose(SpecialEventEnum.Fusion)">
+      <el-button
+          type="warning"
+          :disabled="props.disabled"
+          @click="fusion">
+        合成
+      </el-button>
+    </template>
     <el-button type="info" :disabled="props.disabled" @click="cancel">
       繼續趕路
     </el-button>

@@ -20,7 +20,7 @@ const betAmount = ref(0);
 const diceResult = ref(1);
 const isWin = ref(false);
 const isRolling = ref(false);
-const GambleValues = [2500, 2000, 1500, 1000, 500, 250, 150, 100, 50]
+const GambleValues = [5000, 3000, 1500, 800, 400, 200, 100, 50]
 const availablePrices = computed(() => {
   let a = []
   GambleValues.forEach((value) => {

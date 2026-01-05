@@ -14,6 +14,7 @@ import {ItemSkill} from "@/constants/skill/item-skill";
 import {usePlayerStore} from "@/store/player-store";
 import {Usable} from "@/constants/items/usalbe-item/usable-info";
 import {Potions} from "@/constants/items/usalbe-item/potion-info";
+import FusionRoom from "@/components/RoomLayout/comps/FusionRoom.vue";
 
 const emit = defineEmits(['runFailed'])
 const gameStateStore = useGameStateStore()
@@ -69,6 +70,9 @@ const onRest = () => {
 /** 購物房間 **/
 const ShopRoomRef = ref()
 
+/** 合成房間 **/
+const FusionRoomRef = ref()
+
 /** 綜合取消 **/
 const onCancel = () => {
   switch (currentRoomValue.value) {
@@ -120,6 +124,7 @@ watch(() => gameStateStore.days,
     <RestRoom ref="RestRoomRef" v-if="currentRoomValue === RoomEnum.Rest.value" :key="roomKeyCounter"/>
     <ShopRoom ref="ShopRoomRef" v-if="currentRoomValue === RoomEnum.Shop.value" :key="roomKeyCounter"/>
     <BlessRoom ref="ShopRoomRef" v-if="currentRoomValue === RoomEnum.Bless.value" :key="roomKeyCounter"/>
+    <FusionRoom ref="FusionRoomRef" v-if="currentRoomValue === RoomEnum.Fusion.value" :key="roomKeyCounter"/>
   </el-card>
 </template>
 

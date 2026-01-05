@@ -60,8 +60,9 @@ defineExpose({
 </script>
 
 <template>
+  <NextOperation v-if="gameStateStore.stateIs(GameState.SELECTION_PHASE)"/>
   <FightOperation
-      v-if="gameStateStore.roomIs([RoomEnum.Fight.value,
+      v-else-if="gameStateStore.roomIs([RoomEnum.Fight.value,
       RoomEnum.EliteFight.value,
       RoomEnum.Boss.value,
       RoomEnum.SpecialBoss.value]) &&
@@ -77,7 +78,6 @@ defineExpose({
       @rest="onRest"
       @cancel="onCancel"
   />
-  <NextOperation v-else-if="gameStateStore.stateIs(GameState.SELECTION_PHASE)"/>
   <LeaveOperation
       v-else-if="gameStateStore.roomIs(RoomEnum.Shop.value) &&
       gameStateStore.stateIs(GameState.EVENT_PHASE)"

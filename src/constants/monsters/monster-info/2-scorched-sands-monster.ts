@@ -20,6 +20,7 @@ export const ScorchedSandsMonster = {
 		dropGold: 25,
 		drop: [
 			{item: MATERIAL.DesertRabbitMeat, chance: 0.5},
+			{item: MATERIAL.LowerNormal, chance: 0.1},
 		]
 	} as MonsterType,
 
@@ -42,6 +43,7 @@ export const ScorchedSandsMonster = {
 		onAttacked: 'cactusSpiritOnAttacked',
 		drop: [
 			{item: MATERIAL.CactusMeat, chance: 0.5},
+			{item: MATERIAL.LowerNormal, chance: 0.1},
 		]
 	} as MonsterType,
 
@@ -62,6 +64,7 @@ export const ScorchedSandsMonster = {
 		dropGold: 20,
 		drop: [
 			{item: MATERIAL.SandWormBloodClot, chance: 0.5},
+			{item: MATERIAL.LowerNormal, chance: 0.1},
 		]
 	} as MonsterType,
 
@@ -82,6 +85,7 @@ export const ScorchedSandsMonster = {
 		dropGold: 20,
 		drop: [
 			{item: MATERIAL.ScorpionShell, chance: 0.2},
+			{item: MATERIAL.LowerNormal, chance: 0.1},
 		],
 		onAttack: 'scorpionPoison' // 假設你有中毒處理邏輯
 	} as MonsterType,
@@ -104,6 +108,7 @@ export const ScorchedSandsMonster = {
 		chaseIncrease: 30,
 		drop: [
 			{item: MATERIAL.VultureFeather, chance: 0.2},
+			{item: MATERIAL.LowerNormal, chance: 0.1},
 		],
 	} as MonsterType,
 
@@ -126,6 +131,7 @@ export const ScorchedSandsMonster = {
 		dropGold: 500,
 		drop: [
 			{item: MATERIAL.BehemothHeart, chance: 0.5},
+			{item: MATERIAL.LowerGiant, chance: 0.33},
 		],
 	} as MonsterType,
 }

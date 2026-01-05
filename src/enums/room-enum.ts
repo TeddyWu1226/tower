@@ -47,4 +47,10 @@ export const RoomEnum = {
 		icon: '☠️',
 		color: '#D32F2F',
 	},
+	Fusion: {
+		value: 8,
+		label: '合成',
+		icon: '🛠️',
+		color: '#177edf',
+	},
 };

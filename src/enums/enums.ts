@@ -43,7 +43,10 @@ export enum SpecialEventEnum {
     None = 'None', // 幽靈事件
     GetFruit = 'GetFruit', 	// 魔樹事件
     JobWarrior = 'JobWarrior', 	// 轉職劍士
-    JobWizard = 'JobWizard' // 轉職法師
+    JobWizard = 'JobWizard', // 轉職法師
+
+    // 額外功能事件
+    Fusion = 'Fusion', // 合成功能
 }
 
 /**

@@ -295,3 +295,12 @@ export interface SkillType {
     use: (prop: SkillParams) => Promise<boolean> | boolean; // 回傳技能是否施展成功
 }
 
+
+export interface FusionListType {
+    target: ItemType
+    requirements: {
+        item: ItemType;
+        count: number
+    }[]
+}
+
