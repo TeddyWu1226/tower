@@ -42,7 +42,7 @@ const getSellPrice = (item: StackedItem) => {
   if (item['position']) {
     return Math.floor((EQUIP_BASE_PRICE[item.quality] || 50) * 0.25);
   }
-  return Math.floor((MATERIAL_BASE_PRICE[item.quality] || 1));
+  return Math.floor((item?.price || 1));
 };
 
 const handleSell = (item: StackedItem) => {

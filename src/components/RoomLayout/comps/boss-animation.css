@@ -1,10 +1,21 @@
-/* ------------------- 巨大怪物 (Elite) ------------------- */
-.big .monster-icon{
-    font-size: 3.5rem;
+/* ------------------- 巨大怪物 (BIG) ------------------- */
+.big .monster-icon {
+    font-size: 3.5rem !important;;
 }
-.big .monster-name{
+
+.big .monster-name {
     font-size: 0.8rem;
 }
+
+/* ------------------- 巨大怪物 (GIANT) ------------------- */
+.giant .monster-icon {
+    font-size: 5rem !important;
+}
+
+.giant .monster-name {
+    font-size: 0.6rem;
+}
+
 /* ------------------- 菁英怪 (Elite) ------------------- */
 /* 風格：欄邊，穩重但強大 */
 .monster-card.elite {

@@ -256,4 +256,7 @@ p {
 .is-debuff {
   filter: drop-shadow(0 0 2px red);
 }
+:deep(.el-card__body){
+  padding: 1rem;
+}
 </style>
