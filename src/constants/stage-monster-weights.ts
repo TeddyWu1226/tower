@@ -60,7 +60,7 @@ export const ScorchingDunesWeights: Record<string, number> = {
     SandRabbit: 40,
     CactusSpirit: 25,
     QuicksandWorm: 10,
-    DuneBeast: 5
+    DuneBeast: 3
 };
 
 /**
@@ -72,6 +72,18 @@ export const MirageOasisWeights: Record<string, number> = {
     QuicksandWorm: 20,
     DesertScorpion: 20,
     ArmoredVulture: 20
+};
+
+/**
+ * 區域 2-2: 沙暴隘口(SandstormPass)
+ */
+export const SandstormPassWeights: Record<string, number> = {
+    SandRabbit: 10,
+    CactusSpirit: 10,
+    QuicksandWorm: 10,
+    DesertScorpion: 20,
+    ArmoredVulture: 20,
+    DuneBeast: 3
 };
 
 

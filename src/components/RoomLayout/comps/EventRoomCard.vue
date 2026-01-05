@@ -73,11 +73,14 @@ const getAvailableEvents = () => {
  * 隨機抽取事件
  */
 const pickRandomEvent = () => {
-  const pool = getAvailableEvents();
+  let pool = getAvailableEvents();
   console.log('pool', pool)
   // 設置防錯，如果沒有可用事件則給一個預設
   if (pool.length === 0) return SpecialEventEnum.Gamble;
-
+  // 強制事件
+  if (pool.includes(SpecialEventEnum.Fusion)){
+    pool = [SpecialEventEnum.Fusion]
+  }
   const randomIndex = Math.floor(Math.random() * pool.length);
   return pool[randomIndex];
 };

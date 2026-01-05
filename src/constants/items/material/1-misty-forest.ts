@@ -32,8 +32,9 @@ export const MistyForestMaterial = {
     BeeStinger: {
         name: '毒蜂刺',
         icon: '🐝',
-        description: '末端帶有倒鉤，依然殘留著強烈毒性',
+        description: '末端帶有倒鉤，依然殘留著強烈毒性(作者友情提示:未來可以合成解毒劑)',
         quality: 1,
+        price: 35
     } as ItemType,
     OwlFeather: {
         name: '夜行梟羽毛',
@@ -53,7 +54,7 @@ export const MistyForestMaterial = {
         name: '蔓陀羅根',
         icon: '🍠',
         description: '長得像人臉的怪異根部，極為珍貴的鍊金素材',
-        quality: 2,
+        quality: 3,
         price: 100
     } as ItemType,
 }

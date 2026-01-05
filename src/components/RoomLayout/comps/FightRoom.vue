@@ -41,10 +41,40 @@ const currentRoomValue = computed(() => {
       return gameStateStore.currentRoomValue
     }
 )
+
 const monsterCardRefs = ref<MonsterCardExposed[]>([]);
 const monsterDropGold = ref(0)
 const monsterDropItems = ref<ItemType[]>([])
+// 特殊掉落
+const specialExtraDrop = () => {
+  // 特殊掉落道具
+  if (gameStateStore.currentRoomValue === RoomEnum.Boss.value) {
+    return
+  }
+  switch (gameStateStore.currentStage) {
+    case 5:
+      if (!playerStore.hasItem(SpecialItem.TwilightKey.name)[0]) {
+        const percent = 0.05 + (gameStateStore.days * 0.01)
+        if (checkProbability(percent)) {
+          playerStore.gainItem(SpecialItem.TwilightKey);
+          monsterDropItems.value.push(SpecialItem.TwilightKey)
+        }
+      }
+      break;
+    case 7:
+      if (!playerStore.hasItem(SpecialItem.ClearMirror.name)[0] && !(playerStore.hasItem(SpecialItem.ClearMirrorFragment.name)[1] >= 10)) {
+        const percent = gameStateStore.days * 0.01
+        if (checkProbability(percent)) {
+          playerStore.gainItem(SpecialItem.ClearMirrorFragment);
+          monsterDropItems.value.push(SpecialItem.ClearMirrorFragment)
+        }
+      }
+      break
+    default:
+      break;
+  }
 
+}
 
 // 怪物生成
 const genMonsters = (count: number, weight: Record<string, number>, eliteBoost = false) => {
@@ -152,13 +182,7 @@ const whenMonsterDead = (selectedMonster: MonsterType) => {
     monsterDropItems.value.push(item)
   });
   // 特殊掉落道具
-  if (gameStateStore.currentStage === 5 && !playerStore.hasItem(SpecialItem.TwilightKey.name)[0] && gameStateStore.currentRoomValue !== RoomEnum.Boss.value) {
-    const percent = 0.05 + (gameStateStore.days * 0.01)
-    if (checkProbability(percent)) {
-      playerStore.gainItem(SpecialItem.TwilightKey);
-      monsterDropItems.value.push(SpecialItem.TwilightKey)
-    }
-  }
+  specialExtraDrop()
   // 觸發死亡被動
   if (selectedMonster.onDead && MonsterOnDead[selectedMonster.onDead]) {
     // 執行對應的函式

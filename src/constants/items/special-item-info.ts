@@ -18,4 +18,18 @@ export const SpecialItem = {
 		unsellable: true,
 		skill: 'usePauseToken'
 	} as UsableType,
+	ClearMirror: {
+		name: '清澈之鏡',
+		icon: '🪞',
+		description: '清澈透亮的鏡子,可以讓你看穿幻象的迷霧',
+		quality: 4,
+		unsellable: true,
+	} as ItemType,
+	ClearMirrorFragment: {
+		name: '清澈之鏡碎片',
+		icon: '◀',
+		description: '一片被打碎的鏡子碎片',
+		quality: 3,
+		unsellable: true,
+	} as ItemType,
 }

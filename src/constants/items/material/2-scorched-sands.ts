@@ -17,6 +17,14 @@ export const ScorchedSandsMaterial = {
 		price: 20
 	} as ItemType,
 
+	CactusWater: {
+		name: '仙人掌的純淨水',
+		icon: '💦',
+		description: '稀有物品，極少仙人掌才會掉落的清澈之水。',
+		quality: 3,
+		price: 120
+	} as ItemType,
+
 	SandWormBloodClot: {
 		name: '沙蟲血塊',
 		icon: '🩸',
@@ -28,9 +36,17 @@ export const ScorchedSandsMaterial = {
 	ScorpionShell: {
 		name: '蠍子殼',
 		icon: '🦂',
-		description: '沙漠蠍子堅硬的外殼，是製作簡易護甲的基礎素材。',
+		description: '沙漠蠍子堅硬的外殼。',
 		quality: 0,
 		price: 50
+	} as ItemType,
+
+	ScorpionBlackShell: {
+		name: '蠍子黑殼',
+		icon: '🦂',
+		description: '稀有物品，沙漠蠍子腹部黑色到發亮的鎧甲部位。',
+		quality: 3,
+		price: 150
 	} as ItemType,
 
 	VultureFeather: {

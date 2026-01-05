@@ -36,7 +36,7 @@ const bless = (): void => {
 const MoneyBtnRef = ref()
 const money = (): void => {
   taken.value = true
-  const money = 50
+  const money = 25 + gameStateStore.currentStage * 25
   playerStore.info.gold += money
   const text = `獲得 💰${money}G`
   showEffect(MoneyBtnRef.value?.$el, text, "buff")

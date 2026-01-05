@@ -1,6 +1,7 @@
 import {MonsterType} from "@/types";
 import {WorldDefault} from "@/assets/const";
 import {Usable} from "@/constants/items/usalbe-item/usable-info";
+import {MATERIAL} from "@/constants/items/material/material-info";
 
 export const Boss = {
     // --- 區域 1: 迷霧森林 (Misty Forest) ---
@@ -107,7 +108,7 @@ export const Boss = {
     // --- 區域 2: 灼熱沙漠 (Scorched Sands) ---
     ScorchingDunes: {
         icon: '🦂',
-        name: '劇毒黑蠍',
+        name: '沙影魔獸',
         class: 'boss big',
         description: '潛伏於沙丘之下的殺手，如果連續受到他的毒刺攻擊,他的毒會愈發猛烈',
         ad: 17,
@@ -124,6 +125,10 @@ export const Boss = {
         chaseIncrease: 200,
         onStart: 'scorchingDunesOnStart',
         onAttack: 'scorchingDunesOnAttack',
+        drop:[
+            {item: MATERIAL.LowerLarge, chance: 1},
+            {item: MATERIAL.ScorpionBlackShell, chance: 0.33},
+        ]
     } as MonsterType,
     MirageOasis: {
         icon: '🐍',
