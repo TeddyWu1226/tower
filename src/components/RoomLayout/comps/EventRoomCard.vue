@@ -58,7 +58,7 @@ const EVENT_CONFIG = [
     type: SpecialEventEnum.NeedWater, // 求水事件
     canAppear: () => {
       if (gameStateStore.otherRecord['WATER'] === 1) return false
-      return gameStateStore.currentStage >= 2
+      return gameStateStore.currentStage >= 6
     }
   }
 ];

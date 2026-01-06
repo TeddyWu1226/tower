@@ -5,10 +5,11 @@ import {RoomEnum} from "@/enums/room-enum";
 import {useGameStateStore} from "@/store/game-state-store";
 import {usePlayerStore} from "@/store/player-store";
 import {getRandomLabelByWeight} from "@/utils/create";
-import {DEFAULT_ROOM_WEIGHTS, EAST_ROOM_WEIGHTS, NORMAL_ROOM_WEIGHTS} from "@/constants/default-const";
+import {DEFAULT_ROOM_WEIGHTS, EAST_ROOM_WEIGHTS} from "@/constants/default-const";
 import {useTrackerStore} from "@/store/track-store";
 import {DifficultyEnum} from "@/enums/difficulty-enum";
 import EvnStatus from "@/constants/status/evn-status";
+import {useEpicSubtitle} from "@/components/Shared/EpicSubtitle/useEpicSubtitle";
 
 const props = defineProps({
   disabled: Boolean,
@@ -45,6 +46,7 @@ const goNextStage = () => {
   gameStateStore.nextRooms = []
   if (gameStateStore.currentStage === 8) {
     playerStore.addStatus(EvnStatus.Sandstorm)
+    useEpicSubtitle("沙塵暴席捲整個峽谷...", 2000);
   }
 }
 onMounted(() => {
