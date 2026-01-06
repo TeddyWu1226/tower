@@ -81,8 +81,8 @@ export const SandstormPassWeights: Record<string, number> = {
     SandRabbit: 10,
     CactusSpirit: 10,
     QuicksandWorm: 10,
-    DesertScorpion: 20,
-    ArmoredVulture: 20,
+    DesertScorpion: 10,
+    ArmoredVulture: 10,
     DuneBeast: 3
 };
 

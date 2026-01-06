@@ -70,8 +70,8 @@ const STAGE_GOALS: Record<number, {
   4: {type: QuestType.SURVIVE, target: '天', need: 50, label: '生存'},
   5: {type: QuestType.COLLECT, target: SpecialItem.TwilightKey.name, need: 1, label: '收集'},
   6: {type: QuestType.SURVIVE, target: '天', need: 30, label: '生存'},
-  // 7: {type: QuestType.COLLECT, target: SpecialItem.ClearMirror.name, need: 1, label: '收集'},
-  // 8: {type: QuestType.SURVIVE, target: '天', need: 999, label: '生存(還沒完成)'},
+  7: {type: QuestType.COLLECT, target: SpecialItem.ClearMirror.name, need: 1, label: '收集'},
+  8: {type: QuestType.SURVIVE, target: '天', need: 999, label: '生存(待完成)'},
 };
 // 獲取當前階段的進度數據
 const stageProgress = computed(() => {

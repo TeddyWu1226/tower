@@ -8,7 +8,7 @@ import {getRandomLabelByWeight} from "@/utils/create";
 import {DEFAULT_ROOM_WEIGHTS, EAST_ROOM_WEIGHTS, NORMAL_ROOM_WEIGHTS} from "@/constants/default-const";
 import {useTrackerStore} from "@/store/track-store";
 import {DifficultyEnum} from "@/enums/difficulty-enum";
-import {SpecialItem} from "@/constants/items/special-item-info";
+import EvnStatus from "@/constants/status/evn-status";
 
 const props = defineProps({
   disabled: Boolean,
@@ -43,6 +43,9 @@ const goNextStage = () => {
   gameStateStore.init(gameStateStore.currentStage + 1)
   gameStateStore.setRoom(RoomEnum.Bless.value)
   gameStateStore.nextRooms = []
+  if (gameStateStore.currentStage === 8) {
+    playerStore.addStatus(EvnStatus.Sandstorm)
+  }
 }
 onMounted(() => {
   if (gameStateStore.nextRooms.length > 0) {
