@@ -24,7 +24,7 @@ const hasSave = computed(() => {
 const initAll = async () => {
   playerStore.init();
   saveStore.clearSaves()
-  gameStateStore.init();
+  gameStateStore.init(1, true);
   if (gameStateStore.difficulty === DifficultyEnum.Easy.value) {
     playerStore.gainItem(Usable.SmokeBomb);
     playerStore.gainItem(Usable.SmokeBomb);

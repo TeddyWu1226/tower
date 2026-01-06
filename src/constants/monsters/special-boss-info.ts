@@ -1,7 +1,7 @@
 import {MonsterType} from "@/types";
 import {WorldDefault} from "@/assets/const";
 import {MATERIAL} from "@/constants/items/material/material-info";
-import {Accessory1} from "@/constants/items/equipment/accessories-info";
+import {Accessory1, Accessory2} from "@/constants/items/equipment/accessories-info";
 
 
 export const SpecialBoss = {
@@ -24,6 +24,28 @@ export const SpecialBoss = {
 		onStart: 'evilWoodManOnStart',
 		drop: [
 			{item: Accessory1.CursedWoodenRing, chance: 1}
+		],
+	} as MonsterType,
+	AtreidesMan: {
+		icon: '👦🏼',
+		name: '神秘男子',
+		class: 'boss',
+		description: '穿著黑色戰甲的神秘男子,因為你給他喝了奇怪的液體正大發雷霆',
+		ad: 22,
+		critIncrease: WorldDefault.critIncrease,
+		critRate: 35,
+		adDefend: 10,
+		apDefend: 10,
+		dodge: 35,
+		hit: 10,
+		hp: 100,
+		hpLimit: 200,
+		lifeSteal: 10,
+		level: 8,
+		dropGold: 0,
+		onStart: 'atreidesManOnStart',
+		drop: [
+			{item: Accessory2.AtreidesNecklace, chance: 1}
 		],
 	} as MonsterType,
 };

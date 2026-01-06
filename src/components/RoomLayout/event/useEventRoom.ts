@@ -8,15 +8,17 @@ import JobWizardEvent from "@/components/RoomLayout/event/JobWizardEvent.vue";
 import PotionEvent from "@/components/RoomLayout/event/PotionEvent.vue";
 import StorytellerEvent from "@/components/RoomLayout/event/StorytellerEvent.vue";
 import FusionEvent from "@/components/RoomLayout/event/FusionEvent.vue";
+import NeedWaterEvent from "@/components/RoomLayout/event/NeedWaterEvent.vue";
 
 export const eventComponentMap = {
-    [SpecialEventEnum.None]: NoneEvent,
-    [SpecialEventEnum.Gamble]: GambleEvent,
-    [SpecialEventEnum.GetFruit]: GetFruitEvent,
-    [SpecialEventEnum.JobWarrior]: JobWarriorEvent,
-    [SpecialEventEnum.JobWizard]: JobWizardEvent,
-    [SpecialEventEnum.Chest]: ChestEvent,
-    [SpecialEventEnum.Potion]: PotionEvent,
-    [SpecialEventEnum.Storyteller]: StorytellerEvent,
-    [SpecialEventEnum.Fusion]: FusionEvent
+	[SpecialEventEnum.None]: NoneEvent,
+	[SpecialEventEnum.Gamble]: GambleEvent,
+	[SpecialEventEnum.GetFruit]: GetFruitEvent,
+	[SpecialEventEnum.JobWarrior]: JobWarriorEvent,
+	[SpecialEventEnum.JobWizard]: JobWizardEvent,
+	[SpecialEventEnum.Chest]: ChestEvent,
+	[SpecialEventEnum.Potion]: PotionEvent,
+	[SpecialEventEnum.Storyteller]: StorytellerEvent,
+	[SpecialEventEnum.Fusion]: FusionEvent,
+	[SpecialEventEnum.NeedWater]: NeedWaterEvent
 };

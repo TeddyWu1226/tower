@@ -114,4 +114,15 @@ export const MonsterOnStart: Record<string, (params: MonsterActionParams) => voi
 			}
 		);
 	},
+	atreidesManOnStart: ({playerStore, targetElement}) => {
+		// 額外動畫演示
+		useFloatingMessage(
+			'操!你給我喝了啥!',
+			targetElement,
+			{
+				duration: 2000, // 動畫時間保持不變
+				color: 'red'
+			}
+		);
+	},
 };

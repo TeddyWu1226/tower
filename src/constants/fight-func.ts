@@ -114,6 +114,11 @@ export function applyAttackDamage(attacker: UnitType, defender: UnitType): Battl
 	// 4. 記錄剩餘生命值
 	outcome.remainingHP = defender.hp;
 
+	// 生命回復
+	if (outcome.healAmount) {
+		attacker.hp = Math.min(attacker.hpLimit, attacker.hp + outcome.healAmount);
+	}
+
 	// 輸出戰鬥日誌
 	const logMessage = [
 		`${attacker.name || '攻擊者'} 攻擊 ${defender.name || '防禦者'}，`,

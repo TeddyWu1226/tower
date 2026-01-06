@@ -28,8 +28,7 @@ const EVENT_CONFIG = [
   },
   {
     type: SpecialEventEnum.GetFruit, // 魔樹事件
-    canAppear: () => !gameStateStore.thisStageAlreadyAppear(SpecialEventEnum.GetFruit) &&
-        !gameStateStore.isEventClose(SpecialEventEnum.GetFruit)
+    canAppear: () => !gameStateStore.thisStageAlreadyAppear(SpecialEventEnum.GetFruit)
   },
   {
     type: SpecialEventEnum.JobWarrior, // 劍士轉職事件
@@ -52,7 +51,13 @@ const EVENT_CONFIG = [
   {
     type: SpecialEventEnum.Fusion, // 合成功能解鎖
     canAppear: () => {
-      if (gameStateStore.isEventClose(SpecialEventEnum.Fusion)) return false
+      return gameStateStore.currentStage >= 6
+    }
+  },
+  {
+    type: SpecialEventEnum.NeedWater, // 求水事件
+    canAppear: () => {
+      if (gameStateStore.otherRecord['WATER'] === 1) return false
       return gameStateStore.currentStage >= 2
     }
   }
@@ -65,6 +70,7 @@ const EVENT_CONFIG = [
 const getAvailableEvents = () => {
   // 過濾出所有符合出現條件的事件 Type
   return EVENT_CONFIG
+      .filter(event => !gameStateStore.isEventClose(event.type))
       .filter(event => event.canAppear())
       .map(event => event.type);
 };
@@ -78,7 +84,7 @@ const pickRandomEvent = () => {
   // 設置防錯，如果沒有可用事件則給一個預設
   if (pool.length === 0) return SpecialEventEnum.Gamble;
   // 強制事件
-  if (pool.includes(SpecialEventEnum.Fusion)){
+  if (pool.includes(SpecialEventEnum.Fusion)) {
     pool = [SpecialEventEnum.Fusion]
   }
   const randomIndex = Math.floor(Math.random() * pool.length);

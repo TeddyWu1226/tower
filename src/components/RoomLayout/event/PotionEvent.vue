@@ -19,13 +19,13 @@ const playerStore = usePlayerStore();
 const isDrinking = ref(false);
 const resultType = ref<'heal' | 'mana' | 'debuff' | 'neutral' | null>(null);
 
-const iShowPotion = computed(() => gameStateStore.currentStage <= 5)
-const resultMsg = ref(iShowPotion.value ? "這裡剩下滿地的空瓶子。" : '這裡剩下一口乾涸的水井。');
+const isShowPotion = computed(() => gameStateStore.currentStage <= 5)
+const resultMsg = ref(isShowPotion.value ? "這裡剩下滿地的空瓶子。" : '這裡剩下一口乾涸的水井。');
 const buff = ref<StatusEffect | undefined>();
 
 
 const eventConfig = computed(() => {
-  if (iShowPotion.value) {
+  if (isShowPotion.value) {
     return {
       title: "奇怪的藥劑櫃",
       icon: "🧪",
@@ -68,11 +68,19 @@ const drinkPotion = () => {
       playerStore.info.hp = Math.min(playerStore.finalStats.hpLimit, playerStore.info.hp + healAmount);
       resultMsg.value = `味道意外地清甜！恢復了 <span style="color: #4caf50; font-weight: bold;">${healAmount} HP</span>。`;
 
+      if (!isShowPotion.value && !!gameStateStore.otherRecord['WATER']) {
+        resultMsg.value += `<br/>你想起手上的空瓶,順手用這乾淨的液體裝了滿了它。`
+        gameStateStore.otherRecord['WATER'] = 2
+      }
     } else if (rnd < 55) {
       // 5% 惡作劇
       resultType.value = 'neutral';
       resultMsg.value = `喝完之後你的皮膚變成了 <span style="color: #9c27b0; font-weight: bold;">紫色</span>，雖然感覺沒什麼用，但你覺得自己變帥了。`;
 
+      if (!isShowPotion.value && !!gameStateStore.otherRecord['WATER']) {
+        resultMsg.value += `<br/>你想起手上的空瓶,順手用這奇怪的液體裝了滿了它。`
+        gameStateStore.otherRecord['WATER'] = 2
+      }
     } else {
       // 45% 機率：獲得狀態效果 (Buff/Debuff)
       resultType.value = 'debuff';
@@ -83,9 +91,12 @@ const drinkPotion = () => {
       buff.value = randomStatus;
       playerStore.addStatus(randomStatus);
 
-      // 判斷狀態好壞來決定顏色 (簡單邏輯)
-      const statusColor = '#ff4d4f';
-      resultMsg.value = `嘔... 味道怪怪的！你感到身體產生異樣，獲得狀態 <span style="color: ${statusColor}; font-weight: bold;">${randomStatus.name}</span>。`;
+      resultMsg.value = `嘔... 味道怪怪的！你感到身體產生異樣，獲得狀態 <span style="color: #ff4d4f; font-weight: bold;">${randomStatus.name}</span>。`;
+
+      if (!isShowPotion.value && !!gameStateStore.otherRecord['WATER']) {
+        resultMsg.value += `<br/>你想起手上的空瓶,順手用這奇怪的液體裝了滿了它。`
+        gameStateStore.otherRecord['WATER'] = 3
+      }
     }
 
     // 動畫結束，切換狀態
