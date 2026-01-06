@@ -23,6 +23,9 @@ export function calculateDamage(attacker: UnitType, defender: UnitType): DamageR
 	let hitRate = Math.max(0, BASE_HIT_RATE + attacker.hit - defender.dodge);
 	if (Math.random() * MAX_RATE >= hitRate) return result;
 	result.isHit = true;
+	if (!result.isHit) {
+		return result;
+	}
 
 	// --- 2. 暴擊判斷 ---
 	if (Math.random() * MAX_RATE < attacker.critRate) {
@@ -71,9 +74,10 @@ export function calculateDamage(attacker: UnitType, defender: UnitType): DamageR
  *
  * @param attacker 攻擊者單元
  * @param defender 被攻擊者單元 (此物件的 HP 屬性將會被修改)
+ * @param monster 怪物原本的物件(用於更新血量)
  * @returns 包含戰鬥結果的 BattleOutcome 物件
  */
-export function applyAttackDamage(attacker: UnitType, defender: UnitType): BattleOutcome {
+export function applyAttackDamage(attacker: UnitType, defender: UnitType, monster: MonsterType): BattleOutcome {
 	const logStore = useLogStore();
 	const playerStore = usePlayerStore();
 	// 1. 執行傷害計算
@@ -103,7 +107,7 @@ export function applyAttackDamage(attacker: UnitType, defender: UnitType): Battl
 		defender.hp = playerStore.info.hp;
 	} else {
 		// 普通怪物的邏輯 (假設怪物是普通的 reactive 物件)
-		defender.hp = Math.max(0, defender.hp - damageTaken);
+		monster.hp = Math.max(0, monster.hp - damageTaken);
 	}
 
 	// 3. 判斷是否擊敗
@@ -111,12 +115,16 @@ export function applyAttackDamage(attacker: UnitType, defender: UnitType): Battl
 		outcome.isKilled = true;
 	}
 
-	// 4. 記錄剩餘生命值
+	// 記錄剩餘生命值
 	outcome.remainingHP = defender.hp;
 
-	// 生命回復
+	// 鞥生命回復
 	if (outcome.healAmount) {
-		attacker.hp = Math.min(attacker.hpLimit, attacker.hp + outcome.healAmount);
+		if (attacker.name === monster.name) {
+			monster.hp = Math.min(attacker.hpLimit, attacker.hp + outcome.healAmount);
+		} else {
+			playerStore.info.hp = Math.min(attacker.hpLimit, playerStore.info.hp + outcome.healAmount);
+		}
 	}
 
 	// 輸出戰鬥日誌

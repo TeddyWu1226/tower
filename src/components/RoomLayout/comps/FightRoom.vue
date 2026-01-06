@@ -10,7 +10,8 @@ import {ItemType, MonsterType, SkillType} from "@/types";
 import {
   applyAttackDamage,
   applyRandomFloatAndRound,
-  canEscape, getLootFromTable,
+  canEscape,
+  getLootFromTable,
   spawnMonsters
 } from "@/constants/fight-func";
 import {ElMessage} from "element-plus";
@@ -161,7 +162,7 @@ const monsterMove = () => {
       });
     }
     // 傷害計算
-    applyAttackDamage(getEffectiveStats(selectedMonster), playerStore.finalStats);
+    applyAttackDamage(getEffectiveStats(selectedMonster), playerStore.finalStats, selectedMonster);
   })
 }
 
@@ -252,9 +253,8 @@ const onAttack = () => {
   }
   // 傷害計算
   if (!isPlayerStuck()) {
-    const damageOutput = applyAttackDamage(playerStore.finalStats, selectedMonster);
-    const targetElement = monsterCardRefs.value[selectedMonsterIndex.value];
-    selectedMonster.lastDamageResult = damageOutput
+    selectedMonster.lastDamageResult = applyAttackDamage(playerStore.finalStats,
+        getEffectiveStats(selectedMonster), selectedMonster)
   }
 
   // 檢查怪物是否死亡
