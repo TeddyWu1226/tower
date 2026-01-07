@@ -8,8 +8,8 @@ export const ScorchedSandsMonster = {
 		name: '沙漠兔',
 		description: '在炙熱的沙漠中跳躍,狩獵方式是一腳踢死獵物',
 		level: 6,
-		hp: 60,
-		hpLimit: 60,
+		hp: 50,
+		hpLimit: 50,
 		ad: 11,
 		adDefend: 5,
 		apDefend: 5,
@@ -19,11 +19,10 @@ export const ScorchedSandsMonster = {
 		critIncrease: 150,
 		dropGold: 25,
 		drop: [
-			{item: MATERIAL.DesertRabbitMeat, chance: 0.5},
+			{item: MATERIAL.DesertRabbitMeat, chance: 0.3},
 			{item: MATERIAL.LowerNormal, chance: 0.1},
 		]
 	} as MonsterType,
-
 	CactusSpirit: {
 		icon: '🌵',
 		name: '仙人掌精',
@@ -42,20 +41,19 @@ export const ScorchedSandsMonster = {
 		dropGold: 20,
 		onAttacked: 'cactusSpiritOnAttacked',
 		drop: [
-			{item: MATERIAL.CactusMeat, chance: 0.5},
+			{item: MATERIAL.CactusMeat, chance: 0.3},
 			{item: MATERIAL.CactusWater, chance: 0.05},
 			{item: MATERIAL.LowerNormal, chance: 0.1},
 		]
 	} as MonsterType,
-
 	QuicksandWorm: {
 		icon: '🪱',
 		name: '流沙蟲',
 		description: '在大地深處鑽洞的生物，動作難以捕捉',
 		level: 7,
 		ad: 13,
-		hp: 100,
-		hpLimit: 100,
+		hp: 80,
+		hpLimit: 80,
 		adDefend: 0,
 		apDefend: 8,
 		hit: 12,
@@ -64,11 +62,10 @@ export const ScorchedSandsMonster = {
 		critIncrease: 100,
 		dropGold: 20,
 		drop: [
-			{item: MATERIAL.SandWormBloodClot, chance: 0.5},
+			{item: MATERIAL.SandWormBloodClot, chance: 0.3},
 			{item: MATERIAL.LowerNormal, chance: 0.1},
 		]
 	} as MonsterType,
-
 	DesertScorpion: {
 		icon: '🦂',
 		name: '荒漠小蠍',
@@ -86,12 +83,11 @@ export const ScorchedSandsMonster = {
 		dropGold: 20,
 		onAttack: 'desertScorpionOnAttack',
 		drop: [
-			{item: MATERIAL.ScorpionShell, chance: 0.2},
+			{item: MATERIAL.ScorpionShell, chance: 0.1},
 			{item: MATERIAL.ScorpionBlackShell, chance: 0.05},
 			{item: MATERIAL.LowerNormal, chance: 0.1},
 		],
 	} as MonsterType,
-
 	ArmoredVulture: {
 		icon: '🦅',
 		name: '鐵羽禿鷹',
@@ -110,6 +106,91 @@ export const ScorchedSandsMonster = {
 		chaseIncrease: 30,
 		drop: [
 			{item: MATERIAL.VultureFeather, chance: 0.2},
+			{item: MATERIAL.LowerNormal, chance: 0.1},
+		],
+	} as MonsterType,
+	SandRabbit2: {
+		icon: '🐇',
+		name: '沙漠獵兔',
+		description: '更強大的沙漠兔,有高額閃避以及生存能力',
+		level: 10,
+		hp: 80,
+		hpLimit: 80,
+		ad: 10,
+		adDefend: 5,
+		apDefend: 5,
+		hit: 10,
+		dodge: 30,
+		critRate: 25,
+		critIncrease: 150,
+		dropGold: 25,
+		drop: [
+			{item: MATERIAL.DesertRabbitMeat, chance: 0.5},
+			{item: MATERIAL.LowerNormal, chance: 0.1},
+		]
+	} as MonsterType,
+	CactusSpirit2: {
+		icon: '🌵',
+		name: '沙塵仙人掌精',
+		description: '表皮覆蓋黃色沙塵的仙人掌精，防禦較高且渾身佈滿尖刺，會對攻擊者噴射尖刺',
+		level: 10,
+		hp: 60,
+		hpLimit: 60,
+		ad: 3,
+		adDefend: 17,
+		apDefend: 17,
+		hit: 8,
+		dodge: 0,
+		critRate: 5,
+		critIncrease: 150,
+		chaseIncrease: -10,
+		dropGold: 20,
+		onAttacked: 'cactusSpiritOnAttacked',
+		drop: [
+			{item: MATERIAL.CactusMeat, chance: 0.5},
+			{item: MATERIAL.CactusWater, chance: 0.05},
+			{item: MATERIAL.LowerNormal, chance: 0.1},
+		]
+	} as MonsterType,
+	QuicksandWorm2: {
+		icon: '🪱',
+		name: '大流沙蟲',
+		description: '成年的流沙蟲，有高額血量以及傷害',
+		level: 11,
+		ad: 15,
+		hp: 120,
+		hpLimit: 120,
+		adDefend: 0,
+		apDefend: 8,
+		hit: 12,
+		dodge: 20,
+		critRate: 0,
+		critIncrease: 100,
+		dropGold: 20,
+		drop: [
+			{item: MATERIAL.SandWormBloodClot, chance: 0.5},
+			{item: MATERIAL.LowerNormal, chance: 0.1},
+		]
+	} as MonsterType,
+	DesertScorpion2: {
+		icon: '🦂',
+		name: '荒漠蠍',
+		description: '毒蠍的成年體，尾部的毒針閃爍著致命的冷光。',
+		level: 11,
+		hp: 50,
+		hpLimit: 50,
+		ad: 15,
+		adDefend: 12,
+		apDefend: 12,
+		hit: 18,
+		dodge: 5,
+		critRate: 10,
+		critIncrease: 200,
+		dropGold: 20,
+		onAttack: 'desertScorpionOnAttack',
+		drop: [
+			{item: MATERIAL.ScorpionShell, chance: 0.2},
+			{item: MATERIAL.ScorpionBlackShell, chance: 0.05},
 			{item: MATERIAL.LowerNormal, chance: 0.1},
 		],
 	} as MonsterType,
