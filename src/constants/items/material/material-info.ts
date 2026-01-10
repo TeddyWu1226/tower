@@ -95,4 +95,4 @@ export const MonsterCrystals = {
 		price: 10000
 	} as ItemType,
 };
-export const MATERIAL = {...MistyForestMaterial, ...ScorchedSandsMaterial, ...MonsterCrystals}
+export const Material = {...MistyForestMaterial, ...ScorchedSandsMaterial, ...MonsterCrystals}

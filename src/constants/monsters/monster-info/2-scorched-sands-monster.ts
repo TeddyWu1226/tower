@@ -1,6 +1,6 @@
 import {MonsterType} from "@/types";
 import {Usable} from "@/constants/items/usalbe-item/usable-info";
-import {MATERIAL} from "@/constants/items/material/material-info";
+import {Material} from "@/constants/items/material/material-info";
 
 export const ScorchedSandsMonster = {
     SandRabbit: {
@@ -19,8 +19,8 @@ export const ScorchedSandsMonster = {
         critIncrease: 150,
         dropGold: 25,
         drop: [
-            {item: MATERIAL.DesertRabbitMeat, chance: 0.3},
-            {item: MATERIAL.LowerNormal, chance: 0.1},
+            {item: Material.DesertRabbitMeat, chance: 0.3},
+            {item: Material.LowerNormal, chance: 0.1},
         ]
     } as MonsterType,
     CactusSpirit: {
@@ -41,9 +41,9 @@ export const ScorchedSandsMonster = {
         dropGold: 20,
         onAttacked: 'cactusSpiritOnAttacked',
         drop: [
-            {item: MATERIAL.CactusMeat, chance: 0.3},
-            {item: MATERIAL.CactusWater, chance: 0.05},
-            {item: MATERIAL.LowerNormal, chance: 0.1},
+            {item: Material.CactusMeat, chance: 0.3},
+            {item: Material.CactusWater, chance: 0.05},
+            {item: Material.LowerNormal, chance: 0.1},
         ]
     } as MonsterType,
     QuicksandWorm: {
@@ -62,8 +62,8 @@ export const ScorchedSandsMonster = {
         critIncrease: 100,
         dropGold: 20,
         drop: [
-            {item: MATERIAL.SandWormBloodClot, chance: 0.3},
-            {item: MATERIAL.LowerNormal, chance: 0.1},
+            {item: Material.SandWormBloodClot, chance: 0.3},
+            {item: Material.LowerNormal, chance: 0.1},
         ]
     } as MonsterType,
     DesertScorpion: {
@@ -83,9 +83,9 @@ export const ScorchedSandsMonster = {
         dropGold: 20,
         onAttack: 'desertScorpionOnAttack',
         drop: [
-            {item: MATERIAL.ScorpionShell, chance: 0.1},
-            {item: MATERIAL.ScorpionBlackShell, chance: 0.05},
-            {item: MATERIAL.LowerNormal, chance: 0.1},
+            {item: Material.ScorpionShell, chance: 0.1},
+            {item: Material.ScorpionBlackShell, chance: 0.05},
+            {item: Material.LowerNormal, chance: 0.1},
         ],
     } as MonsterType,
     ArmoredVulture: {
@@ -105,8 +105,8 @@ export const ScorchedSandsMonster = {
         dropGold: 90,
         chaseIncrease: 30,
         drop: [
-            {item: MATERIAL.VultureFeather, chance: 0.2},
-            {item: MATERIAL.LowerNormal, chance: 0.1},
+            {item: Material.VultureFeather, chance: 0.2},
+            {item: Material.LowerNormal, chance: 0.1},
         ],
     } as MonsterType,
     SandRabbit2: {
@@ -125,8 +125,8 @@ export const ScorchedSandsMonster = {
         critIncrease: 150,
         dropGold: 25,
         drop: [
-            {item: MATERIAL.DesertRabbitMeat, chance: 0.5},
-            {item: MATERIAL.LowerNormal, chance: 0.1},
+            {item: Material.DesertRabbitMeat, chance: 0.5},
+            {item: Material.LowerNormal, chance: 0.1},
         ]
     } as MonsterType,
     CactusSpirit2: {
@@ -147,9 +147,9 @@ export const ScorchedSandsMonster = {
         dropGold: 20,
         onAttacked: 'cactusSpiritOnAttacked',
         drop: [
-            {item: MATERIAL.CactusMeat, chance: 0.5},
-            {item: MATERIAL.CactusWater, chance: 0.05},
-            {item: MATERIAL.LowerNormal, chance: 0.1},
+            {item: Material.CactusMeat, chance: 0.5},
+            {item: Material.CactusWater, chance: 0.05},
+            {item: Material.LowerNormal, chance: 0.1},
         ]
     } as MonsterType,
     QuicksandWorm2: {
@@ -168,8 +168,8 @@ export const ScorchedSandsMonster = {
         critIncrease: 100,
         dropGold: 20,
         drop: [
-            {item: MATERIAL.SandWormBloodClot, chance: 0.5},
-            {item: MATERIAL.LowerNormal, chance: 0.1},
+            {item: Material.SandWormBloodClot, chance: 0.5},
+            {item: Material.LowerNormal, chance: 0.1},
         ]
     } as MonsterType,
     DesertScorpion2: {
@@ -189,9 +189,9 @@ export const ScorchedSandsMonster = {
         dropGold: 20,
         onAttack: 'desertScorpionOnAttack',
         drop: [
-            {item: MATERIAL.ScorpionShell, chance: 0.2},
-            {item: MATERIAL.ScorpionBlackShell, chance: 0.05},
-            {item: MATERIAL.LowerNormal, chance: 0.1},
+            {item: Material.ScorpionShell, chance: 0.2},
+            {item: Material.ScorpionBlackShell, chance: 0.05},
+            {item: Material.LowerNormal, chance: 0.1},
         ],
     } as MonsterType,
     DuneBeast: {
@@ -212,9 +212,11 @@ export const ScorchedSandsMonster = {
         chaseIncrease: -100,
         dropGold: 500,
         drop: [
-            {item: MATERIAL.BehemothHeart, chance: 0.5},
-            {item: MATERIAL.LowerGiant, chance: 0.33},
+            {item: Material.BehemothHeart, chance: 0.5},
+            {item: Material.LowerGiant, chance: 0.33},
         ],
+        onDead: 'duneBeastOnDead',
+        onStart: 'duneBeastOnStart',
         onAttacked: 'duneBeastOnAttacked',
     } as MonsterType,
 

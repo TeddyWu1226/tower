@@ -6,7 +6,9 @@ import {SpecialEventEnum} from "@/enums/enums";
 import {usePlayerStore} from "@/store/player-store";
 import {CharEnum} from "@/enums/char-enum";
 import {useTrackerStore} from "@/store/track-store";
-import {MATERIAL} from "@/constants/items/material/material-info";
+import {Material} from "@/constants/items/material/material-info";
+import {Usable} from "@/constants/items/usalbe-item/usable-info";
+import {Monster} from "@/constants/monsters/monster-info";
 
 const gameStateStore = useGameStateStore();
 const playerStore = usePlayerStore();
@@ -66,7 +68,17 @@ const ScorchedSandsEvent = [
   {
     type: SpecialEventEnum.HuntDuneBeast, // 狩獵巨獸事件
     canAppear: () => {
-      return (playerStore.hasItem(MATERIAL.BehemothScales.name))[0]
+      return (
+          (!gameStateStore.thisStageAlreadyAppear(SpecialEventEnum.HuntDuneBeast) &&
+              gameStateStore.getEventProcess(SpecialEventEnum.HuntDuneBeast) === 0 &&
+              playerStore.hasItem(Material.BehemothScales.name)[0]
+          ) ||
+          (gameStateStore.getEventProcess(SpecialEventEnum.HuntDuneBeast) === 1 &&
+              playerStore.hasItem(Usable.DuneBeastBomb.name)[0]
+          ) ||
+          (trackerStore.getKillCount(Monster.DuneBeast.name, 'current') >= 1
+          )
+      )
     }
   }
 ]

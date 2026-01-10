@@ -1,6 +1,6 @@
 import {MonsterType} from "@/types";
 import {WorldDefault} from "@/assets/const";
-import {MATERIAL} from "@/constants/items/material/material-info";
+import {Material} from "@/constants/items/material/material-info";
 
 export const MistyForestMonster = {
     Slime: {
@@ -18,7 +18,7 @@ export const MistyForestMonster = {
         level: 1,
         dropGold: 3,
         drop: [
-            {item: MATERIAL.SlimeGoo, chance: 0.5}
+            {item: Material.SlimeGoo, chance: 0.5}
         ],
         onAttack: 'slimeOnAttack'
     } as MonsterType,
@@ -37,7 +37,7 @@ export const MistyForestMonster = {
         level: 1,
         dropGold: 5,
         drop: [
-            {item: MATERIAL.ForestWood, chance: 0.5}
+            {item: Material.ForestWood, chance: 0.5}
         ]
     } as MonsterType,
     WoodTick: {
@@ -55,7 +55,7 @@ export const MistyForestMonster = {
         level: 2,
         dropGold: 5,
         drop: [
-            {item: MATERIAL.AntShell, chance: 0.5}
+            {item: Material.AntShell, chance: 0.5}
         ]
     } as MonsterType,
     StingerBee: {
@@ -73,7 +73,7 @@ export const MistyForestMonster = {
         level: 3,
         dropGold: 12,
         drop: [
-            {item: MATERIAL.BeeStinger, chance: 0.1}
+            {item: Material.BeeStinger, chance: 0.1}
         ],
         onAttack: 'beeOnAttack'
     } as MonsterType,
@@ -92,7 +92,7 @@ export const MistyForestMonster = {
         level: 3,
         dropGold: 12,
         drop: [
-            {item: MATERIAL.RabbitHorn, chance: 0.3}
+            {item: Material.RabbitHorn, chance: 0.3}
         ]
     } as MonsterType,
     ForestOwl: {
@@ -110,7 +110,7 @@ export const MistyForestMonster = {
         level: 3,
         dropGold: 12,
         drop: [
-            {item: MATERIAL.OwlFeather, chance: 0.5}
+            {item: Material.OwlFeather, chance: 0.5}
         ]
     } as MonsterType,
     FairyGuard: {
@@ -162,7 +162,7 @@ export const MistyForestMonster = {
         level: 6,
         dropGold: 40,
         drop: [
-            {item: MATERIAL.MandrakeRoot, chance: 0.1}
+            {item: Material.MandrakeRoot, chance: 0.1}
         ],
         onDead: 'mandragoraOnDead'
     } as MonsterType,
@@ -183,7 +183,7 @@ export const MistyForestMonster = {
         dropGold: 50,
         drop: [
             {
-                item: MATERIAL.WolfSkin,
+                item: Material.WolfSkin,
                 chance: 1
             }
         ],

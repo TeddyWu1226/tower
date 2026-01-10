@@ -5,7 +5,7 @@ import {checkProbability, shuffleArray} from "@/utils/math";
 import {showEffect} from "@/components/Shared/FloatingEffect/EffectManager";
 import {SpecialItem} from "@/constants/items/special-item-info";
 import {create} from "@/utils/create";
-import {MATERIAL} from "@/constants/items/material/material-info";
+import {Material} from "@/constants/items/material/material-info";
 
 /**
  * 怪物受傷後判斷
@@ -74,7 +74,7 @@ export const MonsterOnAttacked: Record<string, (params: MonsterActionParams) => 
 		console.log('有喔')
 		if (checkProbability(0.2)) {
 			// 掉落鱗片
-			playerStore.gainItem(MATERIAL.BehemothScales)
+			playerStore.gainItem(Material.BehemothScales)
 			logStore.logger.add(`你從巨獸身上得到了一個鱗片`);
 		}
 	},

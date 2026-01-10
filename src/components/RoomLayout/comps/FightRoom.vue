@@ -284,6 +284,8 @@ const onItemSkill = ({skillKey, callback, el}) => {
         targetElement: el
       }
   )
+  // 檢查怪物是否死亡
+  checkAllMonsterDead()
 }
 const isUsing = ref(false)
 // 技能使用
@@ -368,21 +370,20 @@ const init = () => {
   // 檢查是否有突襲怪物
   if (gameStateStore.switchEnemy && gameStateStore.switchEnemy.length > 0) {
     gameStateStore.setCurrentEnemy(gameStateStore.takeSwitchEnemy());
+  } else {
+    switch (currentRoomValue.value) {
+      case RoomEnum.Fight.value:
+        genMonsters(1, getWeightByStage() || {'Error': 1});
+        break;
+      case RoomEnum.EliteFight.value:
+        genEliteMonster();
+        break;
+      case RoomEnum.Boss.value:
+        createBoss()
+        break
+    }
   }
-
-  // 若無緩存，則根據房間類型生成
-  switch (currentRoomValue.value) {
-    case RoomEnum.Fight.value:
-      genMonsters(1, getWeightByStage() || {'Error': 1});
-      break;
-    case RoomEnum.EliteFight.value:
-      genEliteMonster();
-      break;
-    case RoomEnum.Boss.value:
-      createBoss()
-      break
-  }
-  // 額外
+  // 回合開始的觸發
   nextTick().then(() => {
     gameStateStore.currentEnemy.forEach((monster, index) => {
       if (monster.onStart && MonsterOnStart[monster.onStart]) {

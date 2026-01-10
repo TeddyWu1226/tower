@@ -8,9 +8,12 @@ import {RoomEnum} from "@/enums/room-enum";
 import {create} from "@/utils/create";
 import {Monster} from "@/constants/monsters/monster-info";
 import {onUnmounted} from "vue";
+import {SpecialItem} from "@/constants/items/special-item-info";
+import {useTrackerStore} from "@/store/track-store";
 
 const gameStateStore = useGameStateStore();
 const playerStore = usePlayerStore();
+const trackerStore = useTrackerStore();
 
 /**
  * 流程控制說明：
@@ -21,6 +24,8 @@ const playerStore = usePlayerStore();
 // 第0階段
 const takeList = () => {
   gameStateStore.eventAction = 3
+  playerStore.gainItem(SpecialItem.DuneBeastBombCenter)
+  gameStateStore.addEventProcess(SpecialEventEnum.HuntDuneBeast)
   gameStateStore.transitionToNextState();
 }
 
@@ -29,7 +34,9 @@ const goFight = () => {
   gameStateStore.switchToFightRoom(RoomEnum.Fight.value, [create(Monster.DuneBeast)])
 }
 const finishQuest = () => {
+  playerStore.addGold(1000)
   gameStateStore.transitionToNextState();
+  gameStateStore.addEventProcess(SpecialEventEnum.HuntDuneBeast, true)
 }
 
 const onLeave = () => {
@@ -38,13 +45,14 @@ const onLeave = () => {
 
 const init = () => {
   gameStateStore.recordThisStageAppear(SpecialEventEnum.HuntDuneBeast)
+  if (trackerStore.getKillCount(Monster.DuneBeast.name, 'current') >= 1) {
+    gameStateStore.eventProcess[SpecialEventEnum.HuntDuneBeast] = 2
+  }
 }
 init()
 
 onUnmounted(() => {
-  if (gameStateStore.getEventProcess(SpecialEventEnum.HuntDuneBeast) === 0 && gameStateStore.eventAction == 3) {
-    gameStateStore.addEventProcess(SpecialEventEnum.HuntDuneBeast)
-  }
+
 })
 </script>
 
@@ -54,7 +62,13 @@ onUnmounted(() => {
       <div class="general-event">
         <div class="event-icon">👤</div>
         <div class="dialog-box">
-          <template v-if="gameStateStore.getEventProcess(SpecialEventEnum.HuntDuneBeast) === 0">
+          <template v-if="gameStateStore.stateIs(GameState.SELECTION_PHASE)">
+            <span v-if="gameStateStore.isEventClose(SpecialEventEnum.HuntDuneBeast)">「謝謝你。」</span>
+            <span v-else>
+              「等你準備好後，我會再來找你的。」
+            </span>
+          </template>
+          <template v-else-if="gameStateStore.getEventProcess(SpecialEventEnum.HuntDuneBeast) === 0">
             <template v-if="gameStateStore.eventAction === 0">
               一名披著斗篷的跛腳獵人攔住了你，眼神盯著你行囊中閃爍的碎片：<br/>
               「那是...巨獸的鱗片？沒想到有人如此魯莽到會去挑戰它。」
@@ -68,24 +82,18 @@ onUnmounted(() => {
               「我還欠缺點材料，給你這個裝置以及這是需求清單，只要製作出這個必定能在戰鬥中派上用場!」<br/>
               <p class="hint">(你獲得了巨獸炸彈核心以及巨獸炸彈的合成清單)</p>
             </template>
-            <template v-else-if="gameStateStore.eventAction === 3">
-              「等你製作好這個後，我會再來找你的。」
-            </template>
           </template>
-
           <template v-else-if="gameStateStore.getEventProcess(SpecialEventEnum.HuntDuneBeast) === 1">
-            「我們又見面了，英勇的獵人，看你準備好了」
+            「我們又見面了，英勇的登塔者，看你準備好了」
             <br/><br/>
             「我正掌握他的行蹤，你想要現在出發狩獵它嗎?記得在戰鬥中使用那枚炸彈!」
             <p class="hint">(選擇出發後立即觸發戰鬥)</p>
           </template>
-
           <template v-else-if="gameStateStore.getEventProcess(SpecialEventEnum.HuntDuneBeast) === 2">
             獵人看著遠方逐漸平息的沙塵暴，顫抖地摘下了斗篷，露出了佈滿風霜的笑容：
-            <br/><br/>
-            「風沙...停了。數百年的詛咒終於在今日終結。我們沙之民終於能再次行走在陽光下，而不是地底的夾縫中。」
-            <br/>「這件聖物本該隨著傳說一同埋葬，但現在它屬於你了，新一代的沙漠英雄。」
-            <p class="hint">(你獲得了沙之民代代相傳的秘寶)</p>
+            <br/>
+            「風沙...停了。數百年的詛咒終於在今日終結。沒錯，這陣風沙正是它帶來的風暴，如今因為你而平息，感謝你，登塔者，這是一點我的謝禮。」
+            <p class="hint">(你獲得了 1000 G)</p>
           </template>
         </div>
       </div>
@@ -106,7 +114,7 @@ onUnmounted(() => {
       </template>
 
       <template v-else-if="gameStateStore.getEventProcess(SpecialEventEnum.HuntDuneBeast) === 1">
-        <el-button type="danger" @click="goFight">出發狩獵</el-button>
+        <el-button type="danger" @click="goFight">出發</el-button>
         <el-button type="info" @click="onLeave">我正在準備中</el-button>
       </template>
 

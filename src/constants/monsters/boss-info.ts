@@ -1,7 +1,7 @@
 import {MonsterType} from "@/types";
 import {WorldDefault} from "@/assets/const";
 import {Usable} from "@/constants/items/usalbe-item/usable-info";
-import {MATERIAL} from "@/constants/items/material/material-info";
+import {Material} from "@/constants/items/material/material-info";
 
 export const Boss = {
 	// --- 區域 1: 迷霧森林 (Misty Forest) ---
@@ -126,8 +126,8 @@ export const Boss = {
 		onStart: 'scorchingDunesOnStart',
 		onAttack: 'scorchingDunesOnAttack',
 		drop: [
-			{item: MATERIAL.LowerLarge, chance: 1},
-			{item: MATERIAL.ScorpionBlackShell, chance: 0.33},
+			{item: Material.LowerLarge, chance: 1},
+			{item: Material.ScorpionBlackShell, chance: 0.33},
 		]
 	} as MonsterType,
 	MirageOasis: {
@@ -149,7 +149,7 @@ export const Boss = {
 		onStart: 'mirageOasisOnStart',
 		onAttacked: 'mirageOasisOnAttacked',
 		drop: [
-			{item: MATERIAL.LowerLarge, chance: 1},
+			{item: Material.LowerLarge, chance: 1},
 		]
 	} as MonsterType,
 	SandstormPass: {

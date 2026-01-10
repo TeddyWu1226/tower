@@ -32,4 +32,11 @@ export const SpecialItem = {
 		quality: 3,
 		unsellable: true,
 	} as ItemType,
+	DuneBeastBombCenter: {
+		name: '巨獸炸彈核心',
+		icon: '🧿',
+		description: '製作巨獸炸彈的核心，但還欠缺一點東西',
+		quality: 6,
+		unsellable: true,
+	} as ItemType,
 }
