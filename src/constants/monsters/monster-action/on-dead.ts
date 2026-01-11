@@ -6,6 +6,7 @@ import {showEffect} from "@/components/Shared/FloatingEffect/EffectManager";
 import {useEpicSubtitle} from "@/components/Shared/EpicSubtitle/useEpicSubtitle";
 import {SpecialItem} from "@/constants/items/special-item-info";
 import EvnStatus from "@/constants/status/evn-status";
+import {getEffectiveStats} from "@/store/game-state-store";
 
 
 export const MonsterOnDead: Record<string, (params: MonsterActionParams) => void> = {
@@ -23,5 +24,15 @@ export const MonsterOnDead: Record<string, (params: MonsterActionParams) => void
         logStore.logger.add(`沙塵暴平息了。`);
         playerStore.removeStatus(EvnStatus.Sandstorm.name)
 
+    },
+    mummyOnDead: ({monster, playerStore, targetElement, logStore}) => {
+        if (monster.apDefend <= 0) {
+            return
+        }
+        showEffect(targetElement, "🧻", "buff");
+        logStore.logger.add('木乃伊又復活了')
+        monster.hp = getEffectiveStats(monster).hpLimit
+        monster.adDefend -= 10
+        monster.apDefend -= 10
     },
 };

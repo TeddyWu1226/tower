@@ -172,6 +172,21 @@ const monsterMove = () => {
 }
 
 const whenMonsterDead = (selectedMonster: MonsterType) => {
+  // 觸發死亡被動
+  if (selectedMonster.onDead && MonsterOnDead[selectedMonster.onDead]) {
+    // 執行對應的函式
+    const targetElement = monsterCardRefs.value[selectedMonsterIndex.value];
+    MonsterOnDead[selectedMonster.onDead]({
+      monster: selectedMonster,
+      playerStore: playerStore,
+      gameStateStore: gameStateStore,
+      logStore: logStore,
+      targetElement: targetElement.$el
+    });
+  }
+  if (selectedMonster.hp > 0) {
+    return
+  }
   // 紀錄擊殺
   trackStore.recordKill(selectedMonster.name)
   // 經驗取得
@@ -189,18 +204,6 @@ const whenMonsterDead = (selectedMonster: MonsterType) => {
   });
   // 特殊掉落道具
   specialExtraDrop()
-  // 觸發死亡被動
-  if (selectedMonster.onDead && MonsterOnDead[selectedMonster.onDead]) {
-    // 執行對應的函式
-    const targetElement = monsterCardRefs.value[selectedMonsterIndex.value];
-    MonsterOnDead[selectedMonster.onDead]({
-      monster: selectedMonster,
-      playerStore: playerStore,
-      gameStateStore: gameStateStore,
-      logStore: logStore,
-      targetElement: targetElement.$el
-    });
-  }
   // 移除死亡怪
   gameStateStore.currentEnemy.splice(selectedMonsterIndex.value, 1);
   // 確保選中狀態同步：如果選中的怪物被移除了，則取消選中
@@ -208,7 +211,6 @@ const whenMonsterDead = (selectedMonster: MonsterType) => {
     selectedMonsterIndex.value = null;
   }
 }
-
 
 const checkAllMonsterDead = () => {
   //檢查每個怪物血量是否死亡
