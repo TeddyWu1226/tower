@@ -6,6 +6,8 @@ import {ElMessage, ElMessageBox} from "element-plus";
 import {UsableType, EquipmentType, ItemType} from "@/types";
 import {EQUIP_BASE_PRICE, MATERIAL_BASE_PRICE} from "@/components/RoomLayout/comps/ShopRoom/useShopLogic";
 import {createDoubleTapHandler} from "@/utils/touch";
+import {getEnumColumn} from "@/utils/enum";
+import {QualityEnum} from "@/enums/quality-enum";
 
 const playerStore = usePlayerStore();
 
@@ -33,9 +35,9 @@ const stackedBags = computed(() => {
         map.set(item.name, {...item, count: 1, originalIndices: [index], bagType: type});
       }
     });
-    bags[type] = Array.from(map.values());
+    bags[type] = Array.from(map.values()).sort((a, b) => (a.quality || 0) - (b.quality || 0));
   });
-  return bags;
+  return bags
 });
 
 const getSellPrice = (item: StackedItem) => {
@@ -128,7 +130,9 @@ const handleSellAll = (type: 'items' | 'equipments') => {
         >
           <div class="item-badge" v-if="item.count > 1">x{{ item.count }}</div>
           <div class="item-icon">{{ item.icon }}</div>
-          <div class="item-name">{{ item.name }}</div>
+          <div class="item-name" :style="{color:getEnumColumn(QualityEnum,item.quality,'color')}">
+            {{ item.name }}
+          </div>
           <div class="price-tag">回收價:💰 {{ getSellPrice(item) }}</div>
           <div class="sell-action-overlay">雙擊販賣</div>
         </div>
